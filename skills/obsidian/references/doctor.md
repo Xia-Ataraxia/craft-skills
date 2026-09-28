@@ -22,7 +22,7 @@ If the native skill, executable, app bridge, or requested command is unavailable
 **NOT for:**
 - Vault-wide link rot, orphan notes, or frontmatter schema drift — those are not plugin-scoped.
 - Core Obsidian bugs unrelated to any plugin.
-- Template format problems that have nothing to do with plugin API (e.g., pure Markdown structure issues) — discover the official `obsidian-markdown` skill; template selection remains with the target-vault/OMS or personal policy owner.
+- Template format problems that have nothing to do with plugin API (e.g., pure Markdown structure issues) — discover the official `obsidian-markdown` skill; template selection remains with target-vault policy (its AGENTS.md and guidelines) or personal policy.
 
 ## Dependencies
 

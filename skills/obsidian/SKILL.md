@@ -2,7 +2,7 @@
 name: obsidian
 description: Routes native Obsidian skills and local coordination. Use for vault note create/edit/cleanup (“옵시디언 노트 정리”; not filing/taxonomy), wikilinks/callouts/properties/house style; `.base` or embedded base blocks, filters/views, `groupBy`/`sort`/`limit`, Dataview-to-Bases; `.canvas` mind maps; Obsidian Mermaid; `obsidian visualize` Excalidraw/Canvas diagrams; official `obsidian` CLI read/create/move/write, `backlinks`/`unresolved` audits, readback, `Vault not found`, `obsidian` versus third-party `obsidian-cli`; Web Clipper templates (YouTube/GitHub), variables/filters; “플러그인 고쳐줘”, silent plugin failures, API skew, Templater `ReferenceError`/`<%`; headless `ob` Sync (“headless sync 점검”, “obsidian sync status”, “볼트 동기화 복구”, “pull-only로 맞춰줘”, daemon restart). Not for web-page extraction, CommonMark, Dataview queries, React Flow, non-Obsidian Mermaid, outside-vault files, non-plugin core bugs, desktop Sync/Dropbox replication, or filing/provenance.
 metadata:
-  version: 2.2.0
+  version: 2.2.1
 ---
 # Obsidian
 
@@ -60,7 +60,7 @@ An Excalidraw or Canvas visualization uses `visualize.md` for the format choice,
 ## Boundaries
 
 This package owns uncovered app, plugin, renderer, and Sync coordination plus target-vault authorization and native-surface readback.
-A discovered native skill owns its format, field/type, schema, and command details; the target-vault/OMS owner or personal policy owns authorization, template selection, placement, provenance, and house style.
+A discovered native skill owns its format, field/type, schema, and command details; target-vault policy (its AGENTS.md and guidelines) or personal policy owns authorization, template selection, placement, provenance, and house style.
 A personal knowledge-management skill may own what a note means, where it belongs, required provenance, and which template frame applies; compose that policy with this package rather than duplicating it here.
 Before a note write, resolve the actual target-vault policy and its native owner, the exact note and authorized change, required provenance, and protected content.
 Reusable mechanics, a writable tool, or a folder classification do not grant write authority.
@@ -73,7 +73,7 @@ Generic file synchronization, Git conflicts, and backup systems are outside the 
 ## Anti-patterns
 
 - Loading every reference for every request → load only the selected sub-recipe and any explicitly composing neighbor.
-- Editing a vault note with raw shell text tools → use the selected native CLI or OMS surface and exact readback.
+- Editing a vault note with raw shell text tools (sed/echo redirects) → use the host Write/Edit tool or the selected native CLI, then read back.
 - Rewriting a native format or command catalog locally → load the matching official package by identity and report a capability gap when it is unavailable.
 - Conflating the `obsidian-cli` skill identity with a binary, or treating a third-party `obsidian-cli` executable as the official surface → use the executable and runtime documented by the discovered native skill, or report the unsupported surface.
 - Declaring a tool unavailable after one failed probe → confirm with a second, different probe before reporting a degraded path.

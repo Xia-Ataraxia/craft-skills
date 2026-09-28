@@ -8,7 +8,7 @@ It also owns its examples and format validation; do not copy, restate, or overri
 If the native skill is unavailable, report the format capability gap instead of substituting generic Markdown rules or a third-party writer.
 
 This local reference owns only target-vault authorization and destination readback that compose with the native package.
-The target-vault/OMS owner or personal policy owns note meaning, filing, template selection, placement, provenance requirements, and house style; load that owner rather than inventing a local template or placement rule.
+Target-vault policy (its AGENTS.md and guidelines) or personal policy owns note meaning, filing, template selection, placement, provenance requirements, and house style; load that owner rather than inventing a local template or placement rule.
 
 ## Target-vault and native-surface authorization
 
@@ -37,7 +37,7 @@ Check rendered embeds separately; successful destination resolution does not pro
 
 ## Composition boundaries
 
-Compose a note mutation from the native `obsidian-cli` skill's supported CLI surface when CLI is the selected owner, or from an independently authorized native OMS, together with the native `obsidian-markdown` format owner, this target-vault boundary, and any applicable personal policy.
+Compose a note mutation from the native `obsidian-cli` skill's supported CLI surface when CLI is the selected owner, or from the host Write/Edit tool, together with the native `obsidian-markdown` format owner, this target-vault boundary, and any applicable personal policy.
 Use native `json-canvas` for Canvas graph structure and native `obsidian-bases` for `.base` structure; this reference does not define their fields, types, templates, placement, or schemas.
 Use the package's plugin, renderer, and Sync references only when those concerns genuinely compose with the note operation.
 

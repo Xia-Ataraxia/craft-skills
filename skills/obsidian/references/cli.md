@@ -9,7 +9,7 @@ If the native skill, executable, app bridge, or requested command is unavailable
 ## Local composition
 
 - Resolve the exact vault, authorized effect, and native Obsidian mutation surface before any write. Use [target-vault and native-surface authorization](markdown.md#target-vault-and-native-surface-authorization) and [exact non-Markdown destination readback](markdown.md#non-markdown-targets-and-destination-readback) for those boundaries.
-- Compose the native CLI with `obsidian-markdown` for note format decisions and the applicable target-vault/OMS or personal policy owner; a command surface does not grant write authority.
+- Compose the native CLI with `obsidian-markdown` for note format decisions and the applicable target-vault policy (its AGENTS.md and guidelines) or personal policy owner; a command surface does not grant write authority.
 - Use [`doctor.md`](doctor.md) for plugin, template, and API diagnostics. Use [`sync.md`](sync.md) for headless `ob` pairing, lifecycle, supervisor, and backup evidence. Desktop-app Sync state remains an operation of the native CLI skill.
 
 ## Result evidence
