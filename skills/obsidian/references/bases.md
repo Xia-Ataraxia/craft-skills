@@ -4,7 +4,7 @@
 
 Discover the official `obsidian-bases` skill by package identity before creating or editing a `.base` file or an embedded `base` block.
 That skill owns the Bases file format, YAML schema, filters, formulas, properties, functions, summaries, view types, fields, and examples.
-It also owns schema validation, view options, and version-specific format guidance; the target-vault/OMS owner or personal policy owns template selection and placement. Do not copy, restate, or override those manuals here.
+It also owns schema validation, view options, and version-specific format guidance; target-vault policy (its AGENTS.md and guidelines) or personal policy owns template selection and placement. Do not copy, restate, or override those manuals here.
 If the native skill is unavailable, report the Bases capability gap instead of inventing YAML, formulas, or a fallback parser.
 
 This local reference owns only target-vault authorization and app/rendering coordination that the native format owner does not establish.
