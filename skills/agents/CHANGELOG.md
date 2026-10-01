@@ -4,3 +4,4 @@
 - 2026-07-06 — v2.0.0: realign to authoring contract → spec-minimal frontmatter, what+when description, skillify/security boundaries, body cut to 81 lines.
 - 2026-07-12 — v2.1.0: audit found rigid prompt and tool-enforcement rules → applied observable-behavior and single-owner principles through risk-based evals and security hand-offs. Provenance: docs/research/omo-analysis.md.
 - 2026-08-28 — v2.2.0: mutable agent-runtime facts could lead to invented behavior → require official-docs-first verification and explicit uncertainty handling.
+- 2026-10-01 — v2.2.1: installable skillify handoff is gone → route skill authoring to docs/skills/authoring.md; that path is local policy, not a native requirement.

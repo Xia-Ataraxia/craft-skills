@@ -1,4 +1,6 @@
 # Changelog
+
+- 2026-10-01 — v4.3.1: source authoring still pointed mutable-tool updates at skillify contract §10, which triggered a tool upgrade gate → point repository authoring policy at `docs/skills/authoring.md` and stop treating a source edit or informational request as authorization to install or upgrade tools.
 - 2026-09-03 — v4.1.3: the exact adapter-bytes rule for the sibling Claude file had dropped out of the contract while a later step still relied on it → restate it in the Output contract; package tests move to the repository root.
 
 - 2026-09-03 — v4.1.1: tool probes could leave recipes without an explicit failure path → add per-tool fallback rows and record verified QMD/Aside command surfaces. verified_against: obsidian-cli@0.2.3, obsidian@1.13.7, qmd@2.5.3, aside@1.26.902.1732, defuddle@0.19.1, gh@2.99.0, hermes@0.20.1, gjc@0.16.0.

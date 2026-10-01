@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for skillify's package selection and format contract."""
+"""Tests for repository package selection and the format contract."""
 from __future__ import annotations
 
 import json
@@ -11,8 +11,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = REPO_ROOT / "skills/skillify/scripts/validate-skill-format.py"
+REPO_ROOT = Path(__file__).resolve().parents[3]
+SCRIPT = REPO_ROOT / "scripts/governance/tools/validate_skill_format.py"
 _GIT_IDENTITY = {
     "GIT_AUTHOR_NAME": "Test",
     "GIT_AUTHOR_EMAIL": "test@example.com",
@@ -128,14 +128,14 @@ class SkillFormatValidatorTest(unittest.TestCase):
     def test_rejects_traversal_link_out_of_package(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            body = GOOD_SKILL + "\nSee [the contract](../skillify/references/contract.md) for provenance.\n"
+            body = GOOD_SKILL + "\nSee [the contract](../neighbor/references/contract.md) for provenance.\n"
             self._make_skill(root, "demo", body, GOOD_CHANGELOG)
             result = self.run_validator(root)
             self.assertEqual(result.returncode, 1)
             self.assertIn("TRAVERSAL_LINK", result.stdout)
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            body = GOOD_SKILL + "\nThe `skillify` skill's contract reference owns provenance.\n"
+            body = GOOD_SKILL + "\nThe neighbor package's contract reference owns provenance.\n"
             self._make_skill(root, "demo", body, GOOD_CHANGELOG)
             self.assertEqual(self.run_validator(root).returncode, 0)
 
@@ -159,7 +159,7 @@ class SkillFormatValidatorTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             sibling = self._make_skill(
-                root, "skillify", GOOD_SKILL.replace("name: demo", "name: skillify"),
+                root, "neighbor", GOOD_SKILL.replace("name: demo", "name: neighbor"),
                 GOOD_CHANGELOG, evals=None, triggers=None,
             )
             (sibling / "references").mkdir()
@@ -267,13 +267,6 @@ runpy.run_path(script, run_name='__main__')
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertNotIn("BAD_EVAL_CORPUS", result.stdout)
             self.assertNotIn("NO_EVAL_CORPUS", result.stdout)
-
-    def test_accepts_well_formed_package(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_rejects_missing_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -887,11 +880,10 @@ runpy.run_path(script, run_name='__main__')
                         self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
                         self.assertIn("escapes root", result.stderr)
 
-    def test_shared_contract_change_selects_skillify_not_unrelated_debt(self) -> None:
+    def test_shared_contract_change_is_repository_tool_not_unrelated_debt(self) -> None:
+        """Docs and CI select no package and do not inherit unrelated debt."""
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            self._make_skill(root, "skillify",
-                             GOOD_SKILL.replace("name: demo", "name: skillify"), GOOD_CHANGELOG)
             bad = GOOD_SKILL.replace("name: demo", "name: legacy").replace(
                 "metadata:\n  version: 1.0.0\n", "")
             self._make_skill(root, "legacy", bad, GOOD_CHANGELOG)
@@ -900,14 +892,17 @@ runpy.run_path(script, run_name='__main__')
             (root / "AGENTS.md").write_text("updated contract\n")
             result = self.run_validator(root, "--diff-base", "HEAD")
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertIn("scope: package skills/skillify", result.stdout)
+            self.assertIn(
+                "scope: repository-tool 'AGENTS.md'",
+                result.stdout,
+            )
+            self.assertNotIn("scope: package", result.stdout)
             self.assertNotIn("legacy", result.stdout)
+            self.assertEqual(result.stderr, "")
 
-    def test_ci_local_change_selects_skillify_not_unrelated_debt(self) -> None:
+    def test_ci_local_change_is_repository_tool_not_unrelated_debt(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            self._make_skill(root, "skillify",
-                             GOOD_SKILL.replace("name: demo", "name: skillify"), GOOD_CHANGELOG)
             bad = GOOD_SKILL.replace("name: demo", "name: legacy").replace(
                 "metadata:\n  version: 1.0.0\n", "")
             self._make_skill(root, "legacy", bad, GOOD_CHANGELOG)
@@ -918,10 +913,15 @@ runpy.run_path(script, run_name='__main__')
             (scripts / "ci-local.sh").write_text("echo updated gates\n")
             result = self.run_validator(root, "--diff-base", "HEAD")
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertIn("scope: package skills/skillify", result.stdout)
+            self.assertIn(
+                "scope: repository-tool 'scripts/ci-local.sh'",
+                result.stdout,
+            )
+            self.assertNotIn("scope: package", result.stdout)
             self.assertNotIn("legacy", result.stdout)
+            self.assertEqual(result.stderr, "")
 
-    def test_ci_local_change_fails_when_shared_owner_is_missing(self) -> None:
+    def test_repository_tool_change_does_not_require_a_package(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             scripts = root / "scripts"
@@ -930,8 +930,13 @@ runpy.run_path(script, run_name='__main__')
             self._init_git_repo(root)
             (scripts / "ci-local.sh").write_text("echo missing owner\n")
             result = self.run_validator(root, "--diff-base", "HEAD")
-            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
-            self.assertIn("shared format owner skills/skillify is missing", result.stderr)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn(
+                "scope: repository-tool 'scripts/ci-local.sh'",
+                result.stdout,
+            )
+            self.assertNotIn("scope: package", result.stdout)
+            self.assertEqual(result.stderr, "")
 
     def test_explicit_owner_rejects_escape_and_non_owner(self) -> None:
         with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as outside:
@@ -1020,6 +1025,56 @@ runpy.run_path(script, run_name='__main__')
             self.assertEqual(retired.returncode, 0, retired.stdout + retired.stderr)
             self.assertNotIn("DANGLING_PACKAGE_REFERENCE", retired.stdout)
 
+    def test_retirement_distinguishes_checker_data_from_live_consumers(self) -> None:
+        cases = (
+            ("scripts/governance/tests/check.py",
+             "self.assertNotIn('skills/demo', output)\n", False),
+            ("scripts/governance/tests/check.py",
+             "self.assertNotIn(\n    'skills/demo/SKILL.md', output)\n", False),
+            ("scripts/governance/tests/check.py",
+             "# Previously loaded skills/demo/SKILL.md\n"
+             '"""The old owner was skills/demo."""\n', False),
+            ("README.md", "The former skills/demo package was retired.\n", False),
+            ("README.md", "Previously we used skills/demo/SKILL.md.\n", False),
+            ("README.md", "[source](skills/demo/SKILL.md)\n", True),
+            ("README.md", "[source]: skills/demo/SKILL.md\n", True),
+            ("README.md", "Run /skill:demo to continue.\n", True),
+            ("README.md", "```sh\npython skills/demo/scripts/check.py\n```\n", True),
+            ("skills/consumer/SKILL.md",
+             GOOD_SKILL.replace("name: demo", "name: consumer")
+             + "\nRead `skills/demo/SKILL.md`.\n", True),
+            ("scripts/governance/tests/check.py",
+             "resource = 'skills/demo/SKILL.md'\n", True),
+            ("scripts/governance/tests/check.py",
+             "self.assertNotIn('missing', open('skills/demo/SKILL.md').read())\n", True),
+            ("scripts/governance/tools/load.py",
+             "run('python skills/demo/scripts/check.py')\n", True),
+            ("scripts/governance/tools/load.py",
+             "resource = 'skills/demo/SKILL.md'\n(\n", True),
+            ("scripts/governance/tools/load.sh",
+             'python "$ROOT/skills/demo/scripts/check.py"\n', True),
+        )
+        for rel, content, active in cases:
+            with self.subTest(rel=rel, content=content), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
+                self._make_skill(
+                    root, "consumer", GOOD_SKILL.replace("name: demo", "name: consumer"),
+                    GOOD_CHANGELOG,
+                )
+                self._init_git_repo(root)
+                base = self._git_head(root)
+                self._git(root, "rm", "-r", "-f", "skills/demo", "tests/demo")
+                target = root / rel
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(content, encoding="utf-8")
+                result = self.run_validator(root, "--diff-base", base)
+                self.assertEqual(result.returncode, int(active), result.stdout + result.stderr)
+                self.assertEqual(result.stderr, "")
+                self.assertEqual("DANGLING_PACKAGE_REFERENCE" in result.stdout, active)
+                self.assertIn("scope: tombstone skills/demo", result.stdout)
+                self.assertNotIn("scope: package skills/demo", result.stdout)
+
     def test_rename_tracks_old_and_new_owners(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -1038,6 +1093,133 @@ runpy.run_path(script, run_name='__main__')
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertIn("scope: tombstone skills/demo", result.stdout)
             self.assertIn("scope: package skills/renamed", result.stdout)
+
+
+    def test_deletion_commit_uses_base_tree_when_head_equals_deletion(self) -> None:
+        """git diff base deletion omits the commit; the base tree is the owner evidence."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
+            self._init_git_repo(root)
+            base = self._git_head(root)
+            self._git(root, "rm", "-r", "-f", "skills/demo", "tests/demo")
+            self._git(root, "commit", "-m", "retire demo")
+            committed = self.run_validator(root, "--diff-base", base)
+            self.assertEqual(committed.returncode, 0, committed.stdout + committed.stderr)
+            self.assertIn("scope: tombstone skills/demo", committed.stdout)
+            self.assertNotIn("scope: package skills/demo", committed.stdout)
+
+    def test_later_base_lacking_owner_is_not_retirement_evidence(self) -> None:
+        """A base whose tree already lacks the owner does not invent a tombstone."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
+            self._init_git_repo(root)
+            self._git(root, "rm", "-r", "-f", "skills/demo", "tests/demo")
+            self._git(root, "commit", "-m", "retire demo")
+            later = self._git_head(root)
+            (root / "README.md").write_text("unrelated docs edit\n", encoding="utf-8")
+            result = self.run_validator(root, "--diff-base", later)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn(
+                "scope: repository-tool 'README.md'",
+                result.stdout,
+            )
+            self.assertNotIn("scope: tombstone skills/demo", result.stdout)
+            self.assertNotIn("scope: package", result.stdout)
+            self.assertEqual(result.stderr, "")
+
+    def test_unknown_support_paths_fail_closed_without_widening(self) -> None:
+        cases = (
+            ("skills/not-a-package/notes.md", "skills/not-a-package/notes.md"),
+            ("tests/orphan/note.txt", "tests/orphan/note.txt"),
+            ("scripts/orphan/helper.py", "scripts/orphan/helper.py"),
+        )
+        for rel, expected in cases:
+            with self.subTest(rel=rel):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = Path(tmp)
+                    self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
+                    self._init_git_repo(root)
+                    target = root / rel
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text("unrelated\n", encoding="utf-8")
+                    result = self.run_validator(root, "--diff-base", "HEAD")
+                    self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                    self.assertIn("unresolved package/support ownership", result.stderr)
+                    self.assertIn(expected, result.stderr)
+                    self.assertNotIn("scope: package skills/demo", result.stdout)
+
+    def test_support_containment_rejects_escape_and_noncanonical_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as outside:
+            root = Path(tmp)
+            self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
+            self._init_git_repo(root)
+            external = Path(outside) / "outside.md"
+            external.write_text("outside\n", encoding="utf-8")
+            escaped = root / "skills" / "escaped"
+            escaped.symlink_to(outside, target_is_directory=True)
+            (escaped / "SKILL.md").write_text("outside\n", encoding="utf-8")
+            escaping = self.run_validator(root)
+            self.assertEqual(escaping.returncode, 2, escaping.stdout + escaping.stderr)
+            self.assertIn("escapes skills/", escaping.stderr)
+            for package in ("skills/../skills/demo", "skills/./demo", "skills//demo"):
+                with self.subTest(package=package):
+                    result = self.run_validator(root, "--package", package, "--advisory")
+                    self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                    self.assertIn("input error", result.stderr)
+
+    def test_default_scan_rejects_skills_dir_symlink_outside_repo(self) -> None:
+        """skills/ itself must not escape the repo before enumeration or reads."""
+        wrapper = """import os, runpy, sys
+outside = os.path.realpath(sys.argv.pop(1))
+script = sys.argv.pop(1)
+def audit(event, args):
+    if event != 'open':
+        return
+    path = args[0] if args else None
+    if not isinstance(path, (str, bytes, os.PathLike)):
+        return
+    try:
+        resolved = os.path.realpath(path)
+    except OSError:
+        return
+    if resolved == outside or resolved.startswith(outside + os.sep):
+        sys.stderr.write('outside open: ' + resolved + '\\n')
+        raise SystemExit(3)
+sys.addaudithook(audit)
+runpy.run_path(script, run_name='__main__')
+"""
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as outside:
+            root = Path(tmp)
+            self._init_git_repo(root)
+            external = Path(outside)
+            (external / "leaked").mkdir()
+            (external / "leaked" / "SKILL.md").write_text("outside secret\n", encoding="utf-8")
+            (root / "skills").symlink_to(external, target_is_directory=True)
+            result = subprocess.run(
+                [sys.executable, "-c", wrapper, str(external), str(SCRIPT), "--root", str(root)],
+                cwd=root, text=True, capture_output=True, check=False,
+                env=_isolated_git_env(),
+            )
+            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+            self.assertIn("input error", result.stderr)
+            self.assertIn("escapes repository root", result.stderr)
+            self.assertNotIn("outside open:", result.stderr)
+            self.assertNotIn("outside secret", result.stdout + result.stderr)
+
+    def test_readable_markdown_without_sentence_line_breaks_is_accepted(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            wrapped = GOOD_SKILL + (
+                "\nThis paragraph was hard-wrapped at a column width, so the sentence continues\n"
+                "onto the next line without a sentence boundary.\n"
+            )
+            self._make_skill(root, "demo", wrapped, GOOD_CHANGELOG)
+            result = self.run_validator(root)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertNotIn("LINE_BREAK", result.stdout)
+            self.assertNotIn("SENTENCE_BOUNDARY", result.stdout)
 
     def test_unowned_support_path_is_not_silently_ignored(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

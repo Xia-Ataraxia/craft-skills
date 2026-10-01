@@ -9,8 +9,8 @@ fi
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 DIFF_BASE="${DIFF_BASE:-origin/main}"
-python3 skills/skillify/scripts/validate-skill-format.py --diff-base "$DIFF_BASE" &&
-python3 skills/skillify/scripts/validate-runtime-hygiene.py --diff-base "$DIFF_BASE" || {
+python3 scripts/governance/tools/validate_skill_format.py --diff-base "$DIFF_BASE" &&
+python3 scripts/governance/tools/validate_runtime_hygiene.py --diff-base "$DIFF_BASE" || {
   echo "pre-commit: Layer-1 validation failed (SKIP_LOCAL_CI=1 to bypass once)"
   exit 1
 }

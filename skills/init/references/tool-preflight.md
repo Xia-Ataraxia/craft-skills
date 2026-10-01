@@ -4,7 +4,7 @@ Run this reference before a recipe depends on one of these mutable command-line 
 It is not a host inventory, an upstream SSOT, or a CHANGELOG receipt schema.
 Installed versions and host upgrades belong in historical CHANGELOG or the parent ledger, not here.
 
-Authoring create/update of a package that depends on a related official skill or CLI follows the `skillify` skill's contract §10: current matching versions are a verified no-op; stale related dependencies are actually updated through the official channel, then resulting versions are read back and affected siblings are repaired; check-only detection or a failed update leaves the run incomplete. Informational read-only requests do not authorize installation. Unrelated tools stay untouched.
+Check current official API guidance when a task depends on that API, and compare it with the installed command surface before relying on version-sensitive behavior. Repository authoring policy lives in `docs/skills/authoring.md`; authoring alone does not authorize installation or upgrades. Deployment and related dependency updates are separate authorized effects. Unrelated tools stay untouched.
 
 | Tool | What it is | Official source | Install location probe | Version probe | Support boundary | Known incompatibilities | Fallback when unavailable or probe fails |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -22,6 +22,6 @@ Authoring create/update of a package that depends on a related official skill or
 1. Run `command -v <tool>` and that tool's exact version probe before declaring it unavailable.
    A single empty or failing probe is not proof of absence: shell and app-bridge flakiness produce empty output with a zero exit code. Confirm with a second, different probe — a direct install-path check or the tool's own help — and report which probe settled it.
 2. Do not run a mutating subcommand such as `--update` or `install` as a probe.
-   A create/update authoring run still follows the `skillify` skill's contract §10 when a related official skill or CLI is stale. A read-only informational request does not authorize installation.
+   Report a relevant version mismatch and its effect on the requested task; do not turn a source edit or informational request into an installation.
 3. Treat an unavailable, ambiguous, or unsupported tool as a boundary and report it rather than inventing a fallback.
 4. Verify the affected recipe behavior after a probe, update, or sibling repair — a real command, error, or effect on the dependent path — not a generated eval corpus or a CHANGELOG receipt token.

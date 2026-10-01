@@ -2,7 +2,7 @@
 name: offline-transcribe
 description: Transcribes already-local audio or video with an already-prefetched local Whisper model and writes a finite JSON transcript plus SRT, VTT, TXT, TSV, and timestamped Markdown. Use when a user says "transcribe this wav offline", "local mlx whisper", "no upload transcript", "강의.part.01.wav 로컬 전사", or "write srt next to this file without fetching a model". Not for OpenAI cloud transcription, URL/download acquisition, diarization, vault writes, or publishing.
 metadata:
-  version: 1.0.1
+  version: 1.0.2
 ---
 
 # offline-transcribe
@@ -53,5 +53,5 @@ Prefetch is owned by official Hugging Face tooling with `token=False`; this scri
 ## Requirements
 
 - POSIX `sh`, `env` with `-u`, `dirname`, and a prepared `python3` on `PATH` with local `mlx-whisper`, `mlx`, and `numpy`; `ffmpeg` must also be on `PATH`.
-- Related official skills and CLI/agent runtimes follow the `skillify` skill's contract §10.
+- When this task uses a related official skill or CLI/agent runtime, follow Related official skills and mutable facts in docs/skills/authoring.md. Do not treat unused runtimes as required.
 - Cloud OpenAI transcribe remains the vendor skill under its official name; do not shadow it.

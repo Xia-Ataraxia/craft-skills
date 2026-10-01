@@ -142,11 +142,9 @@ jobs:
           BASE_REF: ${{ github.base_ref }}
         run: |
           BASE=$(git merge-base "origin/$BASE_REF" HEAD)
-          python3 skills/skillify/scripts/validate-skill-format.py --diff-base "$BASE"
+          python3 scripts/governance/tools/validate_skill_format.py --diff-base "$BASE"
       - name: Exercise package-selection regressions
-        run: python3 -m unittest discover -s tests/skillify -p test_validate_skill_format.py
-      - name: Exercise optional sentence-reflow helper tests
-        run: python3 -m unittest tests.skillify.test_reflow_sentences
+        run: python3 -m unittest scripts.governance.tests.test_validate_skill_format
 
   layer1-hygiene:
     name: layer1-hygiene
@@ -160,9 +158,9 @@ jobs:
           BASE_REF: ${{ github.base_ref }}
         run: |
           BASE=$(git merge-base "origin/$BASE_REF" HEAD)
-          python3 skills/skillify/scripts/validate-runtime-hygiene.py --diff-base "$BASE"
+          python3 scripts/governance/tools/validate_runtime_hygiene.py --diff-base "$BASE"
       - name: Exercise hygiene regressions
-        run: python3 -m unittest discover -s tests/skillify -p test_validate_runtime_hygiene.py
+        run: python3 -m unittest scripts.governance.tests.test_validate_runtime_hygiene
 
   distribution-version:
     name: distribution-version
