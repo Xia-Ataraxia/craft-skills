@@ -7,6 +7,7 @@
 - [Supported mutation and visible proof](#supported-mutation-and-visible-proof)
 - [Old-branch cleanup](#old-branch-cleanup)
 - [Completion evidence](#completion-evidence)
+- [Task terminals](#task-terminals)
 
 ## Meaning before labels
 
@@ -36,7 +37,7 @@ In particular, sleep can close panels and workspace deletion can remove files; n
 
 ## Inventory and identity
 
-1. Discover the installed Orca CLI and the Orca application's bundled command guide before relying on remembered flags or API payloads.
+1. Discover the installed Orca CLI and fetch its current bundled guides from that same executable before relying on remembered flags or API payloads.
 2. Inventory the authorized connected hosts, repositories, groups, workspace IDs and paths, statuses, and terminal IDs; record disconnected hosts as unverified.
 3. Inspect the actual Git root and origin on each host, with only narrow metadata reads.
 4. Match the provider, owner, and repository identity, then compare Orca's canonical project and source setup IDs.
@@ -54,11 +55,10 @@ Do not embed a token in a remote URL or provision new credentials as part of gro
 
 ## Supported mutation and visible proof
 
-Use the discovered native CLI, supported runtime API, or native UI.
+Use the current official CLI or the native UI the operator already approved.
 An advertised schema field can still be filtered or ignored; require read-back of every intended effect.
 Do not edit internal state files, hardcode bundle internals, or turn a failed private API experiment into a reusable command.
 If the installed version has no supported operation, retain the current state and name the missing capability.
-
 Group placement can depend on which host setup represents a shared project and on native ordering.
 Verify that behavior on the installed version rather than assuming every host registration needs its own PARA group.
 Remove an obsolete group only after repositories, folder workspaces, and child-group references are all absent; disable any cascading removal option.
@@ -69,7 +69,8 @@ Even an explicit request to delete a duplicate-looking setup leaves live or unve
 Inspect actual group expansion, project placement, host workspaces, and visible tab labels after read-back.
 A process/OSC title is not necessarily the custom title rendered on a tab.
 Use fresh UI element identities; do not replay stale coordinates.
-If a supported refresh is necessary, preserve terminal IDs before and after; a full restart is not a substitute.
+If a supported refresh is necessary, preserve terminal IDs before and after.
+A full restart is not a substitute, and this workflow does not restart the application.
 An inaccessible UI leaves visible placement unverified even if metadata is correct.
 
 ## Old-branch cleanup
@@ -108,3 +109,28 @@ Verify deleted refs are absent; compare retained refs and HEAD OIDs, Git worktre
 Report concurrent changes rather than overwriting them to make a comparison pass.
 Separate runtime verification, visible UI verification, Git preservation, and unreachable-host coverage.
 Return concise actual results and retained-item reasons; zero safe deletions is a valid successful audit.
+
+## Task terminals
+
+Inventory existing terminals in the authorized workspace before choosing reuse or creation; record their current handles, task association, ownership, and observed state through the official guide.
+Before creating a terminal, record the known identity or the intended identity, the purpose, the workspace, the execution host and channel, and who owns it.
+Reuse a proven matching task context first.
+Match the task, checkout or folder, host, and conversation purpose, not merely a similar title; do not inject new work into a busy or user-owned context without authority.
+`worktree create --agent` already launches the first terminal; address that agent through the create result's startup handle, or through one current list match, and do not create that same agent again.
+Account for configured default tabs.
+They may run real commands, so do not close them to tidy a create.
+A bare create can also leave a fallback shell; that shell is still not yours to close unless the official guide's confirmation for an unused shell is met and this task owns that effect.
+
+At the end of the task, report the actual per-task outcome: retain, sleep, close, or release, with the reason.
+Name the terminal identity and workspace, the observed result, and any retained context or unverified effect; an intended cleanup is not a completed cleanup.
+No creation and no effect is a valid report.
+
+Separate the operator's authorization from the official mechanic that performs the effect.
+Do not close a terminal because it looks old, idle, orphaned, user-owned, or unverifiable.
+Use the official guide to determine the exact effects of sleep or close; preserve-and-resume intent is different from destructive termination, and release belongs only to a supervised worker after an accepted settlement.
+Process liveness, submission proof, retries, and settlement follow the selected executable's official guides; silence, elapsed time, and an unreachable host do not prove exit or completion.
+If release is uncertain, follow the official recovery receipt and never substitute a terminal close.
+Do not bulk-close a workspace to finish the task.
+
+Keep GUI interference, application restarts, arbitrary deletion, and bulk terminal closure out of this workflow.
+When the UI cannot be inspected, mark visible placement unverified even if metadata is correct.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for skillify runtime hygiene guard."""
+"""Tests for the repository runtime hygiene validator."""
 from __future__ import annotations
 
 import os
@@ -9,8 +9,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = REPO_ROOT / "skills/skillify/scripts/validate-runtime-hygiene.py"
+REPO_ROOT = Path(__file__).resolve().parents[3]
+SCRIPT = REPO_ROOT / "scripts/governance/tools/validate_runtime_hygiene.py"
 _GIT_IDENTITY = {
     "GIT_AUTHOR_NAME": "Test",
     "GIT_AUTHOR_EMAIL": "test@example.com",
@@ -484,14 +484,14 @@ runpy.run_path(script, run_name='__main__')
             self.assertEqual(clean.returncode, 0, clean.stderr)
 
     def test_explicit_file_mode_does_not_write_source_cache(self) -> None:
-        format_src = REPO_ROOT / "skills/skillify/scripts/validate-skill-format.py"
+        format_src = REPO_ROOT / "scripts/governance/tools/validate_skill_format.py"
         with tempfile.TemporaryDirectory() as tmp:
             layout = Path(tmp)
-            scripts = layout / "skills" / "skillify" / "scripts"
+            scripts = layout / "scripts" / "governance" / "tools"
             scripts.mkdir(parents=True)
-            hygiene_src = scripts / "validate-runtime-hygiene.py"
+            hygiene_src = scripts / "validate_runtime_hygiene.py"
             hygiene_src.write_bytes(SCRIPT.read_bytes())
-            (scripts / "validate-skill-format.py").write_bytes(format_src.read_bytes())
+            (scripts / "validate_skill_format.py").write_bytes(format_src.read_bytes())
             scan_root = layout / "scan"
             target = scan_root / "skills" / "demo" / "SKILL.md"
             target.parent.mkdir(parents=True)

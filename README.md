@@ -4,7 +4,7 @@ Work-craft Agent Skills for research and engineering by Beomsu Koh.
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-green) [![Release](https://img.shields.io/github/v/release/Xia-Ataraxia/craft-skills)](https://github.com/Xia-Ataraxia/craft-skills/releases/latest)
 
-Own your craft, vendor-neutral: all 30 packages use the plain Agent Skills `SKILL.md` layout.
+Own your craft, vendor-neutral: all 29 packages use the plain Agent Skills `SKILL.md` layout.
 The portable core contains no runtime-specific behavior; Claude Code, Codex, Hermes, Cursor, and Grok-native integration lives in runtime lenses and generated instruction-file adapters.
 This is a task-oriented library for software and research work — kept separate from [`bstack`](https://github.com/GoBeromsu/bstack) (personal / life / second-brain automation) so the two domains never bleed into each other's context.
 
@@ -40,7 +40,6 @@ This is a task-oriented library for software and research work — kept separate
 | `refactor` | Restructure code without changing what it does, each move backed by a detection command and threshold, gated behind a characterization-test protocol for untested legacy code. |
 | `research` | Run a decision-depth research workflow ending in a `docs/research/{slug}.md` artifact — sweep primary sources, synthesize with a citation on every claim, and state gaps and confidence, never the decision itself. |
 | `security` | Find and fix vulnerabilities across web, API, and LLM surfaces, mapping every trust boundary first and triaging by production reachability and severity second. |
-| `skillify` | Own the lifecycle of skill packages at the destination the user chooses — create, update, move, retire — leaving official skills unmodified, holding only uncovered context, and completing with the package plus focused functional, security, and data-integrity evidence; registration, PR, install, and publication are separate approved effects (bstack registration uses `promote`). |
 | `tailscale` | Verify and repair the Tailscale tailnet that carries cross-host work — SSH, remote process inspection, `scp` — before a dependent workflow runs, triaging failures as network-layer versus service-layer across macOS daemon variants. |
 | `testing` | Architect and audit the test suite — classify each test by taxonomy and resource-based size, place it via a decision tree, and enforce the prove-it law that every bug fix ships with a failing-then-passing test. |
 | `vmware` | Operate VMware Fusion guests through VM lifecycle checks and VNC-backed input automation. |
@@ -72,7 +71,7 @@ Use the Claude Code marketplace channel:
 /plugin install craft-skills@craft-skills
 ```
 
-Then invoke any of the 30 skills above by name, e.g. `api`, `ast-grep`, `defuddle`, `design`, `document`, `init`, `skillify`, `programming`, `research`, `write-prd`, `debug`, `orca`.
+Then invoke any of the 29 skills above by name, e.g. `api`, `ast-grep`, `defuddle`, `design`, `document`, `init`, `programming`, `research`, `write-prd`, `debug`, `orca`.
 
 ---
 
@@ -108,7 +107,7 @@ hermes skills update            # pull upstream changes for every tap-installed 
 ```
 
 The tap scans every file in the unit; only a `safe` verdict installs without `--force`, so
-every package is kept scanner-clean (see `skills/skillify/references/runtime-hygiene.md`).
+every package is kept scanner-clean (see `docs/skills/verification.md`).
 
 ---
 
@@ -180,7 +179,7 @@ The script is idempotent and safe to re-run.
 
 ## Development
 
-Each skill lives in `skills/<name>/SKILL.md`; use the `skillify` skill for package lifecycle changes.
+Each skill lives in `skills/<name>/SKILL.md`. Author against `docs/skills/package-contract.md`; lifecycle and taste live in `docs/skills/authoring.md`; scoped verification lives in `docs/skills/verification.md`.
 
 ### Validation
 
@@ -197,7 +196,7 @@ git config core.hooksPath .githooks
 ```
 
 `SKIP_LOCAL_CI=1` bypasses a hook once; `SKIP_MARKETPLACES=1` skips the claude/codex CLI job.
-Individual checks can still be run directly (`claude plugin validate .`, `python3 skills/skillify/scripts/validate-skill-format.py`).
+Individual checks can still be run directly (`claude plugin validate .`, `python3 scripts/governance/tools/validate_skill_format.py`, `python3 scripts/governance/tools/validate_runtime_hygiene.py`). Tests for those checks live under `scripts/governance/tests/`.
 
 Codex reads the tracked plugin tree directly.
 Hermes integration is covered by the isolated plugin install/load contract test under `scripts/governance/tests/`.

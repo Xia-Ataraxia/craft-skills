@@ -10,7 +10,7 @@
 #   PR_SIZE_OVERRIDE=1 bash ...              # accept churn over the threshold
 #
 # The two Layer-1 validators run against one verified merge-base so uncommitted
-# worktree changes are validated too (see skills/skillify/references/runtime-hygiene.md §3);
+# worktree changes are validated too (see docs/skills/verification.md);
 # the remaining jobs run CI-exact. Label-gated Codex install/replacement jobs are
 # CI-only and intentionally not mirrored.
 set -uo pipefail
@@ -99,14 +99,13 @@ PY
 }
 
 job_layer1_format() {
-  python3 skills/skillify/scripts/validate-skill-format.py --diff-base "$INTEGRATION_BASE" &&
-  python3 -m unittest discover -s tests/skillify -p test_validate_skill_format.py &&
-  python3 -m unittest tests.skillify.test_reflow_sentences
+  python3 scripts/governance/tools/validate_skill_format.py --diff-base "$INTEGRATION_BASE" &&
+  python3 -m unittest scripts.governance.tests.test_validate_skill_format
 }
 
 job_layer1_hygiene() {
-  python3 skills/skillify/scripts/validate-runtime-hygiene.py --diff-base "$INTEGRATION_BASE" &&
-  python3 -m unittest discover -s tests/skillify -p test_validate_runtime_hygiene.py
+  python3 scripts/governance/tools/validate_runtime_hygiene.py --diff-base "$INTEGRATION_BASE" &&
+  python3 -m unittest scripts.governance.tests.test_validate_runtime_hygiene
 }
 
 job_distribution_version() {

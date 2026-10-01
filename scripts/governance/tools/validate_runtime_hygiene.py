@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Validate that craft-skills skill packages do not commit runtime-specific values.
 
+Contract: `docs/skills/verification.md` § Runtime hygiene.
+Package env rules: `docs/skills/package-contract.md` § Package parts.
+
 Default mode scans tracked files. CI can use --diff-base with one verified
 commit to scan changed lines of tracked files plus full untracked files, so
 the guard blocks new leaks without turning legacy cleanup into a single huge
-migration. Git, path, and containment helpers come from validate-skill-format.py.
+migration. Git, path, and containment helpers come from validate_skill_format.py.
 """
 from __future__ import annotations
 
@@ -12,23 +15,21 @@ import argparse
 import ast
 import os
 import subprocess
-import importlib.machinery
 import importlib.util
 import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
-_FORMAT_PATH = Path(__file__).resolve().parent / "validate-skill-format.py"
-_SPEC = importlib.util.spec_from_file_location("skillify_format_validator", _FORMAT_PATH)
+sys.dont_write_bytecode = True
+
+_FORMAT_PATH = Path(__file__).resolve().parent / "validate_skill_format.py"
+_SPEC = importlib.util.spec_from_file_location("governance_skill_format", _FORMAT_PATH)
 if _SPEC is None or _SPEC.loader is None:
     raise RuntimeError(f"cannot load format validator helpers from {_FORMAT_PATH}")
 fmt = importlib.util.module_from_spec(_SPEC)
 sys.modules[_SPEC.name] = fmt
-_SOURCE = importlib.machinery.SourceFileLoader(_SPEC.name, str(_FORMAT_PATH)).get_source(_SPEC.name)
-if _SOURCE is None:
-    raise RuntimeError(f"cannot read format validator source from {_FORMAT_PATH}")
-exec(compile(_SOURCE, str(_FORMAT_PATH), "exec", dont_inherit=True), fmt.__dict__)
+_SPEC.loader.exec_module(fmt)
 
 TEXT_EXTENSIONS = {
     ".bash",
@@ -46,7 +47,11 @@ TEXT_EXTENSIONS = {
 }
 
 SKIP_PARTS = {".git", "node_modules", "__pycache__"}
-DOC_EXAMPLE_ALLOWLIST = {"skills/skillify/references/runtime-hygiene.md"}
+DOC_EXAMPLE_ALLOWLIST = {
+    "docs/skills/verification.md",
+    "docs/skills/package-contract.md",
+    "docs/skills/authoring.md",
+}
 PLACEHOLDER_MARKERS = ("<", ">", "YOUR_", "REDACTED", "PLACEHOLDER", "EXAMPLE", "DUMMY", "XXXX")
 LOOKUP_VALUE_RE = re.compile(r"[()\[\]{}]")
 
@@ -241,15 +246,8 @@ def verify_commit(diff_base: str) -> str:
 
 
 def changed_relpaths(base: str) -> set[str]:
-    changed: set[str] = set()
-    for args in (
-        ("diff", "--name-only", "-z", "--no-renames", base, "HEAD"),
-        ("diff", "--cached", "--name-only", "-z", "--no-renames", "HEAD"),
-        ("diff", "--name-only", "-z", "--no-renames"),
-        ("ls-files", "--others", "--exclude-standard", "-z"),
-    ):
-        changed.update(fmt.git_paths(*args))
-    return changed
+    head = fmt.git_output("rev-parse", "--verify", "HEAD^{commit}").decode().strip()
+    return fmt.diff_union(base, head)
 
 
 def _added_lines_from_diff(diff_text: str) -> list[tuple[int, str]]:

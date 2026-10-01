@@ -1,8 +1,8 @@
 ---
 name: agents
-description: 'Builds and changes LLM-agent systems — prompts, tool schemas and selection, and context/tracing wiring — under an eval-first discipline: prove a behavior change against a versioned eval set before shipping and version prompts as code. Use when building a new agent ("에이전트 만들어줘"), writing or editing a system prompt ("prompt engineering"), tightening a tool schema or changing how an agent selects a tool, setting up an LLM eval or golden set, or wiring RAG/session memory/trace logging. Not for authoring or managing skills in this library (use `skillify`) or for tool allowlists, permissions, execution controls, or consumption caps (use `security`).'
+description: 'Builds and changes LLM-agent systems — prompts, tool schemas and selection, and context/tracing wiring — under an eval-first discipline: prove a behavior change against a versioned eval set before shipping and version prompts as code. Use when building a new agent ("에이전트 만들어줘"), writing or editing a system prompt ("prompt engineering"), tightening a tool schema or changing how an agent selects a tool, setting up an LLM eval or golden set, or wiring RAG/session memory/trace logging. Not for authoring or managing skills in this library (follow docs/skills/authoring.md) or for tool allowlists, permissions, execution controls, or consumption caps (use `security`).'
 metadata:
-  version: 2.2.0
+  version: 2.2.1
 ---
 
 # agents
@@ -55,7 +55,7 @@ When an agent, model API, SDK, eval runner, or hosted service depends on an unkn
 - Model training or fine-tuning → `ml`.
 - Serving the model or agent behind an API → `backend`.
 - Deterministic, model-free business logic (unit/integration tests) → `testing`.
-- Creating, updating, renaming, or retiring a skill in this library, including this one → `skillify`.
+- Creating, updating, renaming, or retiring a skill in this library, including this one → follow the Lifecycle section of docs/skills/authoring.md. This skill does not author or manage library packages.
 
 ## Requirements
 

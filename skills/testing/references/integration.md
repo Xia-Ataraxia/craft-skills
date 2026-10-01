@@ -1,6 +1,8 @@
 # Testing Integration Reference
 
 Use integration evidence when boundary semantics are the named risk and preserve the fidelity that makes those semantics credible.
+Choose the cheapest credible boundary that still exposes that risk; do not assemble a real dependency, full suite, or second runtime pass when existing evidence already covers a small reversible change.
+Broaden only for new boundary behavior, a failure cheaper evidence does not explain, or unresolved fidelity, security, or error-translation risk.
 
 ## Contents
 
@@ -15,6 +17,7 @@ Use a real dependency in a container when engine, major version, configuration, 
 Use a faithful in-memory or wire-level fake only when it preserves the semantics relevant to the named risk at lower cost.
 Do not grow a project-internal fake into a second implementation of application business rules merely to avoid exercising the real boundary.
 When retiring such a fake, map its meaningful consumers to retained evidence before deletion; moving the emulator or rebuilding its catalog is not retirement.
+Do not replace a retired fake with a shared fixture catalog or a new guard layer that only rechecks topology.
 Keep narrow test arrangements outside runtime routes and dependency graphs, and make undeclared intercepted requests fail rather than return a default success.
 
 Use a narrow mock only under the admission rules below.
@@ -34,8 +37,12 @@ Guard privileged cleanup, broad seed, reset, or truncate operations with proof o
 Start expensive immutable dependencies once per session when per-test isolation retains faithful behavior.
 
 Bootstrap only prerequisites needed by the boundary under test.
+Share a fixture only when an isolation consumer actually needs the shared lifecycle; otherwise keep inputs local to the case.
 
 Keep deployment-aware contracts narrow and distinguish independently deployed request or response shape from full behavior.
+A wrapper that hides deployment or wiring can leave that risk untested; keep an independent guard when the obligation survives moving the documentation or the wrapper.
+That guard must itself have a consumer or an independent safety obligation.
+It is not a blanket requirement to test every checker, filename, or call graph.
 
 ## Seams, fakes, mocks, and spies
 
@@ -64,14 +71,16 @@ def test_active_user_query_excludes_inactive_users(db_session):
 ```
 
 This test goes red if the query predicate that excludes inactive users is removed.
+The example states the intended failure mode; it does not require a mutation harness or a recorded red run for every boundary test.
 
 ## Boundary evidence
 
-Require `observed` red evidence for every new or behavior-changed boundary test in a named disposable consumer.
-
-Use `observed`, `safely demonstrable`, and `unavailable` for audits as defined in `conventions.md`.
-
-An unavailable historical counterfactual alone does not justify deleting boundary coverage.
+For a reproducible defect, the strong safe pattern is fail-before and pass-after on a named disposable consumer.
+Use that pattern when the counterfactual can be run safely.
+When it cannot, record honest unavailable evidence and the limit; do not invent a red run, and do not delete boundary coverage from unavailable evidence alone.
+Do not require observed-red or mutation proof for every new or behavior-changed boundary test.
+A small reversible change may rely on a brief rationale against existing evidence.
+Use `observed`, `safely demonstrable`, and `unavailable` for optional audits as defined in `conventions.md`.
 
 Use a contract test for independently deployed sides that need request or response shape evidence without full journey wiring.
 

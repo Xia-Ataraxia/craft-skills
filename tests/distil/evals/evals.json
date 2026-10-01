@@ -4,7 +4,7 @@
     {
       "id": "absorb-portable-repository-rules",
       "prompt": "Distil the portable engineering conventions from this public repository and land the useful rules in our craft-skills library.",
-      "expected_behavior": "Fetches the repository into scratch, audits candidate rules for novelty, portability, and ownership, records a keep/drop mapping, routes approved rules through skillify, and records source credit in each receiving package CHANGELOG.",
+      "expected_behavior": "Fetches the repository into scratch, audits candidate rules for novelty, portability, and ownership, records a keep/drop mapping, lands approved rules under docs/skills/authoring.md, and records source credit in each receiving package CHANGELOG.",
       "grading": "verifiable",
       "assertions": [
         "The absorption report maps every candidate rule to a receiving package and landing form or a drop reason",
@@ -20,7 +20,7 @@
       "grading": "verifiable",
       "assertions": [
         "The verdict lists every gap and intended edit before any landing",
-        "The mapping is confirmed before rules are routed through skillify",
+        "The mapping is confirmed before rules are landed under the repository authoring policy",
         "Monorepo-bound rules are dropped with their reasons rather than copied into a package",
         "No external version history is transferred to a new package"
       ]

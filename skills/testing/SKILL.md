@@ -2,20 +2,24 @@
 name: testing
 description: Designs, improves, and audits test suites around behavior and risk, independent oracles, counterfactual evidence, deterministic diagnosis, and cost. Use for generated-test review, unit/component/integration/e2e or smoke placement, test-suite health, flaky-test policy, fixtures, and test audits. Not for production-code red-green implementation, which belongs to programming; diagnosis or repair of one currently failing or intermittent test, which belongs to debug; structural-change characterization, which belongs to refactor; or ML and agent evaluation methodology, which belongs to ml and agents.
 metadata:
-  version: 2.5.1
+  version: 2.6.0
 ---
 
 # testing
 
 Decide for each proposed or changed test which behavior can fail, which independent oracle proves it, and whether to add, rewrite, delete, or omit the test.
-Leave a strategy that selects the cheapest credible layer and makes no-test decisions reviewable.
+Leave a reviewable strategy that selects the cheapest credible layer and records why a check exists.
+Keep deterministic protocol, schema, version, registration, containment, secret, permission, and routing contracts in code when a current consumer or independent obligation needs them.
+Keep taste, context, and judgment in docs; a policy document is a legitimate subject when its instruction is the contract under test.
 
 ## Output contract
 
-Emit one `templates/test-strategy.md`-shaped strategy table per change before adding or changing tests.
-Include every required column, name the existing higher contract test for each `no-test` row that relies on coverage, and return the decision with its evidence state.
-Treat the table as the deliverable rather than counting tests added.
-When a failure cannot be reproduced, record `no-test` with unavailable reproduction evidence, do not invent a failing test, and report the limit.
+Record the decision, independent oracle, cheapest credible evidence, and residual risk in the existing task summary before adding or changing tests.
+For a small or low-impact reversible change, a short rationale with the evidence state is enough; do not emit a full-column strategy table unless the change spans several distinct risks.
+Use `templates/test-strategy.md` as an optional audit aid when a multi-risk review needs comparable rows, not as proof that testing happened.
+Name the existing higher contract test when a `no-test` decision relies on coverage, and return the decision with its evidence state.
+When a failure cannot be reproduced, report unavailable reproduction evidence and the limit rather than inventing a failing test.
+Choose `no-test` when no credible additional check is justified; lack of reproduction does not invalidate independent contract evidence.
 When the oracle is the implementation, rewrite the test against a specification, contract, recorded fixture, or independent reference.
 When a test is flaky, quarantine it with a root-cause investigation and remove the nondeterminism instead of retrying in a loop.
 When behavior is ambiguous, ask which contract governs it before choosing a test layer.
@@ -24,12 +28,12 @@ When behavior is ambiguous, ask which contract governs it before choosing a test
 
 Read `references/admission.md` before placing, retaining, rewriting, deleting, or adding a test.
 Admit a test only when it names a behavior or invariant, covers a distinct failure mode, uses an independent oracle, and runs at the cheapest layer that can observe the failure.
-Record `add`, `rewrite`, `delete`, or `no-test` in `templates/test-strategy.md` before implementation.
-When the task is codebase reduction, use the existing justification column to account for retired, retained, and replacement implementation or support code; more tests or new guards do not substitute for that objective.
+Each retained check needs a current consumer or an independent safety, security, or data-integrity obligation; do not keep a check because a process artifact, extra approval, or repeated full suite exists.
+When the task is codebase reduction, account in the existing rationale for retired, retained, and replacement implementation or support code; more tests, replacement guards, or new catalogs do not substitute for that objective.
 Apply `references/structure.md` to keep regression setup proportional and `references/integration.md` before replacing a fake.
-Require an observed red for the named reason in a disposable consumer before production implementation when adding or behavior-changing a test.
-Classify audit evidence as `observed`, `safely demonstrable`, or `unavailable` as defined in `references/conventions.md`.
-Do not delete a historical test from unavailable evidence alone.
+For a reproducible defect, obtain a strong fail-before and pass-after result in a disposable consumer when that demonstration is safe.
+Scale observed, safely demonstrable, and unavailable evidence to the risk and lifecycle, as defined in `references/conventions.md`.
+A green run alone does not prove sensitivity, and missing history alone does not authorize deletion.
 
 ## Workflow and references
 
@@ -67,7 +71,7 @@ Apply property and contract techniques within an evidence scope.
 ## Ownership and handoffs
 
 Supply risk, oracle, scope, test-quality review, placement, audit decisions, suite policy, quarantine policy, and post-fix suite health.
-Have `programming` own production-code red-green implementation and return pass evidence after this skill supplies the failing test or test design.
+Have `programming` own production-code red-green implementation and return pass evidence after this skill supplies the test design and the strongest available evidence for the named risk.
 Have `debug` own reproduction, diagnosis, and repair of a specific currently failing or intermittent test and return diagnosis and fix evidence before quarantine or health decisions resume.
 Have `refactor` own characterization before structural change and hand characterization tests to this skill for quality and placement review.
 Do not turn unknown incumbent output into a permanent golden master without an independent contract, invariant, reference, or explicit approval.
@@ -82,10 +86,14 @@ Do not turn unknown incumbent output into a permanent golden master without an i
 - Deleting from `unavailable` evidence alone discards protection without proof → retain the test until independent evidence supports a decision.
 - Wrapping database tests in rollback when application-owned transactions or transaction-local RLS are part of the path masks production behavior → exercise the application-owned transaction and role path instead.
 - Using broad seeds, resets, or privileged cleanup without proving a dedicated disposable non-production target risks real data → prove and use a dedicated disposable target instead.
-- A test that mirrors implementation copy locks in an answer without proving the contract → rewrite it against the specification or approved fixture.
-- Fixture-generator, source-string-mutation, or checker-of-checker layers without an independent oracle protect test topology rather than product risk → test the public checker contract directly or delete the layer.
-- Test count as a metric rewards volume rather than unique evidence → review distinct failure modes and decision rows instead.
-- A narrow regression or fixture retirement grows shared catalogs, duplicate test matrices, or a replacement application emulator → preserve the reduction objective with case-local inputs and the smallest faithful consumer proof; retain necessary boundary coverage rather than imposing filename bans or line-count quotas.
+- A test that copies the implementation's discount formula merely reproduces its bug → derive the expected amount from the independent pricing contract.
+- A check requiring a doc's `Verification` heading or forbidding an old directory name anywhere in prose locks wording or historical examples without a consumer → review the policy meaning and retain executable path-containment or registration checks where those contracts actually apply.
+- JSON key order or whitespace asserted without a wire or parser consumer tests formatting rather than meaning → assert the decoded contract or the consumer that actually depends on the bytes.
+- Two tests with identical setup, inputs, and oracle under different names add no evidence → keep one unless the execution environment exposes a distinct risk.
+- Mandatory strategy tables, extra approvals, or repeated full-suite and runtime checks treated as proof add process cost without new evidence → record the distinct risk and the cheapest credible check in the existing summary.
+- Fixture-generator, source-string-mutation, or checker-of-checker layers without an independent oracle protect test topology rather than product risk → test the public checker contract directly or delete the layer; do not ban a checker or topology test that protects a real contract.
+- Test count as a metric rewards volume rather than unique evidence → review distinct failure modes and decision rationale instead.
+- A narrow regression or fixture retirement grows shared catalogs, duplicate test matrices, or a replacement application emulator → preserve the reduction objective with case-local inputs and the smallest faithful consumer proof; retain independently useful guards after a document migration rather than imposing filename bans or line-count quotas.
 
 ## Portable runtime facts
 

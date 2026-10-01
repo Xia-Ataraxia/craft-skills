@@ -2,16 +2,6 @@
   "schema_version": 1,
   "cases": [
     {
-      "trigger": "skill 만들어줘",
-      "expected_package": "craft-skills/skillify",
-      "forbidden_neighbors": ["bstack/skillify", "craft-skills/document", "craft-skills/init"]
-    },
-    {
-      "trigger": "make a skill",
-      "expected_package": "craft-skills/skillify",
-      "forbidden_neighbors": ["bstack/skillify", "craft-skills/guardrails", "craft-skills/document"]
-    },
-    {
       "trigger": "write an ADR",
       "expected_package": "craft-skills/document",
       "forbidden_neighbors": ["craft-skills/init", "craft-skills/write-report", "oh-my-secondbrain/core/vault-decision-record"]
@@ -27,14 +17,9 @@
       "forbidden_neighbors": ["craft-skills/init", "craft-skills/document", "craft-skills/git"]
     },
     {
-      "trigger": "initialize this reusable plugin ecosystem workflow as a skill",
-      "expected_package": "craft-skills/skillify",
-      "forbidden_neighbors": ["craft-skills/init", "craft-skills/agents", "craft-skills/document"]
-    },
-    {
       "trigger": "init this repository",
       "expected_package": "craft-skills/init",
-      "forbidden_neighbors": ["craft-skills/document", "craft-skills/git", "craft-skills/skillify"]
+      "forbidden_neighbors": ["craft-skills/document", "craft-skills/git"]
     },
     {
       "trigger": "deep-init this codebase with AGENTS instructions",
@@ -129,12 +114,12 @@
     {
       "trigger": "이 레포 규칙 파쿠리해줘",
       "expected_package": "craft-skills/distil",
-      "forbidden_neighbors": ["craft-skills/skillify", "craft-skills/research", "craft-skills/document"]
+      "forbidden_neighbors": ["craft-skills/research", "craft-skills/document"]
     },
     {
       "trigger": "absorb this external skill into our library",
       "expected_package": "craft-skills/distil",
-      "forbidden_neighbors": ["craft-skills/skillify", "craft-skills/research", "craft-skills/init"]
+      "forbidden_neighbors": ["craft-skills/research", "craft-skills/init"]
     },
     {
       "trigger": "choose test placement and fixtures for an integration boundary",

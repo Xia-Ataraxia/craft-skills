@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Validate craft-skills skill-package format against the authoring contract
-(`skills/skillify/references/contract.md`).
+(`docs/skills/package-contract.md`).
 
 Each skill package is a single directory `skills/<skill-name>/` containing at
 least `SKILL.md` + `CHANGELOG.md`. This validator enforces, per package:
@@ -9,26 +9,30 @@ least `SKILL.md` + `CHANGELOG.md`. This validator enforces, per package:
      may additionally contain Agent Skills' optional `license`,
      `compatibility`, and `allowed-tools` keys. `allowed-tools` is an
      experimental, implementation-dependent declaration, not a portable
-     enforcement mechanism.
+     enforcement mechanism. See package-contract.md § Frontmatter.
   2. `name` equals the package directory name, is kebab-case, and is <= 64
-     characters.
+     characters. See package-contract.md § Naming.
   3. `description` is 1..1024 characters (hard bounds); a shape warning
      (non-blocking) fires under 200 or over 700 characters. Lexical routing
-     phrases are not a format gate.
+     phrases are not a format gate. See package-contract.md § Description.
   4. `metadata.version` is present and is semver `MAJOR.MINOR.PATCH`.
+     Changelog length and dated bullets are local release policy, not a
+     native loader requirement. See package-contract.md § Changelog and version.
   5. SKILL.md body compactness is authoring guidance, not a format failure.
+     Sentence-boundary line breaks are a nonblocking typography preference
+     (`docs/skills/verification.md` § Typography) and are not a format error.
   6. No SKILL.md is nested anywhere inside the package below the top-level one
-     (every skill is one flat directory).
+     (every skill is one flat directory). See package-contract.md § Package parts.
   7. SKILL.md body contains no `## Change Log` (history lives in CHANGELOG.md).
   8. CHANGELOG.md exists beside SKILL.md with >= 1 dated bullet `- YYYY-MM-DD ...`
-     and is at or under 100 lines (contract §6).
+     and is at or under 100 lines (package-contract.md § Changelog and version).
   9. No tracked real `.env` file in the package (only `.env.example` may be committed).
  10. Every package-relative support path the body mentions (`scripts/`, `references/`,
      `templates/`, `assets/`, `agents/`) exists in the package, and no markdown link
-     climbs out of the package with `../` (contract §12). Repository-root
-     `tests/<name>/` paths are not package-local support paths.
+     climbs out of the package with `../` (package-contract.md § Referenced paths).
+     Repository-root `tests/<name>/` paths are not package-local support paths.
 
-Modes:
+Modes (`docs/skills/verification.md` § Format checks):
   (default)       full scan; reports every violation; exit 1 if any hard error found.
   --diff-base REF select the union of committed, staged, unstaged and untracked
                   package/support changes against one commit, not a revision range.
@@ -38,11 +42,12 @@ Modes:
 
 Warnings (description-length shape) never affect the exit code, in any mode.
 This validator owns FORMAT only. Secret/real-path leakage is owned by
-validate-runtime-hygiene.py — keep the two concerns separate.
+validate_runtime_hygiene.py — keep the two concerns separate.
 """
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import os
 import re
@@ -78,6 +83,39 @@ PACKAGE_PATH_DIRS = ("scripts", "references", "templates", "assets", "tests", "a
 PACKAGE_PATH_RE = re.compile(
     r"(?:\$SKILL_DIR/|\$\{SKILL_DIR\}/|(?<![A-Za-z0-9_./-]))(?:" + "|".join(PACKAGE_PATH_DIRS) + r")/[A-Za-z0-9_./-]*[A-Za-z0-9_]"
 )
+
+# Repository tools, docs, and CI need no skill owner.
+# Exact files and directory prefixes; a path is in scope when it equals a
+# file or starts with a prefix plus "/". docs/ covers docs/skills/.
+REPOSITORY_TOOL_FILES = frozenset({
+    "AGENTS.md",
+    "README.md",
+    "install.sh",
+    "skills/PROVENANCE.md",
+    "scripts/ci-local.sh",
+    ".codex/config.yaml",
+    ".github/workflows/pr-check.yml",
+    ".github/workflows/test-plugin-install.yml",
+    "docs/skills/package-contract.md",
+    "docs/skills/verification.md",
+    "docs/skills/authoring.md",
+})
+REPOSITORY_TOOL_PREFIXES = (
+    "docs/",
+    "scripts/governance/",
+    "tests/governance/",
+    ".github/",
+    ".codex/",
+)
+# Historical prose may name a retired owner. Skip these in the dangling-
+# reference scan only; they still participate in scope and hygiene checks.
+HISTORICAL_REFERENCE_EXEMPT = frozenset({
+    "skills/PROVENANCE.md",
+    "docs/governance/audit-matrix.md",
+    "docs/governance/acceptance-report.md",
+    "docs/research/omo-analysis.md",
+    "docs/research/skill-authoring-standards.md",
+})
 
 
 @dataclass
@@ -245,6 +283,7 @@ def package_owners(paths: set[str]) -> set[str]:
         str(PurePosixPath(path).parent)
         for path in paths
         if path.startswith("skills/") and path.endswith("/SKILL.md")
+        and PurePosixPath(path).parent.parent.as_posix() == "skills"
     }
 
 
@@ -255,6 +294,17 @@ def nearest_owner(path: str, owners: set[str]) -> str | None:
 
 def current_owners() -> set[str]:
     owners: set[str] = set()
+    if not SKILLS_DIR.is_dir():
+        return owners
+    # A skills/ symlink (or link chain) must stay inside the repo before any listing or read.
+    skills_root = SKILLS_DIR.resolve()
+    repo_root = REPO_ROOT.resolve()
+    if not skills_root.is_relative_to(repo_root):
+        raise ValueError(f"skills/ escapes repository root: {skills_root}")
+    # rglob does not traverse directory symlinks; reject escaping entries first.
+    for entry in SKILLS_DIR.iterdir():
+        if entry.is_symlink() and not entry.resolve().is_relative_to(skills_root):
+            raise ValueError(f"skill path escapes skills/: {entry.relative_to(REPO_ROOT)}")
     for skill in SKILLS_DIR.rglob("SKILL.md"):
         if not skill.resolve().is_relative_to(SKILLS_DIR.resolve()):
             raise ValueError(f"SKILL.md escapes skills/: {skill.relative_to(REPO_ROOT)}")
@@ -276,6 +326,94 @@ def explicit_owner(value: str, owners: set[str]) -> str:
     return normalized
 
 
+def is_repository_tool_path(rel: str) -> bool:
+    """Docs, CI, and repository tools need no skill owner."""
+    if rel in REPOSITORY_TOOL_FILES:
+        return True
+    return any(rel == prefix[:-1] or rel.startswith(prefix) for prefix in REPOSITORY_TOOL_PREFIXES)
+
+
+def _map_package_resource(rel: str) -> str:
+    """Map a repo-root test tree onto its skill owner; leave other paths alone."""
+    if rel == "tests" or rel.startswith("tests/"):
+        return "skills/" + rel[len("tests/"):]
+    return rel
+
+
+def diff_union(base: str, head: str) -> set[str]:
+    """Committed, staged, unstaged, and untracked paths. Not a revision range."""
+    changed: set[str] = set()
+    for args in (
+        ("diff", "--name-only", "-z", "--no-renames", base, head),
+        ("diff", "--cached", "--name-only", "-z", "--no-renames", head),
+        ("diff", "--name-only", "-z", "--no-renames"),
+        ("ls-files", "--others", "--exclude-standard", "-z"),
+    ):
+        changed.update(git_paths(*args))
+    return changed
+
+
+def historical_owners(base: str, head: str) -> set[str]:
+    """Owners visible at base, at HEAD, or in the index.
+
+    A deletion commit removes the owner from HEAD and from the index. The
+    base tree is the evidence that the removed package had a real owner.
+    """
+    return package_owners(
+        git_paths("ls-tree", "-r", "--name-only", "-z", base)
+        | git_paths("ls-tree", "-r", "--name-only", "-z", head)
+        | git_paths("ls-files", "--cached", "-z")
+    )
+
+
+def has_package_consumer(text: str, suffix: str, removed: str) -> bool:
+    """Recognize reference syntax, not every prose mention of an old owner."""
+    reference = re.compile(
+        r"(?:^|[\s`'\"(=])(?:\$\{?\w+\}?/)?"
+        + re.escape(removed) + r"(?=/|[\s`'\"),#]|$)", re.MULTILINE,
+    )
+    invocation = re.compile(
+        r"(?<![\w/-])/skill:" + re.escape(removed.removeprefix("skills/"))
+        + r"(?=$|[\s`'\"),])",
+    )
+    if suffix == ".py":
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            # Malformed source must not hide an otherwise visible consumer.
+            return bool(reference.search(text) or invocation.search(text))
+        non_consumers: set[int] = set()
+        for node in ast.walk(tree):
+            # A negative assertion's literal expected value is checker data.
+            # Do not skip the actual expression, which can still load a path.
+            if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                    and node.func.attr == "assertNotIn" and node.args
+                    and isinstance(node.args[0], ast.Constant)):
+                non_consumers.add(id(node.args[0]))
+            if (isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant)
+                    and isinstance(node.value.value, str)):
+                non_consumers.add(id(node.value))
+        return any(
+            isinstance(node, ast.Constant) and isinstance(node.value, str)
+            and id(node) not in non_consumers
+            and (reference.search(node.value) or invocation.search(node.value))
+            for node in ast.walk(tree)
+        )
+    if suffix == ".md":
+        # Links, inline code, and fenced commands are actionable references.
+        # Plain prose (including a retirement narrative) is not a loader.
+        for match in re.finditer(
+            r"```[\s\S]*?```|~~~[\s\S]*?~~~|`[^`\n]+`|"
+            r"\]\(([^)\n]+)\)|^\s*\[[^\]\n]+\]:\s*(\S+)",
+            text, re.MULTILINE,
+        ):
+            value = match.group(1) or match.group(2) or match.group()
+            if reference.search(value) or invocation.search(value):
+                return True
+        return bool(invocation.search(text))
+    return bool(reference.search(text) or invocation.search(text))
+
+
 def select_packages(diff_base: str | None, packages: list[str]) -> tuple[list[Path], list[Finding]]:
     if not REPO_ROOT.is_dir():
         raise ValueError("repository root must be an existing directory")
@@ -293,22 +431,11 @@ def select_packages(diff_base: str | None, packages: list[str]) -> tuple[list[Pa
         raise ValueError("--diff-base requires one commit-ish, not a range or option")
     base = git_output("rev-parse", "--verify", "--end-of-options", diff_base + "^{commit}").decode().strip()
     head = git_output("rev-parse", "--verify", "HEAD^{commit}").decode().strip()
-    changed: set[str] = set()
-    for args in (
-        ("diff", "--name-only", "-z", "--no-renames", base, head),
-        ("diff", "--cached", "--name-only", "-z", "--no-renames", head),
-        ("diff", "--name-only", "-z", "--no-renames"),
-        ("ls-files", "--others", "--exclude-standard", "-z"),
-    ):
-        changed.update(git_paths(*args))
-    previous = package_owners(
-        git_paths("ls-tree", "-r", "--name-only", "-z", base)
-        | git_paths("ls-tree", "-r", "--name-only", "-z", head)
-        | git_paths("ls-files", "--cached", "-z")
-    )
+    changed = diff_union(base, head)
+    previous = historical_owners(base, head)
     tombstones: set[str] = set()
     for rel in sorted(changed):
-        mapped = "skills/" + rel[len("tests/"):] if rel.startswith("tests/") else rel
+        mapped = _map_package_resource(rel)
         owner = nearest_owner(mapped, owners)
         old_owner = nearest_owner(mapped, previous)
         if owner:
@@ -317,17 +444,12 @@ def select_packages(diff_base: str | None, packages: list[str]) -> tuple[list[Pa
             tombstones.add(old_owner)
         if owner or old_owner:
             continue
-        # These shared surfaces invoke or document skillify's format contract.
-        if (rel in {"AGENTS.md", "skills/PROVENANCE.md", ".github/workflows/pr-check.yml",
-                    ".github/workflows/test-plugin-install.yml", "scripts/ci-local.sh"}
-                or rel.startswith(("scripts/governance/", "tests/governance/"))):
-            if "skills/skillify" not in owners:
-                raise ValueError(f"shared format owner skills/skillify is missing for {rel!r}")
-            selected.add("skills/skillify")
-        elif rel.startswith(("skills/", "tests/", "scripts/")):
+        if is_repository_tool_path(rel):
+            print(f"scope: repository-tool {rel!r} (no skill owner required)")
+            continue
+        if rel.startswith(("skills/", "tests/", "scripts/")):
             raise ValueError(f"unresolved package/support ownership for {rel!r}")
-        else:
-            print(f"scope: excluded {rel!r} (outside package-format ownership)")
+        print(f"scope: excluded {rel!r} (outside package-format ownership)")
     # Check current Git-visible references, not ignored runtime captures or archives.
     reference_paths = (
         git_paths("ls-files", "--cached", "--others", "--exclude-standard", "-z")
@@ -341,12 +463,9 @@ def select_packages(diff_base: str | None, packages: list[str]) -> tuple[list[Pa
                     or any(p.is_file() or p.is_symlink() for p in directory.rglob("*"))):
                 findings.append(Finding(removed, "INCOMPLETE_RETIREMENT",
                                         f"SKILL.md was removed but files remain under {rel_root}"))
-        reference = re.compile(
-            r"(?:^|[\s`'\"(=])(?:\$\{?\w+\}?/)?"
-            + re.escape(removed) + r"(?=/|[\s`'\"),#]|$)", re.MULTILINE,
-        )
         for rel in sorted(reference_paths):
-            if PurePosixPath(rel).parts[0] in {".git", ".gjc", "archive"}:
+            parts = PurePosixPath(rel).parts
+            if "archive" in parts or parts[0] in {".git", ".gjc"} or rel in HISTORICAL_REFERENCE_EXEMPT:
                 continue
             candidate = REPO_ROOT / rel
             if candidate.name == "CHANGELOG.md" or not candidate.is_file():
@@ -357,8 +476,8 @@ def select_packages(diff_base: str | None, packages: list[str]) -> tuple[list[Pa
                 text = candidate.read_text(encoding="utf-8")
             except UnicodeError:
                 continue
-            if reference.search(text):
-                mapped = "skills/" + rel[len("tests/"):] if rel.startswith("tests/") else rel
+            if has_package_consumer(text, candidate.suffix, removed):
+                mapped = _map_package_resource(rel)
                 consumer = nearest_owner(mapped, owners)
                 if consumer:
                     selected.add(consumer)
@@ -396,7 +515,8 @@ def check_referenced_paths(name: str, skill_dir: Path, body: str) -> list[Findin
     if TRAVERSAL_LINK_RE.search(body):
         findings.append(Finding(name, "TRAVERSAL_LINK",
                                 "SKILL.md links climb out of the package with `../`; "
-                                "the Hermes tap fetcher aborts the install on such a path (contract §12)"))
+                                "the Hermes tap fetcher aborts the install on such a path "
+                                "(docs/skills/package-contract.md § Referenced paths)"))
     seen: set[str] = set()
     for match in PACKAGE_PATH_RE.finditer(body):
         rel = re.sub(r"^\$\{?SKILL_DIR\}?/", "", match.group(0)).rstrip(".")
@@ -409,7 +529,8 @@ def check_referenced_paths(name: str, skill_dir: Path, body: str) -> list[Findin
             continue
         if not _support_path_inside_package(skill_dir, rel):
             findings.append(Finding(name, "MISSING_REFERENCED_PATH",
-                                    f"SKILL.md mentions `{rel}` but the package does not ship it (contract §12)"))
+                                    f"SKILL.md mentions `{rel}` but the package does not ship it "
+                                    "(docs/skills/package-contract.md § Referenced paths)"))
     return findings
 
 
