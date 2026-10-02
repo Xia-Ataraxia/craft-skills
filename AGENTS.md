@@ -1,65 +1,109 @@
-# craft-skills — Agent Operating Guide
+# Repository Guidelines
 
-Engineering and research work-craft skills for any coding agent — Claude Code, Codex, Hermes, or a generic instruction-following agent.
-This is the operator's own accumulated craft, kept vendor-agnostic on purpose: every skill is a plain Markdown recipe, portable across runtimes with no lock-in to one tool's frontmatter or plugin format.
-Keep reusable work methods here, including personal preferences that generalize without private context.
-Keep personal accounts, knowledge policy, and private operating context in `bstack`; compose distinct responsibilities rather than duplicating them.
+<!-- init:managed id=init-root sha256=95c86fe870b0a758598797795b0ea74f5bedccdc7c01f3c25d257b6749742367 -->
+## Project Overview
 
-## Layout
+craft-skills is a public library of reusable research and engineering methods, not an application.
+Keep the plain Markdown core vendor-neutral; personal accounts, knowledge policy, and private operating context belong in `bstack`.
+Discover packages from `skills/*/SKILL.md`, rather than maintaining another inventory here.
+`README.md` introduces usage and distribution; the three owners under `docs/skills/` govern changes.
 
-A package is one flat directory: `skills/<name>/SKILL.md` plus whichever of `references/`, `templates/`, `scripts/`, `assets/`, and `CHANGELOG.md` it needs; tests live at repo-root `tests/<name>/`.
-Runtime-owned `agents/` directories are optional plumbing, not part of the portable core.
-No nested `SKILL.md` files — every skill is one level deep.
-`tests/<name>/` holds focused functional, security, and data-integrity fixtures; optional reusable scenarios may live under `tests/<name>/evals/`.
-Generated run transcripts and scores stay in gitignored `evals/` scratch and are never quality gates.
-Do not require a wording- or procedure-locking corpus.
+## Architecture & Data Flow
 
-Discover available packages from `skills/*/SKILL.md`; do not maintain a second package inventory here.
-`browser` is a thin personal-boundary package: Aside is the sole managed route, official aside-browser and current aside guide own product usage, and this library records only uncovered identity, existing-app protection, same-session continuation, and observed-result composition.
-`obsidian` composes unchanged official native owners `obsidian-markdown`, `obsidian-bases`, `json-canvas`, and `obsidian-cli` for format and CLI mechanics, keeping only uncovered local app/Sync coordination and live-vault policy (its AGENTS.md and guidelines).
-`design` owns root `DESIGN.md`, UX/UI judgment, bad-UX audits, and rendered evidence.
+A request routes through a package's description to `SKILL.md`, then to its on-demand references, scripts, templates, or assets.
+Each package is flat: `skills/<name>/SKILL.md`; no nested skills or grouping directories.
+Runtime-specific adapters and optional `agents/` plumbing stay outside the portable core; authoring does not require GJC.
+Author source → check the affected contract and behavior → hand off evidence; installation, registration, publication, and effective loading are separate effects.
+`docs/skills/authoring.md` owns create, update, move/rename, retire, requested field harvest, and vendor-gap extraction.
+`docs/skills/package-contract.md` owns consumed package contracts; `docs/skills/verification.md` owns evidence and its limits.
+Docs own policy; `validate_skill_format.py` and `validate_runtime_hygiene.py` own their deterministic checks, not semantic judgment.
 
-Author against `docs/skills/package-contract.md`; lifecycle and taste live in `docs/skills/authoring.md`; scoped verification lives in `docs/skills/verification.md`.
-Route by work type. Package lifecycle is ordinary documentation, not a required skill invocation. `docs/skills/authoring.md` owns create, update, move/rename, retire, field harvest, and vendor-gap extraction. `docs/skills/package-contract.md` owns the local package contract consumed by release tools, not by a native loader. `docs/skills/verification.md` owns scoped judgment; deterministic checks stay in `scripts/governance/tools/validate_skill_format.py` and `scripts/governance/tools/validate_runtime_hygiene.py`, with tests under `scripts/governance/tests/`.
-The portable core stays neutral across Claude Code, Codex, Hermes, Cursor, Grok, and GJC. Optional `agents/` and `assets/` stay out of the core, and authoring needs no GJC. Line breaks are nonblocking taste; do not require a reflow command.
-Official manuals stay official. Check relevant official skills and CLI/agent APIs only on tasks that use them. Deployment, install, registration, and publication are separate effects.
-Official vendor skills stay unmodified on their official distribution and update channels; local packages hold only uncovered context.
+## Key Directories
 
-## Install matrix
+- `skills/<name>/`: always-read recipe plus only the support resources it actually consumes; package-local `CHANGELOG.md` holds history.
+- `tests/<name>/`: focused functional, security, and data-integrity fixtures, outside install bundles; optional `evals/` holds reusable scenarios.
+- `scripts/governance/tools/` and `scripts/governance/tests/`: repository checks and their regression tests, not a second skill workflow.
+- `docs/skills/`: authoring, package-contract, and verification owners; consult the relevant owner rather than duplicating policy.
+- `.github/workflows/`: actual CI and distribution jobs; runtime manifests describe native packaging, not universal loader behavior.
+- Gitignored `evals/` scratch: generated transcripts and scores, never committed policy or mandatory quality gates.
 
-| Runtime | How skills are loaded |
-|---------|------------------------|
-| **Claude Code** | Claude marketplace commands: `/plugin marketplace add Xia-Ataraxia/craft-skills` then `/plugin install craft-skills@craft-skills`. |
-| **Codex** | Canonical channel: vendor-native plugin install with `codex plugin marketplace add Xia-Ataraxia/craft-skills` then `codex plugin add craft-skills@craft-skills --json`; marketplace metadata lives in `.codex-plugin/plugin.json`. Codex auxiliary clone path: `.agents/skills/craft-skills` is optional development context from the user project's root; skills are nested at `.agents/skills/craft-skills/skills/<name>/SKILL.md`. |
-| **Hermes** | Custom tap: `hermes skills tap add Xia-Ataraxia/craft-skills`, then `hermes skills install Xia-Ataraxia/craft-skills/skills/<name>` per skill and `hermes skills update` for upstream changes. The tap copies and scans the whole unit, so packages stay scanner-clean (`safe`). |
-| **GJC** (Gajae-Code) | For authorized installation, use the marketplace plugin: `gjc plugin marketplace add Xia-Ataraxia/craft-skills` then `gjc plugin install craft-skills@craft-skills`. GJC advertises installed plugin packages as `craft-skills:<name>`. Select the native update command, target, and scope from installed help; do not widen to unrelated plugins. Preserve identifiable native field experiments separately from the official cache and retain unique changes before normalization. Do not author the official cache or point `skills.customDirectories` at a version-pinned cache. Verify updated content and fresh effective loading separately. |
-| **Generic agents** (Cursor, Gemini, Copilot, etc.) | Point the instruction-file import at `skills/<name>/SKILL.md`; each file is self-contained. |
+## Development Commands
 
-## Environment variables
+Run from the repository root and select the actual integration branch before resolving one base commit.
+These commands come from `.github/workflows/pr-check.yml`; `--diff-base` takes one commit, not a revision range.
 
-| Variable | Meaning |
-|----------|---------|
-| `CRAFT_WT_REMOTE_HOST` | Tailscale hostname for remote worktree exec (the worktree recipe now lives in the `git` skill's `references/worktree.md`; optional). |
-| `OBSIDIAN_VAULT_PATH` | Obsidian vault root resolved independently on each machine. |
-| `OBSIDIAN_CLI_PATH` | Optional path to the `obsidian-cli` or `ob` binary required by the invoking skill. |
-| `OBSIDIAN_SYNC_REMOTE_HOST` | Optional SSH host for a headless Obsidian Sync replica. |
-| `OBSIDIAN_SYNC_PROCESS_NAME` | Optional process-supervisor name for the headless Sync daemon. |
-| `PM2_LOG_DIR` | Optional pm2 log directory used by the headless Sync daemon recipe. |
+```sh
+BASE_REF=main # replace with the actual PR target branch
+BASE=$(git merge-base "origin/$BASE_REF" HEAD)
+python3 scripts/governance/tools/validate_skill_format.py --diff-base "$BASE"
+python3 scripts/governance/tools/validate_runtime_hygiene.py --diff-base "$BASE"
+python3 scripts/governance/tools/check_version_bump.py --diff-base "$BASE"
+python3 -m unittest scripts.governance.tests.test_validate_skill_format
+python3 -m unittest scripts.governance.tests.test_validate_runtime_hygiene
+python3 -m unittest tests.init.test_agents_region tests.init.test_package_contract
+```
 
-## Rails
+Select the tests relevant to the changed behavior; the commands above are not a mandatory suite for every edit.
+The Layer-1 selectors include committed, staged, unstaged, and untracked changes; shared repository-tool paths select no skill owner, while unknown scoped paths fail closed.
+`bash scripts/ci-local.sh` runs the declared local checks, but is not full CI proof: marketplace checks can skip, isolated native-install jobs are CI-only, and the macOS transcription job is not mirrored.
+Inspect `.github/workflows/test-plugin-install.yml` before claiming marketplace or install coverage; the local runner can register a marketplace in temporary Codex state.
+There is no application build/run or root npm/Bun pipeline; TypeScript and transcription checks use task-specific dependencies declared in CI.
 
-- Formal package changes follow `docs/skills/authoring.md`, the local contract in `docs/skills/package-contract.md`, and task- and content-bound destination admission. Branch → PR delivery stays an authorized separate effect. Do not require a `skillify` invocation, special package protection, or an authoring-triggered CLI update.
-- Official tool skills and manuals remain unmodified originals; install and update them through their official channels. Local skills hold only context those originals do not cover. Do not fork, copy, or rewrite official product usage into this library.
-- Check current official guidance for APIs the task actually uses, and distinguish that guidance from the installed version's command surface. Report relevant incompatibilities without inventing support. Authoring does not authorize host upgrades: dependency updates and deployment are separately authorized effects, verified on their affected paths. Do not inventory or update unrelated tools.
-- Preserve native local field learning without immediate canonical edits or version bumps. Harvest only on request, distinguishing `canonical_package`, `proposed_pr`, `field_package`, and `reference_evidence` with owner, privacy, provenance, and admission state.
-- Do not harvest all MEMORY/USER/conversation files, edit official installed caches as an authoring shortcut, or add an automatic harvesting service.
-- Choose verification by observable behavior and risk: real script, error, effect, security, and data-integrity fixtures, plus independent judgment for subjective output and relevant routing positives/near-misses. Do not require generated eval/run outputs, wording- or procedure-locking corpora, or a replacement checker-of-checker. The agent chooses method and recovery. Do not add generic repeated consent for reversible in-scope work.
-- Keep a schema field, check, gate, or receipt only when it has a current consumer or an independent safety obligation. Structural and lexical checks are not semantic or deployed-behavior proof. Distinguish official compatibility requirements, upstream recommendations, and local repository policy.
-- Reuse a common approved policy and exact authoring evidence across coherent domain batches; do not restart a full GJC workflow per package or duplicate admission committees.
-- Reuse an unchanged task-bound approval tuple (target, command, effect). New publication, install, removal, or restart effects require their own authorization; a plan or passing test alone grants none.
-- Record source base plus current recursive content digest, actual checks, independent findings, and unverified effects. A release commit, installed content, and effective load are separate facts.
-- Keep out-of-scope findings separate without automatically expanding the change or publishing an issue. Publish a concrete issue only within the operator's authorization.
-- CHANGELOG bullets are one compact line: `- YYYY-MM-DD — [vX.Y.Z: ]why → what.` Keep each package CHANGELOG at or under 100 lines by dropping oldest whole entries; do not grow a sidecar archive.
-- Provenance is two-tier: per-change credit lives in the package's own `CHANGELOG.md`; the current cross-skill lineage snapshot lives in `skills/PROVENANCE.md`.
-- Root policy owners are this file, `docs/skills/authoring.md`, `docs/skills/package-contract.md`, `docs/skills/verification.md`, the format and runtime-hygiene validators under `scripts/governance/tools/`, native distribution/version checks, and NOTICE/LICENSE/upstream attribution. Keep private operating context out of public packages. Optional authored examples are not a forced evals/triggers schema; compact bodies are guidance; line breaks are nonblocking taste; CHANGELOG files stay at or under 100 lines.
-- Do not require a manifest-driven governance aggregator or checker-of-checker. Keep or drop an individual check only with a current consumer or independent safety owner.
+## Code Conventions & Common Patterns
+
+Use `name`, `description`, and `metadata.version` frontmatter; the name matches the kebab-case directory, and version is never a top-level key.
+Local semantic versions and changelogs serve repository consumers, not a native loader requirement; consult the package contract for optional metadata.
+Keep judgment in prose and fragile repeatable operations in scripts; reuse existing patterns and prefer standard-library Python with `unittest` for focused fixtures.
+Declare narrow flags or positional inputs; use placeholders in examples, not host-specific paths or secrets.
+A declared non-secret runtime setting may default from one documented environment variable; secrets require declared environment lookup, not ambient environment dumping.
+Resolve support paths within the package, including symlinks; reject missing or escaping paths and ambiguous inputs rather than guessing.
+Do not use `../` cross-package links: name the sibling skill and file in prose instead.
+Keep `.env` private and gitignored; only `.env.example` with placeholders is committed. Never reproduce secret values in reports or logs.
+Keep one owner per rule and link to it; tables, rigid heading schemas, wording corpora, provider quorums, and checker-of-checker aggregators are not requirements.
+Sentence-per-line is nonblocking taste, not a reflow or formatting gate.
+Changelog bullets use `- YYYY-MM-DD — [vX.Y.Z: ]why → what.`; retain at most 100 lines by dropping oldest whole entries, without a sidecar archive.
+Per-change credit belongs in the package changelog; update `skills/PROVENANCE.md` when primary lineage changes, preserving upstream attribution and applicable NOTICE/LICENSE obligations.
+
+## Important Files
+
+- `docs/skills/authoring.md`: lifecycle, admission, private/public boundaries, official-source handling, and separately authorized delivery.
+- `docs/skills/package-contract.md`: metadata, containment, history, supported resource layout, and actual format checks.
+- `docs/skills/verification.md`: observable oracles, scoped checks, evidence identity, security, and deployment limits.
+- `.github/workflows/pr-check.yml`, `.github/workflows/test-plugin-install.yml`, and `scripts/ci-local.sh`: inspect actual jobs rather than assuming README coverage claims.
+- `README.md`, `install.sh`, and native manifests such as `.codex-plugin/plugin.json`: distribution entry points; check affected manifest compatibility rather than inventing native support.
+- `skills/init/SKILL.md` and `skills/init/scripts/agents_region.py`: hierarchical guidance ownership and hash-checked managed-region editing.
+Maintain this payload through `python3 skills/init/scripts/agents_region.py AGENTS.md --id init-root --payload-file -`; supply UTF-8 text ending in LF through stdin.
+Keep the title outside the single `init-root` region; resolve hand-edited marker content rather than bypassing its hash check.
+Leave existing adapters unchanged unless selected; add child `AGENTS.md` only for a distinct configured entry scope, not directory size.
+
+## Runtime/Tooling Preferences
+
+Official vendor skills and manuals stay unmodified on upstream channels; local packages hold uncovered context, not copied product manuals or harnesses.
+Consult current official guidance and installed help only for APIs and tools the task uses; distinguish compatibility requirements, recommendations, and local policy.
+`README.md` documents runtime distribution routes; GJC installed packages use `craft-skills:<name>`, while portable frontmatter keeps the bare name.
+Select authorized native update commands and scope from installed help; never author official caches or point `skills.customDirectories` at a version-pinned cache.
+Preserve unique field experiments separately; harvest only on request, recording owner, privacy, provenance, and admission for `canonical_package`, `proposed_pr`, `field_package`, or `reference_evidence`.
+Do not harvest whole memory/conversation stores, add automatic harvesting, or turn field learning into an automatic canonical edit or version bump.
+`browser` keeps Aside as the sole managed route and delegates product usage upstream; `obsidian` composes unchanged official format/CLI owners with local app/Sync and live-vault policy; `design` owns root `DESIGN.md` and rendered UX evidence.
+Optional environment names remain task-bound: `CRAFT_WT_REMOTE_HOST` for the git worktree recipe; `OBSIDIAN_VAULT_PATH` resolves per host, with `OBSIDIAN_CLI_PATH`, `OBSIDIAN_SYNC_REMOTE_HOST`, `OBSIDIAN_SYNC_PROCESS_NAME`, and `PM2_LOG_DIR` used only by their selected recipes.
+Preserve unrelated dirty work; never stash, discard, or publish it to make a task look clean.
+Reuse unchanged approvals bound to target, command, and effect; new install, removal, restart, publication, or expanded delivery effects require their own authorization.
+A plan or passing test grants no external effect; do not upgrade unrelated tools or publish out-of-scope issues automatically.
+
+## Testing & QA
+
+Choose evidence by observable behavior and risk: exercise real scripts, error paths, security boundaries, and data integrity; use independent judgment for subjective output and routing positives/near-misses.
+A prose correction may use focused contract review; do not require generated scores, fixed case counts, a wording-locked corpus, or repeated admission committees.
+Keep checks only with a current consumer or independent safety obligation; structural and lexical passes do not prove deployed behavior.
+Record source base and current recursive content digest, evaluated resources, actual checks, independent findings, and unverified effects in the existing handoff.
+Label results executed or reviewed; name unrun checks and reasons. Release commit, installed content, discovery, and effective load are separate facts.
+Reuse exact task- and content-bound evidence across coherent batches; do not restart a workflow per package.
+
+### Repository-aware PR review
+
+When assigned a repository PR, read root and applicable nested `AGENTS.md`, then inspect the actual base, head, and diff, including callers and support resources.
+Apply `docs/skills/authoring.md` to lifecycle and retirement, `docs/skills/package-contract.md` to consumed contracts, and `docs/skills/verification.md` to the oracle and evidence.
+Check affected routes, manifests, privacy, containment, and retirement references; approved retirement removes obsolete paths rather than leaving aliases or loadable stubs.
+Select the actual affected checks; report material findings with path and line, separating observed execution from reviewed evidence and unrun limitations.
+This is assigned-review guidance, not an automatic PR detector, bot, or webhook; review does not authorize fixes, installation, merge, release, or restart.
+<!-- /init:managed id=init-root -->
