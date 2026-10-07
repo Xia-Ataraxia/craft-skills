@@ -72,7 +72,6 @@ ALLOWED_PACKAGE_FILES = frozenset({"SKILL.md", "CHANGELOG.md", ".env.example", "
 REPOSITORY_TOOL_FILES = frozenset({
     "AGENTS.md",
     "README.md",
-    "install.sh",
     "skills/PROVENANCE.md",
     "scripts/ci-local.sh",
     ".codex/config.yaml",

@@ -194,7 +194,7 @@ jobs:
           BASE=$(git merge-base "origin/${BASE_REF}" HEAD)
           python3 scripts/governance/tools/check_version_bump.py --diff-base "$BASE"
       - name: Run distribution guard tests
-        run: python3 -m unittest scripts.governance.tests.test_check_version_bump scripts.governance.tests.test_verify_plugin_install scripts.governance.tests.test_resolve_plugin_revision scripts.governance.tests.test_install_sh tests.init.test_agents_region tests.init.test_package_contract
+        run: python3 -m unittest scripts.governance.tests.test_check_version_bump scripts.governance.tests.test_verify_plugin_install scripts.governance.tests.test_resolve_plugin_revision tests.init.test_agents_region tests.init.test_package_contract
 
   typescript-baseline:
     name: typescript-baseline
