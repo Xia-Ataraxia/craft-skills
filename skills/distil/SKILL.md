@@ -2,7 +2,7 @@
 name: distil
 description: Distils transferable rules and conventions from an external source — a well-crafted repo, an engineering article, an AGENTS.md, or a third-party skill — and lands them in this library under the authoring contract with provenance recorded. Use when the user says "파쿠리", "distil the rules from this repo", "absorb this skill", or "pull the conventions out of this article", or hands over a link worth mining. Not for authoring a skill from your own workflow or shipping the final package — land approved mappings through docs/skills/authoring.md; not for open-ended investigation of a question — use research; not for summarizing a source with no intent to land rules in the library.
 metadata:
-  version: 1.1.3
+  version: 1.2.0
 ---
 
 # distil
@@ -71,6 +71,7 @@ per decision, no history, no attribution in the body. Then choose its landing fo
 
 Document the mapping — every candidate rule, its landing form, and keep/drop recommendation —
 before routing it to its owner.
+Run `unslop` as the final pass over the prose you land; code and fixed machine formats are excluded.
 
 ## Land
 

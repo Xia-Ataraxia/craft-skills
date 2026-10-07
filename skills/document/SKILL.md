@@ -2,13 +2,14 @@
 name: document
 description: Scaffolds and authors repository documentation through a six-type ontology and canonical artifacts. Use when asked to scaffold repository docs, "record this decision", "where does this spec go", "update the README", "draft the project CHANGELOG", or "comment-the-why". Not for conducting research (use research), technical reports (use write-report), API-surface comments, or DESIGN.md, visual direction, UX audits, and design-system work (use design).
 metadata:
-  version: 4.0.1
+  version: 4.1.0
 ---
 
 # document
 
 Author and file project documentation so every artifact lands at exactly one canonical location with the right template.
 Success: a reader or agent can always answer "where does this go?" without guessing.
+Run `unslop` as the final pass over the prose this skill writes; code and fixed machine formats are excluded.
 
 ## Requirements
 
@@ -38,6 +39,7 @@ Create a `decision` artifact only when the user explicitly asks to record a deci
 | Write or update the repository README | `references/readme.md` | `templates/readme.md` |
 | Write the project-level CHANGELOG / release notes | `references/changelog.md` | `templates/changelog.md` |
 | Decide how to comment code (comment-the-why) | `references/inline-comments.md` | — |
+| Write or review prose in a doc, RFC, README, PR description, or commit message | `references/technical-writing.md` | — |
 | Map the system (`architecture.md`) | see architecture.md section below | `templates/architecture.md` |
 | File research, a spec, a plan, a rule, or an archived source | ontology table above | matching file in `templates/` |
 | Scaffold repository documentation | `docs/` layout below | create the applicable canonical directories and artifacts |

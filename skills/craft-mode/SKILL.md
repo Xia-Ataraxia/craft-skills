@@ -2,7 +2,7 @@
 name: craft-mode
 description: "Routes multi-step engineering work through a chosen playbook, situational workflows, and domain-owned principles. Use for craft-mode, a rigorous feature or bug fix, a migration, a measured performance problem, or work that needs a clear finish condition and evidence. Keeps replies concise, applies unslop to prose, and uses independent workers only when the runtime supports them. A named procedure such as how, why, correct, or tdd can run directly; domain policy stays with its principle owner."
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Craft mode
@@ -50,6 +50,7 @@ Use only the authorization already given for the specific effect.
 Proceed with reversible work inside scope; ask for product choices that evidence cannot settle.
 
 Use [Usage](references/usage.md) for choosing or steering a route and [Setup](references/setup.md) for native discovery.
+Use [Catalog](references/catalog.md) to find where an upstream pstack skill or principle lives now, or why it is not offered.
 Use [Owner decisions](references/conflicts.md) when inherited rules conflict; do not rewrite a principle to resolve the conflict.
 
 ## Principle index

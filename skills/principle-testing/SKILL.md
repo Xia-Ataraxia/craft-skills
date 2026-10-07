@@ -2,7 +2,7 @@
 name: principle-testing
 description: Designs, improves, and audits test suites around behavior and risk, independent oracles, counterfactual evidence, deterministic diagnosis, and cost. Use for generated-test review, unit/component/integration/e2e or smoke placement, test-suite health, flaky-test policy, fixtures, and test audits. Not for production-code red-green implementation, which belongs to principle-programming; diagnosis or repair of one currently failing or intermittent test, which belongs to debug; structural-change characterization, which belongs to refactor; ML evaluation methodology, which belongs to ml; or project-specific agent evaluation methodology.
 metadata:
-  version: 3.1.0
+  version: 3.2.0
 ---
 
 # principle-testing
@@ -55,6 +55,7 @@ Read this file for every testing task and read the matching reference before cha
 | Location, incumbent layout, fixture scope, or builders | `references/structure.md` |
 | Database, cache, queue, service boundary, contract, fake, seam, or mock | `references/integration.md` |
 | Browser, CLI, user journey, startup wiring, selector, wait, or smoke | `references/e2e.md` |
+| Create or maintain a project-local verification skill that drives the app the way a user does | `references/verification-skills.md` |
 
 ## Evidence scopes and resource size
 

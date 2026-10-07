@@ -1,0 +1,110 @@
+# Source catalog
+
+This catalog maps every direct skill and every principle in pstack, pinned at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e, to its place in this library.
+Each row has three labels.
+**Origin** is where the source came from.
+**Current craft owner** is the package that already covered the topic before the import, or `none`.
+**Craft destination** is where the source now lives.
+
+**Kind** says how to reach it:
+
+- **command**: a package you invoke by name.
+- **reference**: a file read on demand by its owner or by craft-mode; it has no command of its own.
+- **dropped**: no portable substance exists, so no file or command offers it.
+
+Cross-package paths name the owning skill and its file.
+Resolve them through that skill's discovery location.
+
+## Contents
+
+- [Direct skills](#direct-skills)
+- [Principles](#principles)
+- [Unsupported boundaries](#unsupported-boundaries)
+- [Composition edges](#composition-edges)
+
+## Direct skills
+
+| Upstream skill | Origin | Current craft owner | Craft destination | Kind | Notes |
+|---|---|---|---|---|---|
+| `poteto-mode` | pstack | none | `craft-mode` | command | Playbook router and working style; no persistent mode. |
+| `poteto-help` | pstack | none | `craft-mode/references/usage.md` | reference | Router help, read by craft-mode. |
+| `how` | pstack | none | `how` | command | Workers are optional; runs sequentially without them. |
+| `why` | pstack | none | `why` | command | May compose how. |
+| `recall` | pstack | none | `recall` | command | Reads only a history source the user names. |
+| `blast-radius` | pstack | none | `blast-radius` | command | Proves the safety fact by running real code. |
+| `architect` | pstack | none | `architect` | command | Grounds through how and why; explores with arena. |
+| `arena` | pstack | none | `arena` | command | Sequential candidates when the runtime has no parallel workers. |
+| `swarm` | pstack | none | `swarm` | command | Concurrency depends on runtime workers. |
+| `interrogate` | pstack | none | `interrogate` | command | Uses whatever reviewers the runtime offers; no fixed model list. |
+| `automate-me` | pstack | none | `automate-me` | command | Writes one private personal skill; mines history only from a source the user names. |
+| `make-bot-ui` | pstack | none | none | dropped | Cursor-only backend; see [Unsupported boundaries](#unsupported-boundaries). |
+| `setup-pstack` | pstack | none | `craft-mode/references/setup.md` | dropped | Model and budget configuration dropped by owner decision; the file documents native discovery only. |
+| `reflect` | pstack | none | `reflect` | command | Reads the current session only when the runtime exposes it. |
+| `correct` | pstack | none | `correct` | command | Encodes a repeated mistake in structure with a negative control. |
+| `teach` | pstack | none | `teach` | command | Composes how and why. |
+| `tdd` | pstack | `programming` (now `principle-programming`), red-green TDD | `tdd` | command | principle-testing keeps oracle and policy ownership. |
+| `benchmark-checklist` | pstack | none | `benchmark-checklist` | command | Applies `principle-testing/references/explain-the-number.md`. |
+| `no-comments` | pstack | `programming` shortcut comments and `document` inline comments | `principle-programming/references/comments.md` | reference | One reviewer pass, or a reported self-review when no reviewer exists. |
+| `typescript-best-practices` | pstack | `programming` (now `principle-programming`) TypeScript reference | `principle-programming/references/typescript.md` and `principle-programming/references/typescript/patterns.md` | reference | Absorbed whole; upstream wins on conflicts. |
+| `figure-it-out` | pstack | none | `figure-it-out` | command | Designs an auditable playbook when none fits. |
+| `show-me-your-work` | pstack | none | `show-me-your-work` | command | Local decision log by default. |
+| `create-verification-skill` | pstack | `testing` (now `principle-testing`) e2e guidance | `principle-testing/references/verification-skills.md` | reference | Writes into the runtime's project-local skill directory. |
+| `maintain-verification-skill` | pstack | `testing` (now `principle-testing`) e2e guidance | `principle-testing/references/verification-skills.md` | reference | Source readers run sequentially without workers; a PR needs user authorization. |
+| `unslop` | pstack | none | `unslop` | command | Always applies to prose; code and fixed machine formats are excluded. |
+| `bro` | pstack | none | `bro` | command | Short plain-language restatement on request. |
+| `technical-writing` | pstack | `document` | `document/references/technical-writing.md` | reference | Read by document for prose work. |
+
+## Principles
+
+Every principle file holds the upstream body verbatim, with frontmatter dropped and sibling links rewritten.
+craft-mode's SKILL.md indexes all of them.
+
+| Upstream principle | Group | Origin | Current craft owner | Craft destination | Kind |
+|---|---|---|---|---|---|
+| `principle-laziness-protocol` | core | pstack | `programming` and `refactor` | `principle-programming/references/laziness-protocol.md` | reference |
+| `principle-foundational-thinking` | core | pstack | none | `principle-architecture/references/foundational-thinking.md` | reference |
+| `principle-redesign-from-first-principles` | core | pstack | none | `principle-architecture/references/redesign-from-first-principles.md` | reference |
+| `principle-attack-the-premise` | core | pstack | none | `debug/references/attack-the-premise.md` | reference |
+| `principle-subtract-before-you-add` | core | pstack | `programming` and `refactor` | `refactor/references/subtract-before-you-add.md` | reference |
+| `principle-minimize-reader-load` | core | pstack | none | `principle-programming/references/minimize-reader-load.md` | reference |
+| `principle-outcome-oriented-execution` | core | pstack | none | `principle-architecture/references/outcome-oriented-execution.md` | reference |
+| `principle-experience-first` | core | pstack | none | `principle-frontend/references/experience-first.md` | reference |
+| `principle-exhaust-the-design-space` | core | pstack | none | `principle-architecture/references/exhaust-the-design-space.md` | reference |
+| `principle-build-the-lever` | core | pstack | none | `principle-programming/references/build-the-lever.md` | reference |
+| `principle-model-the-domain` | architecture | pstack | none | `principle-programming/references/model-the-domain.md` | reference |
+| `principle-boundary-discipline` | architecture | pstack | `programming` | `principle-backend/references/boundary-discipline.md` | reference |
+| `principle-type-system-discipline` | architecture | pstack | none | `principle-programming/references/type-system-discipline.md` | reference |
+| `principle-make-operations-idempotent` | architecture | pstack | none | `principle-backend/references/make-operations-idempotent.md` | reference |
+| `principle-migrate-callers-then-delete-legacy-apis` | architecture | pstack | none | `principle-architecture/references/migrate-callers-then-delete-legacy-apis.md` | reference |
+| `principle-separate-before-serializing-shared-state` | architecture | pstack | none | `principle-architecture/references/separate-before-serializing-shared-state.md` | reference |
+| `principle-prove-it-works` | verification | pstack | `testing` | `principle-testing/references/prove-it-works.md` | reference |
+| `principle-fix-root-causes` | verification | pstack | `debug` | `debug/references/fix-root-causes.md` | reference |
+| `principle-sequence-verifiable-units` | verification | pstack | none | `principle-testing/references/sequence-verifiable-units.md` | reference |
+| `principle-test-behavior-not-implementation` | verification | pstack | `testing` | `principle-testing/references/test-behavior-not-implementation.md` | reference |
+| `principle-explain-the-number` | verification | pstack | none | `principle-testing/references/explain-the-number.md` | reference |
+| `principle-guard-the-context-window` | delegation | pstack | none | `craft-mode/references/guard-the-context-window.md` | reference |
+| `principle-never-block-on-the-human` | delegation | pstack | none | `craft-mode/references/never-block-on-the-human.md` | reference |
+| `principle-encode-lessons-in-structure` | meta | pstack | none | `correct/references/encode-lessons-in-structure.md` | reference |
+
+## Unsupported boundaries
+
+`make-bot-ui` has no portable workflow, so no file or command offers it.
+Every step depends on Cursor-only backend features: creating a webhook routine through `update_state`, collecting the sender key through a `SendToUser` secret-request card and its connector credential file, posting to a Cursor automation webhook URL, and waking on that routine's `webhook_event`.
+Without that backend, the remaining local server and tailnet steps have nothing to wake.
+Tailnet reachability on its own belongs to the `tailscale` skill.
+
+`setup-pstack` configured per-role models and budgets for Cursor; the owner dropped that outcome.
+No package selects a model family.
+
+Elsewhere, Cursor-only parts are removed and the portable outcome stays: Custom Mode persistence, fixed model tables, Cursor transcript paths, and Cursor's built-in skill authoring.
+Worker-dependent steps run sequentially when the runtime has no workers, and the report says so.
+
+## Composition edges
+
+[Playbooks](playbooks.md) owns the 23 playbooks and their workflow and principle edges.
+These direct-skill edges are required:
+
+- `teach` composes `how` and `why`.
+- `architect` grounds through `how` and `why` and explores alternatives with `arena`.
+- `benchmark-checklist` applies `principle-testing/references/explain-the-number.md`.
+- `correct` applies `correct/references/encode-lessons-in-structure.md`.

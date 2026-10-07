@@ -6,3 +6,4 @@
 - 2026-08-29 — v1.1.1: the landing table's file-glob token made Hermes demand a support directory the package does not ship, failing every exact-tap skill update → the landing form names the `references/` directory instead of a glob.
 - 2026-09-03 — v1.1.2: three cross-package links climbed out of the package, which the Hermes tap fetcher treats as traversal and refuses to install → name the owning skill and file in prose; add the Output contract and eval corpus the contract requires.
 - 2026-10-01 — v1.1.3: installable skillify handoff is gone → land approved mappings through docs/skills/authoring.md; that path is local policy, not a native requirement.
+- 2026-10-07: Landed rules are prose that readers meet in every package, so unslop now runs as the final pass before landing while code and machine formats stay untouched.

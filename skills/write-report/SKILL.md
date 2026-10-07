@@ -2,7 +2,7 @@
 name: write-report
 description: 'Scaffolds and authors a project''s one-off canonical technical report against a single YAML frame (technical-report.yaml) whose depth is the enforced table of contents — section, then heading, then required must-content. Use when asked to "scaffold a technical report" or "기술 보고서", when writing or restructuring a report section against that frame, or when checking a section''s structure and pinned sources for "TOC enforcement" against its source manifest. Not for ongoing project documentation, READMEs, ADRs, or changelogs (use `document`) — write-report owns exactly one canonical, one-off deliverable per project.'
 metadata:
-  version: 1.0.2
+  version: 1.1.0
 ---
 
 # write-report
@@ -71,6 +71,7 @@ section equally.
 Defaults, unless the frame's `governance` overrides them:
 
 - Prose-first; bullets only for section summaries or atomic enumeration.
+- Run `unslop` as the final pass over each section draft's prose; the YAML frame, code, and other fixed machine formats are excluded.
 - MECE — state a fact once, cite it elsewhere.
 - `[[wikilinks]]` for internal/section citations; `[title](url)` for external sources.
 - Hierarchical Mermaid — high-level diagram first, component detail in a separate one.

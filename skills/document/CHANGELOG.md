@@ -14,3 +14,4 @@
 - 2026-08-29 — v3.1.1: a wildcard support-file token made Hermes request a literal missing path → name the templates directory without a glob.
 - 2026-08-29 — v4.0.0: document owned design-system documents and lifecycle → moved ownership to design. BREAKING.
 - 2026-08-30 — v4.0.1: repository documentation scaffolding belongs to document, not init.
+- 2026-10-07: Documentation needed one sentence-level writing standard and a fixed final prose pass, so pstack's technical-writing guide lands as a reference and unslop closes every prose artifact. Provenance: technical-writing from Lauren Tan's pstack at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e.

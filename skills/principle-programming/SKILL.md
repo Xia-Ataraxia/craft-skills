@@ -2,7 +2,7 @@
 name: principle-programming
 description: Guides correctness-first, type-strict Python and TypeScript implementation. Use when asked to write a `.py` or `.ts` file, scaffold a Python/TypeScript project, add strict types, assess an implementation diff for correctness or type holes, or fix a reproducible defect. Not for smell-only assessment or behavior-preserving restructuring — use refactor; not for suite-level test architecture — use principle-testing.
 metadata:
-  version: 3.1.0
+  version: 3.2.0
 ---
 
 # principle-programming
@@ -19,6 +19,7 @@ Load only the references the task needs before touching code; a one-off script d
 | `.py`, `.pyi`, or Python task | `references/python.md` — tooling table, iron list, data-modeling map |
 | `.ts`, `.tsx`, `.mts`, `.cts`, or TypeScript task | `references/typescript.md` — tooling table, iron list, and this package's `assets/tsconfig.strict.json`; load `references/typescript/clean-code.md` when naming, function shape, or structure is in scope |
 | Smell-only review | Route to `refactor`; it owns the code-smell catalog and the resulting restructuring |
+| Comments in a diff, or a request to strip or review them | `references/comments.md`: one reviewer pass, accepted fixes, and encoding offers for claimed constraints |
 
 ## Principle references
 
@@ -51,7 +52,7 @@ Use an available AST tool when syntax-aware matching or transformation helps; co
 When semantic support is unavailable, use bounded text search and source inspection, disclose coverage limits, and validate with the project's checks rather than claiming semantic proof or complete caller coverage.
 Stop when that fallback cannot establish the safety the change needs; do not assume missing support requires installing a server, hook, or skill wrapper.
 
-Record a deliberate shortcut's ceiling and upgrade path in a follow-up note, type, test, or lint rule, per no-comments step 5.
+Record a deliberate shortcut's ceiling and upgrade path in a follow-up note, type, test, or lint rule, per step 5 of [comments](references/comments.md).
 
 ## Core decisions
 

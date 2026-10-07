@@ -157,6 +157,12 @@ This is operational verification guidance, not a vendor install command.
 
 After installation, skills are discovered by each runtime from their `SKILL.md` packages (GJC exposes them as `craft-skills:<name>`).
 
+`unslop` already runs inside `craft-mode` and as the final prose pass of the writing skills. To make it always-on for everything your agent writes, add this line to your agent's global instructions (for example, your user-level `AGENTS.md` or `CLAUDE.md`); this repository never edits that file for you:
+
+```text
+Apply the unslop skill to all prose you write, including replies, docs, PR descriptions, and commit messages; leave code and fixed machine formats unchanged.
+```
+
 ### Convenience Installer
 
 The repository's convenience installer prints the observed Claude Code, Codex, and Hermes channels:
