@@ -122,7 +122,6 @@ job_distribution_version() {
     scripts.governance.tests.test_check_version_bump \
     scripts.governance.tests.test_verify_plugin_install \
     scripts.governance.tests.test_resolve_plugin_revision \
-    scripts.governance.tests.test_install_sh \
     tests.init.test_agents_region \
     tests.init.test_package_contract
 }

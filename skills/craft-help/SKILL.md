@@ -2,7 +2,7 @@
 name: craft-help
 description: Guides users through craft-skills setup, craft-mode, and picking the skill, playbook, or principle for a task, then hands back a prompt they can send and the file the answer came from. Use for "craft-help", "which skill should I use", "how do I use craft-mode", "which playbook fits this", "how do I install craft-skills", or "my craft-mode run went wrong". Answers the question without starting the work. Not for doing the work - use craft-mode.
 metadata:
-  version: 1.0.3
+  version: 1.0.4
 ---
 
 # Craft help
@@ -32,7 +32,7 @@ When craft-skills isn't installed and it matters, give them the install route un
 
 ## Get set up
 
-1. Install craft-skills through the runtime's channel in `README.md`: the Claude Code, Codex, or GJC plugin marketplace, a Hermes tap, or a skills directory (`.cursor/skills`, `.grok/skills`, or `.agents/skills`) for Cursor, Grok-native, and plain Agent Skills runtimes. `./install.sh <runtime>` prints the commands.
+1. Install craft-skills through the runtime's channel in `README.md`: the Claude Code, Codex, or GJC plugin marketplace, a Hermes tap, or a skills directory (`.cursor/skills`, `.grok/skills`, or `.agents/skills`) for Cursor, Grok-native, and plain Agent Skills runtimes.
 2. Start a real task with `/craft-mode`, a goal, and a check that can pass or fail.
 
 Installing changes nothing until the user invokes a skill. `README.md` has the details. Offer to word their first prompt with them, per [`references/prompting.md`](references/prompting.md).

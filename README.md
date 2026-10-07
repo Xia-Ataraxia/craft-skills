@@ -194,21 +194,6 @@ After installation, skills are discovered by each runtime from their `SKILL.md` 
 Apply the unslop skill to all prose you write, including replies, docs, PR descriptions, and commit messages; leave code and fixed machine formats unchanged.
 ```
 
-### Convenience Installer
-
-The repository's convenience installer prints the Claude Code, Codex, Hermes, and GJC channels:
-
-```bash
-./install.sh codex    # print the Codex plugin commands
-./install.sh codex --clone /path/to/project  # optionally clone development context
-./install.sh hermes   # print tap commands and verify tap registration
-./install.sh claude   # print the Claude Code marketplace commands
-./install.sh gjc      # print marketplace commands and verify plugin installation
-./install.sh all      # run all four
-```
-
-The script is idempotent and safe to re-run.
-
 ---
 
 ## Development

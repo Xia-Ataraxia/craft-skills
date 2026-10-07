@@ -1,6 +1,6 @@
 # Repository Guidelines
 
-<!-- init:managed id=init-root sha256=3e245caaa32f811b863291204e1dab3afebbfcb3858ac2d57ce8e662d4b5bad8 -->
+<!-- init:managed id=init-root sha256=2836f15645fb6ef18f665f2539005422086317a2faedbb7ab9f5fc2c67064bf3 -->
 ## Project Overview
 
 craft-skills is a public library of reusable research and engineering methods, not an application.
@@ -72,7 +72,7 @@ Per-change credit belongs in the package changelog; update `skills/PROVENANCE.md
 - `docs/skills/package-contract.md`: metadata, containment, history, supported resource layout, and actual format checks.
 - `docs/skills/verification.md`: observable oracles, scoped checks, evidence identity, security, and deployment limits.
 - `.github/workflows/pr-check.yml`, `.github/workflows/test-plugin-install.yml`, and `scripts/ci-local.sh`: inspect actual jobs rather than assuming README coverage claims.
-- `README.md`, `install.sh`, and native manifests such as `.codex-plugin/plugin.json`: distribution entry points; check affected manifest compatibility rather than inventing native support.
+- `README.md` and native manifests such as `.codex-plugin/plugin.json`: distribution entry points; check affected manifest compatibility rather than inventing native support.
 - `skills/init/SKILL.md` and `skills/init/scripts/agents_region.py`: hierarchical guidance ownership and hash-checked managed-region editing.
 Maintain this payload through `python3 skills/init/scripts/agents_region.py AGENTS.md --id init-root --payload-file -`; supply UTF-8 text ending in LF through stdin.
 Keep the title outside the single `init-root` region; resolve hand-edited marker content rather than bypassing its hash check.
