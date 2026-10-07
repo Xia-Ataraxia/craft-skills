@@ -2,7 +2,7 @@
 name: refactor
 description: "Restructures code without changing what it does — extracting functions, renaming, removing duplication, flattening nested conditionals, and other mechanical moves backed by a detection command and threshold. Use when the user says \"refactor this\", \"clean up this code\", \"리팩토링 해줘\", or \"this function is a mess\", or a named smell (long function, deep nesting, feature envy) surfaces while reading code with no intended behavior change. Gates untested legacy code behind a characterization-test protocol first. Not for diagnosing why something is broken — use debug — or for behavior-changing feature work and bug fixes, which belong to programming's red-green-refactor loop."
 metadata:
-  version: 2.5.1
+  version: 2.5.2
 ---
 
 # refactor
@@ -54,7 +54,7 @@ Before touching structure: a test suite exists for the path and is green right n
 - Use an available AST tool when syntax-aware matching or transformation helps; consult an existing code graph only for a concrete dependency or impact question, checking its coverage and freshness.
 - Without semantic support, use bounded text search and source inspection, disclose coverage limits, and validate with project checks; text matches are not semantic proof or complete reference coverage. Stop when that fallback cannot establish the move's safety rather than assuming a server, hook, or skill wrapper must be installed.
 - File-size ceiling (250 pure LOC) and its escape hatches → `programming`; this skill owns function-level size, not file-level.
-- Turning any rule here into an enforced lint/hook/pre-commit check → `guardrails`.
+- Turning any rule here into an enforced lint/hook/pre-commit check → use the target repository's existing enforcement tooling.
 
 ## Mutable tool and LSP facts
 
@@ -79,7 +79,7 @@ For mutable language-server, test, runtime, and tool behavior, consult official 
 | "No time for characterization tests, I already know what it does." | That certainty is exactly the guess this protocol replaces with a pinned assertion. |
 | "Two duplicates is basically three, I'll extract now." | Rule of three means three — the second occurrence is too early to know the right shape. |
 | "Tests still pass, so the commit is one change." | Passing tests don't prove that; check whether any assertion's expected value moved before assuming so. |
-| "The linter's autofix is mechanical, so it needs no review." | Autofixes have flipped tests by stripping suppression reasons, joining literals a scan searched for, and reordering a byte-pinned export list — the failure classes `guardrails` catalogues. Read the diff and run the suite. |
+| "The linter's autofix is mechanical, so it needs no review." | Autofixes have flipped tests by stripping suppression reasons, joining literals a scan searched for, and reordering a byte-pinned export list — see the failure classes in `references/lint-first.md`. Read the diff and run the suite. |
 | "A quick script that greps for this is faster than configuring the linter." | The script is a private tool CI must be taught to call and the next person must learn; configuration is already wired in. |
 
 ## Verification

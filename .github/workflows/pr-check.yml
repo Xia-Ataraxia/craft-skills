@@ -187,17 +187,3 @@ jobs:
         run: npm install --global typescript@latest
       - name: Verify unused-local and parameter boundaries
         run: python3 -m unittest tests.programming.test_typescript_baseline
-
-  offline-transcribe-macos:
-    name: offline-transcribe-macos
-    runs-on: macos-26
-    steps:
-      - uses: actions/checkout@v7.0.1
-      - name: Create isolated Python environment and install current offline dependencies
-        run: |
-          python3 -m venv "$RUNNER_TEMP/offline-transcribe-venv"
-          "$RUNNER_TEMP/offline-transcribe-venv/bin/python" -m pip install --upgrade pip
-          "$RUNNER_TEMP/offline-transcribe-venv/bin/python" -m pip install --upgrade mlx-whisper huggingface-hub
-      - name: Exercise offline transcription tests
-        run: |
-          "$RUNNER_TEMP/offline-transcribe-venv/bin/python" -B -m unittest discover -s tests/offline-transcribe -p test_transcribe_offline.py

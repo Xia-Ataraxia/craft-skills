@@ -1,6 +1,6 @@
 {
   "name": "craft-skills",
-  "description": "Work-craft skills for research + engineering: UI/UX design, documentation, database diagnosis and schema/operations tradeoffs, browser automation, Obsidian, version control, structural AST search, write-prd product requirements, ML, agents, security, and skill authoring.",
+  "description": "Work-craft skills for research + engineering: UI/UX design, documentation, database diagnosis and schema/operations tradeoffs, browser automation, Obsidian, version control, structural AST search, write-prd product requirements, ML, security, and skill authoring.",
   "owner": {
     "name": "GoBeromsu"
   },

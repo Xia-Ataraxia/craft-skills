@@ -1,6 +1,6 @@
 # Repository Guidelines
 
-<!-- init:managed id=init-root sha256=95c86fe870b0a758598797795b0ea74f5bedccdc7c01f3c25d257b6749742367 -->
+<!-- init:managed id=init-root sha256=4968ee501b1724cc9f16d19a5df2cb3c79e328f55bd10a277f78a46ef33ad3cc -->
 ## Project Overview
 
 craft-skills is a public library of reusable research and engineering methods, not an application.
@@ -45,9 +45,9 @@ python3 -m unittest tests.init.test_agents_region tests.init.test_package_contra
 
 Select the tests relevant to the changed behavior; the commands above are not a mandatory suite for every edit.
 The Layer-1 selectors include committed, staged, unstaged, and untracked changes; shared repository-tool paths select no skill owner, while unknown scoped paths fail closed.
-`bash scripts/ci-local.sh` runs the declared local checks, but is not full CI proof: marketplace checks can skip, isolated native-install jobs are CI-only, and the macOS transcription job is not mirrored.
+`bash scripts/ci-local.sh` runs the declared local checks, but is not full CI proof: marketplace checks can skip and isolated native-install jobs are CI-only.
 Inspect `.github/workflows/test-plugin-install.yml` before claiming marketplace or install coverage; the local runner can register a marketplace in temporary Codex state.
-There is no application build/run or root npm/Bun pipeline; TypeScript and transcription checks use task-specific dependencies declared in CI.
+There is no application build/run or root npm/Bun pipeline; TypeScript checks use task-specific dependencies declared in CI.
 
 ## Code Conventions & Common Patterns
 

@@ -171,7 +171,7 @@ Testing accepts handed-off characterization tests for quality, oracle, placement
 
 Testing owns new-test quality, audits, placement, quarantine policy, and post-fix health.
 
-`ml` and `agents` own their evaluation domains.
+`ml` owns model-training evaluation; agent evaluation methodology follows the target project's contract.
 
 ## Public source basis
 

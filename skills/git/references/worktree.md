@@ -26,7 +26,7 @@ Make a named worktree off the default branch with one command, and never work di
 git wt <name>  →  branch <name>  →  worktree at $WORKTREE_ROOT/<name>
 ```
 
-`guardrails` blocks the default branch (`main`) at pre-commit using the checks this skill registers — never work directly on it.
+The repository's pre-commit dispatcher blocks the default branch (`main`) using the checks this skill registers — never work directly on it.
 
 ## Step 1 — Propose install (checked on first invocation)
 
@@ -51,13 +51,34 @@ sh skills/git/scripts/install.sh
 3. Copies the shipped `githooks/pre-push` into `.githooks/` (skip if present).
 4. Runs `scripts/git-guard/setup-hooks.sh` to register `alias.wt` and `chmod +x` the scripts and hooks.
 
-**Hand-off — `core.hooksPath` belongs to `guardrails`.** This installer never writes `.githooks/pre-commit` and never sets `git config core.hooksPath`. That mechanism — and the dispatcher that runs every executable in `.githooks/guards.d/` in lexical order — is owned exclusively by the `guardrails` skill; two owners pointing `core.hooksPath` at the same directory is how installs collide. The three checks registered here sit inert until `core.hooksPath` points at `.githooks`; wire that by installing `guardrails` in the target repo, or set it by hand in a repo that doesn't use `guardrails`:
+**Hand-off — the target repository owns `core.hooksPath` and its pre-commit dispatcher.** This installer never writes `.githooks/pre-commit` and never sets `git config core.hooksPath`. Preserve the incumbent hook mechanism instead of installing a competing owner.
+For `.githooks/guards.d/`, the repository's executable `.githooks/pre-commit` must run every executable guard in lexical order and exit nonzero if any fails.
+A minimal dispatcher body is:
+
+```sh
+#!/usr/bin/env sh
+set -eu
+root="$(git rev-parse --show-toplevel)"
+guards_dir="$root/.githooks/guards.d"
+[ -d "$guards_dir" ] || exit 0
+status=0
+for guard in "$guards_dir"/*; do
+  [ -e "$guard" ] || continue
+  if [ -x "$guard" ]; then
+    "$guard" || status=1
+  fi
+done
+exit "$status"
+```
+
+Merge this behavior into an existing pre-commit hook rather than overwriting it.
+The registered pre-commit checks stay inert until both the executable dispatcher and the hook path are wired under the target repository's install authority:
 
 ```bash
 git config core.hooksPath .githooks
 ```
 
-Both installers are idempotent — safe to re-run once accepted. After install, confirm:
+The bundled installer is idempotent — safe to re-run once accepted. After install, confirm:
 
 ```
 [git-guard] alias.wt        = ...
@@ -162,10 +183,10 @@ Dependencies: `git` >= 2.5 (worktree support); `tmux` + `tailscale` (or equivale
 | Script | Role |
 |---|---|
 | `../scripts/install.sh` | Bundled first-run installer: copies guard scripts into the repo, registers them into `.githooks/guards.d/`, installs `.githooks/pre-push`, then runs `setup-hooks.sh`. The single entry point `worktree`/`init` delegate to. |
-| `../githooks/guards.d/10-assert-not-main.sh` | Shipped guards.d entry — execs `assert-not-main.sh`. Registered by `install.sh`; dispatched by `guardrails`'s pre-commit mechanism. |
+| `../githooks/guards.d/10-assert-not-main.sh` | Shipped guards.d entry — execs `assert-not-main.sh`. Registered by `install.sh`; dispatched by the repository's pre-commit hook. |
 | `../githooks/guards.d/20-deny-assets.sh` | Shipped guards.d entry — execs `deny-assets.sh staged`. |
 | `../githooks/guards.d/30-check-freshness.sh` | Shipped guards.d entry — execs `check-freshness.sh warn`. |
-| `../githooks/pre-push` | Shipped hook, installed directly — not via guards.d, since `guardrails` has no push-time surface: assert-not-main + check-freshness (warn) + deny-assets (push). |
+| `../githooks/pre-push` | Shipped hook, installed directly if absent — not via guards.d: assert-not-main + check-freshness (warn) + deny-assets (push). |
 | `../scripts/lib.sh` | Shared helpers: `gg_warn`, `gg_die`, protected-branch list. |
 | `../scripts/assert-not-main.sh` | Exits 1 when HEAD is on a protected branch. |
 | `../scripts/check-freshness.sh` | Compares HEAD to upstream; `block` (exit 1) or `warn` mode. |
@@ -180,4 +201,4 @@ Dependencies: `git` >= 2.5 (worktree support); `tmux` + `tailscale` (or equivale
 - A phantom `git worktree list` entry after a manual `rm -rf` clears with `git worktree prune` — then the branch can be deleted or checked out.
 - Spawning a fresh worktree for every trivial task when a small reused pool (`lane-N`) would do — reuse the pool for sequential solo work; a dedicated worktree per parallel work lane is fine when isolation is genuinely needed.
 - Never set `GIT_GUARD_PROTECTED=` in shell startup files — it disables enforcement globally and permanently.
-- Assuming the checks fire right after `install.sh` runs — they stay inert until `core.hooksPath` points at `.githooks`, which is `guardrails`'s install, not this one (Step 1).
+- Assuming the pre-commit checks fire right after `install.sh` runs — they stay inert until the repository's executable dispatcher runs them and `core.hooksPath` points at `.githooks` (Step 1).

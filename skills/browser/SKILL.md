@@ -1,8 +1,8 @@
 ---
 name: browser
-description: Owns personal composition for live authenticated browser work through Aside as the sole managed route. Use when a request says "Use Aside to inspect my logged-in dashboard", "inspect my signed-in dashboard", "open this in my browser", "click this button", "fill out this form", "continue this Aside session", or "브라우저로 열어줘" and the page needs login, JavaScript, or multi-step interaction. Not for static public extraction — use defuddle — or plain JSON API responses — use an HTTP client. Not for rewriting official Aside product usage.
+description: Owns personal composition for live authenticated browser work through Aside as the sole managed route. Use when a request says "Use Aside to inspect my logged-in dashboard", "inspect my signed-in dashboard", "open this in my browser", "click this button", "fill out this form", "continue this Aside session", or "브라우저로 열어줘" and the page needs login, JavaScript, or multi-step interaction. Not for static public extraction — use a standalone extractor — or plain JSON API responses — use an HTTP client. Not for rewriting official Aside product usage.
 metadata:
-  version: 2.0.1
+  version: 2.0.2
 ---
 
 # Browser
@@ -40,6 +40,6 @@ Do not claim official Aside skill absence.
 
 ## Boundaries
 
-Use defuddle for static public pages that do not need an authenticated browser session.
+Use a standalone extractor for static public pages that do not need an authenticated browser session; verify non-empty readable output and leave persistence to the caller.
 Use an HTTP client for direct API or JSON work.
 Do not delete installed browser apps, profiles, or user data.
