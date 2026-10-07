@@ -2,7 +2,7 @@
 name: craft-mode
 description: "Routes multi-step engineering work through a chosen playbook, situational workflows, and domain-owned principles. Use for craft-mode, a rigorous feature or bug fix, a migration, a measured performance problem, or work that needs a clear finish condition and evidence. Keeps replies concise, applies unslop to prose, and uses independent workers only when the runtime supports them. A named procedure such as how, why, correct, or tdd can run directly; domain policy stays with its principle owner."
 metadata:
-  version: 1.1.0
+  version: 1.1.1
 ---
 
 # Craft mode

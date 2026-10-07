@@ -2,7 +2,7 @@
 name: document
 description: Scaffolds and authors repository documentation through a six-type ontology and canonical artifacts. Use when asked to scaffold repository docs, "record this decision", "where does this spec go", "update the README", "draft the project CHANGELOG", or "comment-the-why". Not for conducting research (use research), technical reports (use write-report), API-surface comments, or DESIGN.md, visual direction, UX audits, and design-system work (use design).
 metadata:
-  version: 4.1.0
+  version: 4.1.1
 ---
 
 # document

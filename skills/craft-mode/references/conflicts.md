@@ -46,3 +46,12 @@ Affected files:
 - `principle-programming/SKILL.md`, the independently reversible unit rule.
 - `refactor/SKILL.md`, the separate-commit step and checklist.
 - `craft-mode/references/playbooks.md`, the refactoring route.
+
+## (e) Inline-comment scope
+
+(e) `no-comments` governs code comments: a comment stays only when it records something the code's owners cannot change (an external API quirk, an upstream bug workaround, a value that must stay in sync with an external system) or points to an ADR (`// See ADR-NNN`); a "why" about our own design choice becomes a clearer name, structure, type or test instead. The existing bans on restating the code, unclear names, dead code and change narration stay. Adopted by the orchestrator on 2026-10-07 after the owner did not answer within 30 minutes, following decision (a); reversible on owner veto.
+
+Affected files:
+
+- `document/references/inline-comments.md`, the rewritten convention.
+- `principle-programming/references/comments.md`, preserved principle text; the review procedure both files point to.
