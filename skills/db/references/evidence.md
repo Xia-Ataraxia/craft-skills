@@ -16,136 +16,136 @@ It accounts for 26 corpus sources: 25 complete and the Aurora source partial.
 
 ## E-PG-EXPLAIN-18
 
-Source class: official. URL: https://www.postgresql.org/docs/current/using-explain.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://www.postgresql.org/docs/current/using-explain.html>. Fetched: 2026-08-30; status: complete.
 Boundary: PostgreSQL 18 current documentation. Caveat: `EXPLAIN ANALYZE` runs the statement and cost estimates omit some DML work. Trigger: selected PG major or page behavior changes.
 
 ## E-PG-PGSTAT-18
 
-Source class: official. URL: https://www.postgresql.org/docs/current/pgstatstatements.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://www.postgresql.org/docs/current/pgstatstatements.html>. Fetched: 2026-08-30; status: complete.
 Boundary: PostgreSQL 18 extension F.32. Caveat: rankings are incomplete after deallocations and query IDs are not stable across logical replication. Trigger: PG major, extension configuration, or page changes.
 
 ## E-MYSQL-DEADLOCK-84
 
-Source class: official. URLs: https://dev.mysql.com/doc/refman/8.4/en/innodb-deadlocks.html, https://dev.mysql.com/doc/refman/8.4/en/innodb-deadlocks-handling.html, and https://dev.mysql.com/doc/refman/8.4/en/innodb-transaction-isolation-levels.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URLs: <https://dev.mysql.com/doc/refman/8.4/en/innodb-deadlocks.html>, <https://dev.mysql.com/doc/refman/8.4/en/innodb-deadlocks-handling.html>, and <https://dev.mysql.com/doc/refman/8.4/en/innodb-transaction-isolation-levels.html>. Fetched: 2026-08-30; status: complete.
 Boundary: MySQL 8.4 InnoDB. Caveat: lower isolation does not eliminate write deadlocks; READ COMMITTED may reduce locking-read contention only when weaker snapshot semantics are acceptable, and whole-transaction retry remains required. Trigger: server version, isolation or deadlock-detection configuration, or page changes.
 
 ## E-PG-VACUUM-18
 
-Source class: official. URL: https://www.postgresql.org/docs/current/routine-vacuuming.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://www.postgresql.org/docs/current/routine-vacuuming.html>. Fetched: 2026-08-30; status: complete.
 Boundary: PostgreSQL 18 current documentation. Caveat: standard vacuum reuses rather than normally returns space; `VACUUM FULL` has an exclusive-lock and disk cost. Trigger: PG major, autovacuum configuration, or page changes.
 
 ## E-PG-PARTITION-18
 
-Source class: official. URL: https://www.postgresql.org/docs/current/ddl-partitioning.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://www.postgresql.org/docs/current/ddl-partitioning.html>. Fetched: 2026-08-30; status: complete.
 Boundary: PostgreSQL 18.6 current documentation. Caveat: pruning depends on predicates and partition constraints; do not infer benefit without the selected workload. Trigger: PG major, partition layout, or page changes.
 
 ## E-MYSQL-INDEX-84
 
-Source class: official. URL: https://dev.mysql.com/doc/refman/8.4/en/innodb-index-types.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://dev.mysql.com/doc/refman/8.4/en/innodb-index-types.html>. Fetched: 2026-08-30; status: complete.
 Boundary: MySQL 8.4, §17.6.2.1. Caveat: the manual establishes clustered-index structure, not a universal measured penalty for every random key. Trigger: server engine/version or page changes.
 
 ## E-VITESS-SHARDING-22
 
-Source class: official. URL: https://vitess.io/docs/archive/22.0/reference/features/sharding/. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://vitess.io/docs/archive/22.0/reference/features/sharding/>. Fetched: 2026-08-30; status: complete.
 Boundary: archived Vitess v22 page only. Caveat: cross-shard transactions and global uniqueness remain unknown here. Trigger: selected release, topology, or sharding-document changes.
 
 ## E-REDIS-EVICTION
 
-Source class: official. URL: https://redis.io/docs/latest/develop/reference/eviction/. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://redis.io/docs/latest/develop/reference/eviction/>. Fetched: 2026-08-30; status: complete.
 Boundary: current Redis documentation; LRU is 3.0+, LFU 4.0+, and tuning details are Open Source-only. Caveat: volatile policies can behave as `noeviction` when no TTL-bearing keys qualify. Trigger: server major or eviction/config capability changes.
 
 ## E-MONGODB-MODELING
 
-Source class: official. URL: https://www.mongodb.com/docs/manual/data-modeling/. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://www.mongodb.com/docs/manual/data-modeling/>. Fetched: 2026-08-30; status: complete.
 Boundary: current data-modeling hub and probed server documentation. Caveat: document-size and unbounded-array limits are unknown until separately sourced. Trigger: server major or page changes.
 
 ## Official engine and operations sources
 
 ## E-PG-CONNECTIONS-WIKI
 
-Source class: official practitioner-maintained wiki. URL: https://wiki.postgresql.org/wiki/Number_Of_Database_Connections. Fetched: 2026-08-30; status: complete.
+Source class: official practitioner-maintained wiki. URL: <https://wiki.postgresql.org/wiki/Number_Of_Database_Connections>. Fetched: 2026-08-30; status: complete.
 Boundary: oldid 21949, edited 2014-03-14, with pre-9.2/9.2-era benchmarks. Caveat: its formula is a starting heuristic, not an SSD or current tuned default. Trigger: selected PG version, hardware, or capacity model changes.
 
 ## E-PG-WARM-STANDBY-18
 
-Source class: official. URL: https://www.postgresql.org/docs/current/warm-standby.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://www.postgresql.org/docs/current/warm-standby.html>. Fetched: 2026-08-30; status: complete.
 Boundary: PostgreSQL 18.6 current documentation. Caveat: streaming replication is asynchronous by default, so loss exposure depends on observed lag. Trigger: PG major, replication configuration, or page changes.
 
 ## E-MYSQL-SEMISYNC-84
 
-Source class: official. URL: https://dev.mysql.com/doc/refman/8.4/en/replication-semisync.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://dev.mysql.com/doc/refman/8.4/en/replication-semisync.html>. Fetched: 2026-08-30; status: complete.
 Boundary: MySQL 8.4 plugin implementation. Caveat: acknowledgement is receipt, not execution or commit, and timeout can fall back to asynchronous replication. Trigger: server version, plugin/configuration, or page changes.
 
 ## E-AURORA-PERFORMANCE-PARTIAL
 
-Source class: official. URL: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Performance.html. Fetched: 2026-08-30; status: partial.
+Source class: official. URL: <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Performance.html>. Fetched: 2026-08-30; status: partial.
 Boundary: current guide; documented storage windows include Aurora MySQL 2.09+ and Aurora PostgreSQL for shrinking `VolumeBytesUsed`, with other listed version windows in the source. Caveat: it says replication lag is “considerably less than 100 ms,” but does not document the practitioner load tail or failover mechanics; failover remains unknown. Trigger: engine version, Region/capability, instance class, parameter group, or page changes.
 
 ## E-STRONG-MIGRATIONS
 
-Source class: official project documentation. URL: https://github.com/ankane/strong_migrations/blob/master/README.md. Fetched: 2026-08-30; status: complete.
+Source class: official project documentation. URL: <https://github.com/ankane/strong_migrations/blob/master/README.md>. Fetched: 2026-08-30; status: complete.
 Boundary: installed gem behavior only when matched to a tagged README/changelog. Caveat: fetched master text is not a version contract and raw SQL requires independent review. Trigger: gem version, target DB version, or safety-check configuration changes.
 
 ## E-INDEX-LUKE-WHERE
 
-Source class: practitioner. URL: https://use-the-index-luke.com/sql/where-clause. Fetched: 2026-08-30; status: complete.
+Source class: practitioner. URL: <https://use-the-index-luke.com/sql/where-clause>. Fetched: 2026-08-30; status: complete.
 Boundary: general SQL index reasoning, not engine-specific syntax or guarantee. Caveat: validate access versus filter predicates and plan shape on the selected engine. Trigger: selected engine/version or access-path assumptions change.
 
 ## E-GHOST-LIMITS
 
-Source class: official project documentation. URL: https://github.com/github/gh-ost/blob/master/doc/requirements-and-limitations.md. Fetched: 2026-08-30; status: complete.
+Source class: official project documentation. URL: <https://github.com/github/gh-ost/blob/master/doc/requirements-and-limitations.md>. Fetched: 2026-08-30; status: complete.
 Boundary: detected tool version with MySQL 5.7+ RBR and full row-image prerequisites. Caveat: no foreign-key or trigger path. Trigger: gh-ost/MySQL version, binlog mode, FK/trigger, or provider changes.
 
 ## E-PG-ISOLATION-18
 
-Source class: official. URL: https://www.postgresql.org/docs/current/transaction-iso.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://www.postgresql.org/docs/current/transaction-iso.html>. Fetched: 2026-08-30; status: complete.
 Boundary: PostgreSQL 18 current documentation. Caveat: serializable and repeatable-read failures require whole-transaction retry; do not treat pre-commit reads as finalized. Trigger: PG major, isolation policy, or page changes.
 
 ## E-PGBOUNCER-FEATURES
 
-Source class: official. URL: https://www.pgbouncer.org/features.html. Fetched: 2026-08-30; status: complete.
+Source class: official. URL: <https://www.pgbouncer.org/features.html>. Fetched: 2026-08-30; status: complete.
 Boundary: feature matrix for the probed PgBouncer release. Caveat: transaction and statement pooling intentionally break session-state expectations. Trigger: PgBouncer release or pool mode changes.
 
 ## Practitioner sources
 
 ## E-THREADS-KEYS
 
-Source class: practitioner. URL: https://www.threads.com/@bear_dba/post/Dcj12jbk_sD. Fetched: 2026-08-30; status: complete.
+Source class: practitioner. URL: <https://www.threads.com/@bear_dba/post/Dcj12jbk_sD>. Fetched: 2026-08-30; status: complete.
 Boundary: observed DBA design guidance, not an engine-neutral performance guarantee. Caveat: key choice depends on selected engine, distribution, and mutation requirements. Trigger: selected engine or key/workload assumptions change.
 
 ## E-THREADS-JSON
 
-Source class: practitioner. URL: https://www.threads.com/@bear_dba/post/DaQJODLmNJ1. Fetched: 2026-08-30; status: complete.
+Source class: practitioner. URL: <https://www.threads.com/@bear_dba/post/DaQJODLmNJ1>. Fetched: 2026-08-30; status: complete.
 Boundary: practitioner JSON tradeoffs. Caveat: validate indexing, constraints, and query patterns with selected-engine evidence. Trigger: engine/version or JSON access-pattern changes.
 
 ## E-THREADS-PUSH
 
-Source class: practitioner. URL: https://www.threads.com/@bear_dba/post/DbfSol-j8LM. Fetched: 2026-08-30; status: complete.
+Source class: practitioner. URL: <https://www.threads.com/@bear_dba/post/DbfSol-j8LM>. Fetched: 2026-08-30; status: complete.
 Boundary: burst-load observation. Caveat: no capacity number follows from the example; correlate send schedule with measured demand. Trigger: launch shape, cache, or capacity changes.
 
 ## E-THREADS-CRAWLING
 
-Source class: practitioner. URL: https://r.jina.ai/https://www.threads.com/@bear_dba/post/Dbb1k_qkxug. Fetched: 2026-08-30; status: complete.
+Source class: practitioner. URL: <https://r.jina.ai/https://www.threads.com/@bear_dba/post/Dbb1k_qkxug>. Fetched: 2026-08-30; status: complete.
 Boundary: crawler isolation guidance. Caveat: front-door controls remain outside this skill and reader isolation needs observed capacity. Trigger: traffic source, routing, or replica capacity changes.
 
 ## E-THREADS-BULK-DML
 
-Source class: practitioner. URL: https://r.jina.ai/https://www.threads.com/@bear_dba/post/DcQNBhZGP-v. Fetched: 2026-08-30; status: complete.
+Source class: practitioner. URL: <https://r.jina.ai/https://www.threads.com/@bear_dba/post/DcQNBhZGP-v>. Fetched: 2026-08-30; status: complete.
 Boundary: practitioner bulk-change guidance. Caveat: batch size and pause are workload-specific, never fixed defaults. Trigger: row volume, replication, undo, or storage conditions change.
 
 ## E-THREADS-AURORA-LAG
 
-Source class: practitioner. URL: https://r.jina.ai/https://www.threads.com/@bear_dba/post/DcCyJVKmCLj. Fetched: 2026-08-30; status: complete.
+Source class: practitioner. URL: <https://r.jina.ai/https://www.threads.com/@bear_dba/post/DcCyJVKmCLj>. Fetched: 2026-08-30; status: complete.
 Boundary: practitioner streaming/read-load and Aurora reader-lag observation. Caveat: “usually within 20 ms, seconds under load” is an observation, not a guarantee or SLA; AWS separately says “considerably less than 100 ms,” and failover remains unknown. Driver buffering and cursor semantics require selected-driver evidence. Trigger: Aurora engine/version, Region, load, routing policy, driver, result size, or workload changes.
 
 ## E-THREADS-SUPABASE
 
-Source class: practitioner. URL: https://www.threads.com/@bear_dba/post/DcmzD8bGAwg. Fetched: 2026-08-30; status: complete.
+Source class: practitioner. URL: <https://www.threads.com/@bear_dba/post/DcmzD8bGAwg>. Fetched: 2026-08-30; status: complete.
 Boundary: practitioner managed-service scaling observations. Caveat: choosing a provider or engine belongs to principle-backend and is not prescribed here. Trigger: principle-backend selection or service limits change.
 
 ## E-THREADS-FK
 
-Source class: practitioner. URL: https://www.threads.com/@bear_dba/post/DccLgcJEzbh. Fetched: 2026-08-30; status: complete.
+Source class: practitioner. URL: <https://www.threads.com/@bear_dba/post/DccLgcJEzbh>. Fetched: 2026-08-30; status: complete.
 Boundary: practitioner foreign-key tradeoffs. Caveat: removing an FK shifts integrity enforcement and is not a generic performance fix. Trigger: service boundary, integrity model, or selected engine changes.
 
 ## Mutable-product probes

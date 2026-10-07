@@ -5,3 +5,4 @@
 - 2026-08-28 — v1.2.0: mutable Tailscale CLI and daemon facts need runtime evidence handling → official-docs-first conflict disclosure, specific-evidence precedence, and safe stops without invented commands or capabilities.
 - 2026-08-28 — v1.2.1: Tailscale dependency maintenance lacked an explicit support boundary → adds official KB, safe `tailscale version`, selected tailnet/client/platform scope, and client/daemon/CLI update switch/status/SSH-consent re-evaluation.
 - 2026-09-03 — v1.2.2: privilege-escalation wording tripped the install scanner → replaces it with root-privilege phrasing and adds the completion contract.
+- 2026-10-07: Markdown lint repairs: separated headings and lists with blank lines in the references and SKILL.md.

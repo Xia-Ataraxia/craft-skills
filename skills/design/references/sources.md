@@ -2,7 +2,7 @@
 
 ## Immutable upstream receipt
 
-- Google Labs `design.md`: https://github.com/google-labs-code/design.md
+- Google Labs `design.md`: <https://github.com/google-labs-code/design.md>
 - Pin: `9bf8eae67128b6cc55ad9bf86665767deb4c11cd` (release 0.4.0)
 - License: Apache License 2.0, `LICENSE` at that commit.
 - Update-review paths: `README.md`, `PHILOSOPHY.md`, `docs/spec.md`, `LICENSE`, `packages/cli/package.json`, `packages/cli/src/commands/{lint,diff,export}.ts`, `packages/cli/src/linter/`, and associated linter tests/fixtures.
@@ -31,13 +31,13 @@ No row required owner-approved removal.
 
 ## Other foundations
 
-- UI UX Pro Max, https://github.com/nextlevelbuilder/ui-ux-pro-max-skill — design pattern/reference concepts only; inspect its current license and revision before updating any adoption.
-- Agentic Design System, https://github.com/aa-on-ai/agentic-design-system — structured design-governance workflow concepts only; inspect license/revision before update.
-- W3C WCAG 2.2, https://www.w3.org/TR/WCAG22/ — accessibility vocabulary and adaptation prompts, not checker conformance.
-- W3C WAI-ARIA, https://www.w3.org/TR/wai-aria-1.2/ — normalized role/name evidence vocabulary, not computed-name implementation.
-- Apple Human Interface Guidelines, https://developer.apple.com/design/human-interface-guidelines/ — platform interaction guidance.
+- UI UX Pro Max, <https://github.com/nextlevelbuilder/ui-ux-pro-max-skill> — design pattern/reference concepts only; inspect its current license and revision before updating any adoption.
+- Agentic Design System, <https://github.com/aa-on-ai/agentic-design-system> — structured design-governance workflow concepts only; inspect license/revision before update.
+- W3C WCAG 2.2, <https://www.w3.org/TR/WCAG22/> — accessibility vocabulary and adaptation prompts, not checker conformance.
+- W3C WAI-ARIA, <https://www.w3.org/TR/wai-aria-1.2/> — normalized role/name evidence vocabulary, not computed-name implementation.
+- Apple Human Interface Guidelines, <https://developer.apple.com/design/human-interface-guidelines/> — platform interaction guidance.
 - ISO 9241-210, Human-centred design for interactive systems — user/context framing; licensed standard, not reproduced.
-- Nielsen Norman Group usability heuristics, https://www.nngroup.com/articles/ten-usability-heuristics/ — feedback, control, recovery, consistency prompts.
+- Nielsen Norman Group usability heuristics, <https://www.nngroup.com/articles/ten-usability-heuristics/> — feedback, control, recovery, consistency prompts.
 
 Update triggers: an explicit approved manual review of a pinned upstream release, material template/schema/checker change, license change, or a source correction. Review the immutable diff, license, paths, adoption/deviation list, probes, tests, checker/reference/template/skill/provenance/version/changelog impacts. Never fetch a moving branch/tag or install/call an upstream runtime during normal checking.
 

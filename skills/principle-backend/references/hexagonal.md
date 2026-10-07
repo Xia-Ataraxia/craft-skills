@@ -129,7 +129,7 @@ Detect the port/adapter boundaries already established (see the dependency-direc
 
 ## Folder shape (see `folders.md` for full framework-specific trees)
 
-```
+```text
 src/
   domain/         # entities, value objects — zero framework imports
   ports/          # interfaces the domain depends on

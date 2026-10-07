@@ -4,7 +4,7 @@ How to carry a coding task from request to done without guessing, faking, or lea
 
 ## The loop
 
-```
+```text
 understand → plan → change → verify → report
 ```
 

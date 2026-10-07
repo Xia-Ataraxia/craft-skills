@@ -43,7 +43,7 @@ Depth order matters; do not jump ahead to `must` before the section list is sett
    `TECHNICAL_REPORT_BOOK`, numeric-prefix order, `title`, `file`, one-line `intent`. An
    abstract section with no `##` headings carries `headings: []`.
 2. **depth-2 — headings.** Per section, interview its `##` headings, each with a one-line
-   `intent`. The heading name is exactly the markdown `## ` text.
+   `intent`. The heading name is exactly the markdown `##` text.
 3. **depth-3 — must.** Per heading (and abstract section), interview the `must` items — the
    facts or claims that heading has to contain. An empty `must` means unfinished.
 4. **governance + background.** Capture approval authority by role, document-vs-log

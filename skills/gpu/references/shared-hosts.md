@@ -58,9 +58,11 @@ Never jump from zero to the full run:
    Measure step time (median over ≥ 20 steady steps), VRAM peak (both
    `torch.cuda.max_memory_allocated()` and the `nvidia-smi` peak), and host RAM.
    Optionally log thermals to catch power/thermal caps:
+
    ```bash
    nvidia-smi --query-gpu=timestamp,temperature.gpu,power.draw,power.limit,clocks.sm,pstate,clocks_throttle_reasons.active --format=csv -l 2 > thermal.csv
    ```
+
    Timing discipline: CUDA executes asynchronously — call `torch.cuda.synchronize()`
    (or time with CUDA events) before reading any timer, discard the warmup steps (JIT,
    allocator, and cache effects pollute the first iterations), and report the median of

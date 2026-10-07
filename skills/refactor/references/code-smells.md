@@ -461,4 +461,3 @@ A `TODO` comment standing in for behavior the current task actually requires, sh
 **Fix:** implement the behavior now, or file a tracked issue and say so explicitly in the commit or PR — never let the comment substitute for either.
 
 Grey zone: a `TODO` marking a genuinely out-of-scope follow-up (a documented future optimization, not required for correctness now) is fine — the smell is a `TODO` covering for missing behavior the task was supposed to deliver.
-

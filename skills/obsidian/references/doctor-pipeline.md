@@ -65,7 +65,7 @@ obsidian delete path="_smoketest/diag-probe.md"
 
 ### Classification decision tree
 
-```
+```text
 Is there a ReferenceError for a variable name?
   YES → undefined-variable
   NO  → Does the error mention a method or property that no longer exists?
@@ -163,7 +163,7 @@ obsidian eval code="app.plugins.plugins['<plugin-id>'].settings.<key> = <value>;
 
 **undefined-variable (Templater):** Replace `<% bareVar %>` with an `<%* ... %>` entry block:
 
-```
+```text
 # Before (broken)
 <% newName %>
 

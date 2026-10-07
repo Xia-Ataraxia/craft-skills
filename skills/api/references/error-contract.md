@@ -39,4 +39,3 @@ Never include a stack trace, SQL query, secret, file path, or implementation-spe
 Structured errors carry exactly one discriminator key across the whole surface.
 An audit of one service found `code`, `error`, and `error_class` all in use, which forces every client to branch on all three and makes any single-key grep look clean.
 Pick one, record the choice in the repository's contract document, and grep for the rejected alternatives in CI so the second one cannot reappear.
-

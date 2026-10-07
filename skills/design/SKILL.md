@@ -5,6 +5,8 @@ metadata:
   version: 1.1.2
 ---
 
+# Design
+
 Review a PR or rendered user journey against seven named UX principles so an identified operator can complete one primary action without an evidenced interaction failure.
 Succeed when the review names each failed principle from a rendered screen or interaction, records reproducible evidence, and recommends the smallest correction.
 

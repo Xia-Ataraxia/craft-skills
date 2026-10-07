@@ -22,7 +22,7 @@ Make a named worktree off the default branch with one command, and never work di
 
 ## Core rule
 
-```
+```text
 git wt <name>  →  branch <name>  →  worktree at $WORKTREE_ROOT/<name>
 ```
 
@@ -80,7 +80,7 @@ git config core.hooksPath .githooks
 
 The bundled installer is idempotent — safe to re-run once accepted. After install, confirm:
 
-```
+```text
 [git-guard] alias.wt        = ...
 [git-guard] guards.d        : .githooks/guards.d/{10-assert-not-main,20-deny-assets,30-check-freshness}.sh
 [git-guard] pre-push hook   : .githooks/pre-push

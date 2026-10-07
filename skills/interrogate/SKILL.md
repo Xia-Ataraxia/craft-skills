@@ -37,6 +37,7 @@ Write one clear paragraph. If you're unsure about the intent, ask the user befor
 Launch available independent reviewers readonly through the runtime's native interface, concurrently within its limit or sequentially. Identify each actual reviewer and keep the prompts identical. When no independent reviewers are available, report independent review unavailable; a direct lead review may still surface findings, but is not a multi-reviewer verdict.
 
 Read `references/reviewer-prompt.md` and fill in the template with:
+
 1. The stated intent
 2. The diff or file contents
 3. The review rubric from `references/rubric.md`
@@ -68,6 +69,7 @@ Categorize every finding using these buckets:
 - **Dismissed**. Wrong, nitpicky, or missing context. Brief explanation why.
 
 For each finding, include:
+
 - Which model(s) raised it
 - The category (act on / consider / noted / dismissed)
 - A one-line rationale for the categorization
@@ -77,22 +79,29 @@ For each finding, include:
 Present the verdict in this structure:
 
 ### Intent
+
 > [The stated intent paragraph from Step 2]
 
 ### Reviewers
+
 - Reviewer [label]: [model name], [N findings] (one bullet per reviewer)
 
 ### Act On
+
 [Findings that should be addressed. For each: description, which models raised it, why it matters.]
 
 ### Consider
+
 [Findings worth thinking about. For each: description, which models raised it, tradeoff involved.]
 
 ### Noted
+
 [Valid but low-priority. Brief list.]
 
 ### Dismissed
+
 [Rejected findings with brief rationale.]
 
 ### Agreement Map
+
 [Where did models agree, where did they diverge, and what does the pattern of agreement/disagreement tell us?]

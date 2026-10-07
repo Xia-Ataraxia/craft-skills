@@ -20,6 +20,7 @@ The code already shows *what* it does. A comment earns its place only when it ca
 ## The test
 
 Before writing a comment, ask: *"Does this tell the reader something the code cannot?"*
+
 - Yes → it is a why-comment; keep it.
 - No → either delete it, or fix the code (rename, extract) so the comment is unnecessary.
 

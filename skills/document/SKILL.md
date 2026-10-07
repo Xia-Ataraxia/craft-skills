@@ -70,7 +70,7 @@ Do not move existing documents without an explicit request.
 
 ## Decision boundaries
 
-```
+```text
 research (facts found)  |  decision/ADR (explicit record request)  |  plan (implementation built)
 ```
 
@@ -83,7 +83,7 @@ When routing is unclear, ask which artifact the user wants: evidence, a recorded
 
 Scaffold only the canonical directories and repository documentation artifacts requested; do not create empty placeholder files or move existing documents without an explicit request.
 
-```
+```text
 docs/
 ├── research/                     # Fact collection — sources, comparisons (pre-decision)
 │   ├── {slug}.md
@@ -105,7 +105,7 @@ Finalizing a draft means **moving** it into `docs/` at the correct path, then de
 
 ## Lifecycle — spec and plan
 
-```
+```text
 spec drafted (scratch) → MOVE → docs/exec-plan/active/{slug}/spec.md
 plan drafted (scratch) → MOVE → docs/exec-plan/active/{slug}/plan.md
                                   FINALIZE only when the user explicitly adopts the immutable-plan contract

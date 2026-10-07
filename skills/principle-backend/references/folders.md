@@ -17,7 +17,7 @@ The folder tree is the architecture made visible — pick the tree that matches 
 
 ## Layered — FastAPI
 
-```
+```text
 src/
   api/              # controllers — routers, request/response DTOs
   services/         # business logic, orchestration, transaction boundary
@@ -37,7 +37,7 @@ configs/
 
 ## Layered — Express/Nest
 
-```
+```text
 src/
   controllers/
   services/
@@ -57,7 +57,7 @@ config/
 
 ## Vertical-slice — FastAPI
 
-```
+```text
 src/
   features/
     create_order/
@@ -78,7 +78,7 @@ configs/
 
 ## Vertical-slice — Express/Nest
 
-```
+```text
 src/
   features/
     create-order/
@@ -99,7 +99,7 @@ config/
 
 ## Hexagonal — FastAPI
 
-```
+```text
 src/
   domain/            # entities, value objects — zero framework imports
   ports/             # Protocols the domain depends on
@@ -118,7 +118,7 @@ configs/
 
 ## Hexagonal — Express/Nest
 
-```
+```text
 src/
   domain/
   ports/             # TS interfaces the domain depends on

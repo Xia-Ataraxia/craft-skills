@@ -190,7 +190,7 @@ Release tooling in this repository consumes it.
 A native skill loader does not require it.
 Do not present the field as spec-mandated portability.
 
-```
+```text
 MAJOR  A trigger phrase is removed or renamed, or the output format breaks a downstream consumer.
 MINOR  A backward-compatible capability is added.
 PATCH  A bug fix, prose correction, or dependency bump with no interface change.
@@ -204,7 +204,7 @@ An absorption or comparison that changes nothing records a verified no-op and ne
 
 Every library package has `CHANGELOG.md` with at least one dated bullet and at most 100 lines (`NO_CHANGELOG`, `CHANGELOG_NO_DATED_BULLET`, `CHANGELOG_TOO_LONG`).
 
-```
+```text
 - YYYY-MM-DD: <why it changed>
 ```
 

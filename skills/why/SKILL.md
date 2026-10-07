@@ -83,6 +83,7 @@ Launch all matching investigators in a single message so they run concurrently. 
 Use the runtime's available reviewer/worker for each source. Preserve read access to the selected integration; do not write files or external state. When workers are unavailable, run the same bounded source passes sequentially.
 
 Each investigator gets:
+
 1. The base prompt from `references/investigator-prompt.md`
 2. The category playbook `references/sources/<source>.md` for the selected MCP, adapted from the examples in `references/source-playbook.md`
 3. The cross-cutting `references/sources/incident-postmortem.md` **if the target code looks defensive** (null checks, retry logic, timeout handling, rate limiting, feature flags, egress guards, OOM handlers)
@@ -123,6 +124,7 @@ If your scope assessment suggests a single-commit trivial target where the PR de
 Use the runtime's available reviewer/worker for synthesis, or synthesize directly after the source passes. Preserve read access needed to spot-verify citations; do not write files or external state.
 
 The synthesizer gets:
+
 1. The investigator findings, including any null results and any categories skipped with justification
 2. The code anchor from Step 2 (file paths, symbols, commit hashes, PR numbers, ticket IDs)
 3. The user's original question

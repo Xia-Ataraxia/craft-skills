@@ -126,7 +126,7 @@ Detect the layer boundaries already in use in this service (see the `principle-b
 
 ## Folder shape (see `folders.md` for full framework-specific trees)
 
-```
+```text
 src/
   api/            # controllers — routers, request/response DTOs
   services/       # business logic, orchestration, transaction boundary

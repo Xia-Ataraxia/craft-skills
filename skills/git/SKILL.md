@@ -11,12 +11,12 @@ Version-control craft, in order: **truth over memory, one logical change per com
 A commit is done right when it traces to one logical change, matches the repo's own detected conventions rather than an imported standard, and never rewrites shared history without the safe path.
 Deep recipes live in `references/`: `conventions.md` (commit-type/scope/merge-strategy tables), `history-surgery.md` (non-interactive fixup/reword/split/bisect/undo), `worktree.md` (`git wt` isolated-worktree workflow + guard install).
 Detection-by-code runs throughout — every rule ships a copy-pasteable command with a threshold, because the repo's actual history always outranks a general convention.
+
 ## Request mode
 
 For a commit, rebase, or staging request, run the ground-truth gate before the first Git mutation.
 For an investigation-shaped request — history, blame, why, or status — collect and report evidence without changing the worktree, index, or history.
 Investigation findings do not authorize a follow-on mutation.
-
 
 ## Ground truth (run first, every time)
 

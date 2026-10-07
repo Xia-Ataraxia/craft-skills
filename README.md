@@ -82,7 +82,7 @@ This is a task-oriented library for software and research work — kept separate
 
 Use the Claude Code marketplace channel:
 
-```
+```text
 /plugin marketplace add Xia-Ataraxia/craft-skills
 /plugin install craft-skills@craft-skills
 ```

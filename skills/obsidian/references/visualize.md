@@ -30,7 +30,7 @@ Do not substitute one format for another against what the user asked for; Canvas
 
 An `.excalidraw.md` file is Markdown, top to bottom:
 
-```
+````markdown
 ---
 excalidraw-plugin: parsed
 <any other frontmatter the vault wants>
@@ -50,7 +50,7 @@ excalidraw-plugin: parsed
 {"type":"excalidraw","version":2,"source":"https://github.com/zsviczian/obsidian-excalidraw-plugin","elements":[...],"appState":{"gridSize":null,"viewBackgroundColor":"#ffffff"},"files":{}}
 ```
 %%
-```
+````
 
 The `## Text Elements` section is a human-readable index (one blank line between entries); the plugin reads the actual scene from the fenced `json` block.
 Always emit plain `json`, never hand-edit or hand-produce `compressed-json` — it is a compression codec output, not something to author by hand.

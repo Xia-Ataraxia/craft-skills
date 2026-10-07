@@ -21,7 +21,7 @@ One feature is one slice, and a slice carries its own handler, validation, and p
 
 A slice is one use case, structured as a single folder that owns everything needed to execute it: the request handler, its input validation, and its persistence calls. A slice does not split its own logic across `controllers/`, `services/`, `repositories/` folders shared with other slices — that split is the layered pattern, and mixing it into a vertical-slice service is the #1 drift.
 
-```
+```text
 src/features/create_order/
   handler.py        # entry point — receives the request, calls validation then persistence
   validation.py      # input parsing/validation for this use case only
@@ -123,7 +123,7 @@ Detect the slice boundaries and shared-admission convention already used in this
 
 ## Folder shape (see `folders.md` for full framework-specific trees)
 
-```
+```text
 src/
   features/
     create_order/

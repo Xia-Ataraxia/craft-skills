@@ -30,20 +30,27 @@ Ask: **is this a syntax-tree question or a bytes question?** Use ast-grep when t
 ## Golden path: mutate by ladder
 
 1. **Validate the pattern.** State the target language and run a query-inspection command before targeting the repository:
+
    ```sh
    ast-grep run --lang ts --pattern 'client.fetch($URL)' --debug-query
    ```
+
    Replace `ast-grep` with `sg` when that is the installed binary. If parsing fails, fix the pattern before searching files.
 2. **Search without mutation.** Limit paths to the intended scope and read representative matches:
+
    ```sh
    ast-grep run --lang ts --pattern 'client.fetch($URL)' src/
    ```
+
 3. **Dry-run the replacement.** `--rewrite` without `--update-all` previews the change; it does not write files:
+
    ```sh
    ast-grep run --lang ts --pattern 'client.fetch($URL)' --rewrite 'http.fetch($URL)' src/
    ```
+
 4. **Inspect the blast radius.** Check total matches, changed files, surrounding code, and exceptional forms such as optional chaining, overloads, or comments that text search would have confused.
 5. **Apply only the reviewed change.** Re-run the exact dry-run command with `--update-all`, then inspect the diff and run focused tests:
+
    ```sh
    ast-grep run --lang ts --pattern 'client.fetch($URL)' --rewrite 'http.fetch($URL)' --update-all src/
    ```

@@ -20,7 +20,7 @@ source build without breaking the chain or the host.
 Four links, checked in order; a break anywhere surfaces as "no kernel image is available",
 `torch.cuda.is_available() == False`, or a build failure:
 
-```
+```text
 GPU compute capability (sm_XX)
   ∈ torch's compiled arch list        # torch.cuda.get_arch_list()
 torch's CUDA runtime (torch.version.cuda)
@@ -63,13 +63,17 @@ not a driver reinstall.
    as a segfaulting compile or a broken runtime, never as an install error.
 3. Pick the torch wheel: newest build whose CUDA runtime ≤ driver ceiling **and** whose
    arch list contains the GPU's sm. Verify after install:
+
    ```bash
    python3 -c "import torch; assert torch.cuda.is_available(); print(torch.cuda.get_arch_list(), torch.cuda.get_device_capability())"
    ```
+
 4. Smoke-test before installing anything on top:
+
    ```bash
    python3 -c "import torch; x=torch.randn(1024,1024,device='cuda'); torch.cuda.synchronize(); print('cuda-ok', (x@x).sum().item())"
    ```
+
 5. Only then layer dependents (flash-attn, bitsandbytes, llama.cpp) — for each, confirm
    a prebuilt wheel exists for this **exact** combination before any source build is
    considered. Wheels are keyed on every axis at once — package version × CUDA × torch
@@ -95,10 +99,12 @@ A source build is a launch — on a shared host it also passes the shared-host g
   for flash-attn, `CMAKE_CUDA_ARCHITECTURES=120` for llama.cpp — so the build neither
   misses the GPU nor wastes hours compiling every architecture.
 - **Shape of a safe build command:**
+
   ```bash
   nice -n 10 env MAX_JOBS=2 FLASH_ATTN_CUDA_ARCHS=<sm> \
     pip install --no-build-isolation flash-attn
   ```
+
   (`--no-build-isolation` so the build sees the real torch, not an isolated stale one.)
 
 ## 5. Attention backends
@@ -109,6 +115,7 @@ A source build is a launch — on a shared host it also passes the shared-host g
   or more releases before it reaches flash-attn, so check the README's support list and
   the issue tracker for this sm (§3 step 2) before planning around the flash path. On an
   unsupported sm the failure is a model-load error, not a slow path. Gate it:
+
   ```python
   try:
       import flash_attn  # noqa: F401
@@ -117,6 +124,7 @@ A source build is a launch — on a shared host it also passes the shared-host g
       attn = "sdpa"
   model = AutoModelForCausalLM.from_pretrained(name, attn_implementation=attn, ...)
   ```
+
   SDPA is the universal fallback — slower, but correct on every architecture torch
   supports; a measured SDPA number beats an unmeasured flash-attn promise.
 - Any speedup claim for the flash path is unmeasured until benchmarked on this GPU —

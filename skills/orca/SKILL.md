@@ -129,7 +129,7 @@ Do not revive unrelated hosts merely to complete an organization inventory.
 
 - `orca` — official source: the installed application's bundled `orca-cli` and `orchestration` guides, fetched with the already selected executable; version probe: `orca --version`; readiness probe: `orca status --json`. This package does not copy their command inventory. Organization support depends on the installed group, project, and host capabilities, not private implementation paths.
 - `git` — official sources: [branch deletion](https://git-scm.com/docs/git-branch), [worktrees](https://git-scm.com/docs/git-worktree), and [reflogs](https://git-scm.com/docs/git-reflog); version probe: `git --version`; cleanup requires linked-worktree enumeration, reflog timestamps, ancestor checks, and non-forced branch deletion.
-- `ssh` — official source: https://man.openbsd.org/ssh_config; version probe: `ssh -V`; configuration probe: `ssh -G <host-alias>`; support boundary: an OpenSSH client supporting `ControlPersist`, `RemoteCommand`, `BatchMode`, and `ConnectTimeout`.
+- `ssh` — official source: <https://man.openbsd.org/ssh_config>; version probe: `ssh -V`; configuration probe: `ssh -G <host-alias>`; support boundary: an OpenSSH client supporting `ControlPersist`, `RemoteCommand`, `BatchMode`, and `ConnectTimeout`.
 - Dependency trigger — an Orca, Git, or OpenSSH update, changed capability probe, or changed status, identity, grouping, or deletion behavior requires official-documentation review and affected scenarios before reusing the operation.
 
 ## Anti-patterns

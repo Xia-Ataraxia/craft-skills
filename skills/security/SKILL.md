@@ -22,6 +22,7 @@ Do not propose a fix before this gate.
 3. Name the assets at risk: credentials, personal data, payment data, availability, another tenant's data.
 4. Write a one-line abuse case for each top flow — "attacker submits X through channel Y to achieve Z." This turns severity triage into something concrete instead of abstract.
 5. Route to the surface-specific or risk-specific reference(s) that apply before acting:
+
    | Surface or scope | Read |
    |---|---|
    | Web UI / frontend rendering | `references/web.md` |
@@ -29,7 +30,9 @@ Do not propose a fix before this gate.
    | LLM-powered feature (agent, prompt, retrieval-augmented generation (RAG), tool use) | `references/llm.md` |
    | CI workflow that runs on a pull request, or any change to its permissions, registry login, image push, cache export, or artifact upload | `references/untrusted-ci.md` |
    | Full audit, or dependency, build, credential, or supply-chain reachability | `references/secrets-supply-chain.md` |
+
    A review can route to more than one reference — a web app with an LLM feature reads `web.md`, `api.md`, and `llm.md`. Read `secrets-supply-chain.md` and run its relevant audit commands only when its routing row applies.
+
 Preserve trust-boundary validation and error handling; remove either only when an adversarial regression test proves it redundant.
 
 Quick surface-identification heuristics — approximate, confirm by reading the code, not the grep alone:
@@ -67,7 +70,7 @@ For audit-tool output, framework security behavior, and version-dependent remedi
 
 Every finding runs through this tree before it gets a fix-now / next-release / backlog verdict:
 
-```
+```text
 Is the flaw reachable by an unauthenticated or low-privilege actor in production?
 ├─ NO (needs prod-admin access, or the actor is already at the target's privilege level)
 │    → BACKLOG — harden opportunistically, no release blocked.

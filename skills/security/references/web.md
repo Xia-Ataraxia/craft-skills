@@ -66,7 +66,7 @@ Reading: no output is a fail — no CSP in place. A present header still needs `
 
 **Fix** — baseline policy, tightened per app:
 
-```
+```http
 Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'
 ```
 

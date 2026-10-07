@@ -32,7 +32,6 @@ Do not claim official Aside skill absence.
 - Close only resources this task created and ledgered. Preserve pre-existing and ambiguous handles. Report cleanup failure without widening the close scope.
 - Fallback routing to agent-browser, existing-session, Chrome, or other managed backends is retired. If Aside cannot do the work, stop.
 
-
 ## Requirements
 
 - Official `aside-browser` and current `aside` CLI. When this task uses a related official skill or CLI/agent runtime, re-probe it under Related official skills and mutable facts in docs/skills/authoring.md. Do not treat unused runtimes as required.

@@ -19,7 +19,7 @@ A lockfile pins resolved versions, while an importable package keeps reusable pi
 
 ### Greenfield example tree
 
-```
+```text
 project/
   pyproject.toml
   uv.lock
@@ -144,6 +144,7 @@ Pass: one file per meaningfully distinct run, growing over the project's life. F
 - `experiments/` output is gitignored by default, but a small number of final, reported-on run directories may be committed deliberately (e.g. under `experiments/reported/`) when the team wants those specific results version-controlled — the default stays gitignored; this is an explicit, scoped exception, not a silent one.
 
 ## Incumbent-respect clause
+
 Detect the project's existing layout before changing anything: inspect its dependency declaration, lockfile, environment manager, package shape, and `configs/` or `data/` convention. Follow that incumbent shape for edits inside an established project. Apply the `pyproject.toml` + locked dependencies + importable-package recipe to new projects and explicitly scoped package migrations only; never restructure an existing project's layout inside an unrelated feature or experiment change.
 
 ## Hand-offs

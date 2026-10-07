@@ -2,7 +2,7 @@
 name: tailscale
 description: Verifies and repairs the Tailscale tailnet that carries cross-host work — SSH, remote process inspection, `scp` — before a dependent workflow runs, and triages failures as network-layer versus service-layer. Use when `tailscale ping` or `ssh <peer>` hangs, when a reachable peer is missing from `tailscale status`, when switching networks between tailnets with `tailscale switch` or listing stored profiles, when the target is a shared-in node or a tailnet you were invited to rather than own, when picking the daemon-restart path for a macOS install variant, or when a browser OAuth popup appears mid-SSH. Not for generic SSH problems unrelated to the tailnet.
 metadata:
-  version: 1.2.2
+  version: 1.2.3
 ---
 
 # tailscale
@@ -28,6 +28,7 @@ tailscale version
 Support only behavior verified for the selected tailnet, installed client version, and platform; do not promote a newly documented command or daemon behavior beyond that boundary. When the client, daemon, or CLI updates, re-run the switch, status, and SSH-consent evaluations before releasing the package update.
 
 Three macOS install layouts coexist, and the daemon-restart path differs across them:
+
 - **macsys (Tailscale.app, standalone `.pkg`)** — GUI app with the daemon embedded in the app process. Restart by quitting and relaunching the app (`osascript -e 'quit app "Tailscale"'`, then launch again).
 - **Homebrew + per-user `LaunchAgent`** — `brew install tailscale` + `brew services start tailscale`. Daemon runs as the login user, stops on logout. Restart via `brew services restart tailscale`.
 - **Homebrew + system `LaunchDaemon` (headless)** — `brew install tailscale` + `tailscaled install-system-daemon` (run as root). Daemon runs as root via `launchd`, survives logout. Restart via `launchctl kickstart -k system/com.tailscale.tailscaled` as root. Do not use `brew services` here — it manages the per-user agent, not the root system daemon.
@@ -118,6 +119,7 @@ Full procedure: `references/tailnet-profile-and-identity-changes.md`.
 ## Source-of-truth host discipline
 
 In a two-host setup, every meaningful change is authored on the source-of-truth host and executed over `ssh <replica>`:
+
 - Prefer one-shot `ssh <replica> '<command>'` invocations so every remote action lands in the source-of-truth host's transcript. Interactive ad-hoc sessions on the replica leave no audit trail.
 - Config files that govern the replica live in tracked directories on the source-of-truth host and are pushed via `scp`. Never edit them in place on the replica.
 - The only legitimate interactive session on the replica is when a real TTY is required (e.g. a password prompt that cannot be piped). Capture any state it produced back to the source-of-truth host immediately.

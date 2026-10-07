@@ -32,15 +32,15 @@ to record a decision.
 
 - Source: {URL or citation}
 - Key points:
-  -
-  -
+  - {point}
+  - {point}
 
 ### {Finding or source B}
 
 - Source: {URL or citation}
 - Key points:
-  -
-  -
+  - {point}
+  - {point}
 
 ## Comparison
 

@@ -203,6 +203,8 @@ It does not require an output-contract heading, anti-pattern registry wording, a
 Sentence line breaks are a nonblocking typography preference.
 The reflow helper is retired.
 
+Markdown style is checked by `npx -y markdownlint-cli2@0.23.3` against the root `.markdownlint-cli2.jsonc`, in CI and `scripts/ci-local.sh`.
+
 After an authorized merge or update, verify the resulting revision and rerun the relevant checks.
 Report unrelated work without stashing it or changing the operator's branch implicitly.
 

@@ -40,13 +40,13 @@ when the convention is retired.
 
 ### Compliant
 
-```
+```text
 {show a concrete compliant example}
 ```
 
 ### Non-compliant
 
-```
+```text
 {show a concrete violation and explain why it fails}
 ```
 

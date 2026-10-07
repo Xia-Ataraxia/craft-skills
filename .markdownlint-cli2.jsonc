@@ -1,0 +1,49 @@
+// Markdown lint for every tracked .md file. Run: npx -y markdownlint-cli2@0.23.3
+// Verbatim or near-verbatim upstream copies are ignored so lint never rewrites third-party text.
+{
+  "globs": ["**/*.md"],
+  "ignores": [
+    ".git/**",
+    ".omo/**",
+    "**/node_modules/**",
+    "skills/*/evals/**",
+    "skills/principle-programming/references/laziness-protocol.md",
+    "skills/principle-architecture/references/foundational-thinking.md",
+    "skills/principle-architecture/references/redesign-from-first-principles.md",
+    "skills/debug/references/attack-the-premise.md",
+    "skills/refactor/references/subtract-before-you-add.md",
+    "skills/principle-programming/references/minimize-reader-load.md",
+    "skills/principle-architecture/references/outcome-oriented-execution.md",
+    "skills/principle-frontend/references/experience-first.md",
+    "skills/principle-architecture/references/exhaust-the-design-space.md",
+    "skills/principle-programming/references/build-the-lever.md",
+    "skills/principle-programming/references/model-the-domain.md",
+    "skills/principle-backend/references/boundary-discipline.md",
+    "skills/principle-programming/references/type-system-discipline.md",
+    "skills/principle-backend/references/make-operations-idempotent.md",
+    "skills/principle-architecture/references/migrate-callers-then-delete-legacy-apis.md",
+    "skills/principle-architecture/references/separate-before-serializing-shared-state.md",
+    "skills/principle-testing/references/prove-it-works.md",
+    "skills/debug/references/fix-root-causes.md",
+    "skills/principle-testing/references/sequence-verifiable-units.md",
+    "skills/principle-testing/references/test-behavior-not-implementation.md",
+    "skills/principle-testing/references/explain-the-number.md",
+    "skills/craft-mode/references/guard-the-context-window.md",
+    "skills/craft-mode/references/never-block-on-the-human.md",
+    "skills/correct/references/encode-lessons-in-structure.md",
+    "skills/unslop/SKILL.md",
+    "skills/principle-programming/references/typescript/patterns.md",
+    "skills/document/references/technical-writing.md",
+    "skills/interrogate/references/code-quality-review.md",
+    "skills/interrogate/references/lead-judgment.md",
+    "skills/interrogate/references/reviewer-prompt.md",
+    "skills/interrogate/references/rubric.md"
+  ],
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD060": false,
+    "MD033": false,
+    "MD024": { "siblings_only": true }
+  }
+}

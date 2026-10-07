@@ -34,9 +34,11 @@ Before touching structure: a test suite exists for the path and is green right n
 2. One move at a time from `references/catalog.md` — never combine two into one step.
 3. Verify proportionally to blast radius: run a focused test after a local move, a broader suite after a cohesive checkpoint, and the final relevant suite when the refactor is complete. A red result reverts the move or cohesive group that caused it rather than debugging forward on a refactor that just broke something.
 4. Refactor commits stay separate from behavior commits. A planned change with declared breakage defers to the `principle-architecture` skill's outcome-oriented-execution reference instead. Detect a commit mixing the two before it lands:
+
    ```bash
    git diff --staged --diff-filter=M -- '*test*' '*spec*' '*_test.*' '*.test.*' | grep -E '^[+-][^+-].*\b(assert|expect)\b'
    ```
+
    `--diff-filter=M` exempts brand-new test files (characterization tests, added coverage) by construction — no output means clean. An existing assertion's expected value flipping (a `-`/`+` pair changing `assert x == 47` to `== 48`, or a deletion) is the behavior-change signal — split the commit. A `+`-only line adding a new assertion beside untouched ones is just added coverage, not proof of a mix.
 
 ## Scope guard

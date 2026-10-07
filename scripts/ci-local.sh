@@ -105,6 +105,10 @@ job_layer1_format() {
   python3 -m unittest scripts.governance.tests.test_validate_skill_format
 }
 
+job_markdown_lint() {
+  npx -y markdownlint-cli2@0.23.3
+}
+
 job_layer1_hygiene() {
   python3 scripts/governance/tools/validate_runtime_hygiene.py --diff-base "$INTEGRATION_BASE" &&
   python3 -m unittest scripts.governance.tests.test_validate_runtime_hygiene
@@ -157,6 +161,7 @@ PY
 
 run_job "pr-size"              job_pr_size
 run_job "layer1-format"        job_layer1_format
+run_job "markdown-lint"        job_markdown_lint
 run_job "layer1-hygiene"       job_layer1_hygiene
 run_job "distribution-version" job_distribution_version
 run_job "typescript-baseline"  job_typescript_baseline
