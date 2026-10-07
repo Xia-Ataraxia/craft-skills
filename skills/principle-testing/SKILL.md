@@ -1,8 +1,8 @@
 ---
 name: principle-testing
-description: Designs, improves, and audits test suites around behavior and risk, independent oracles, counterfactual evidence, deterministic diagnosis, and cost. Use for generated-test review, unit/component/integration/e2e or smoke placement, test-suite health, flaky-test policy, fixtures, and test audits. Not for production-code red-green implementation, which belongs to principle-programming; diagnosis or repair of one currently failing or intermittent test, which belongs to debug; structural-change characterization, which belongs to refactor; ML evaluation methodology, which belongs to ml; or project-specific agent evaluation methodology.
+description: Designs, improves, and audits test suites around behavior and risk, independent oracles, counterfactual evidence, deterministic diagnosis, and cost. Use for generated-test review, unit/component/integration/e2e or smoke placement, test-suite health, surviving-mutant triage on changed code, flaky-test policy, fixtures, and test audits. Not for production-code red-green implementation, which belongs to principle-programming; diagnosis or repair of one currently failing or intermittent test, which belongs to debug; structural-change characterization, which belongs to refactor; ML evaluation methodology, which belongs to ml; or project-specific agent evaluation methodology.
 metadata:
-  version: 3.2.1
+  version: 3.3.0
 ---
 
 # principle-testing
@@ -56,6 +56,7 @@ Read this file for every testing task and read the matching reference before cha
 | Database, cache, queue, service boundary, contract, fake, seam, or mock | `references/integration.md` |
 | Browser, CLI, user journey, startup wiring, selector, wait, or smoke | `references/e2e.md` |
 | Create or maintain a project-local verification skill that drives the app the way a user does | `references/verification-skills.md` |
+| Mutant checks on changed logic, or tests that still pass when changed code is wrong | `references/mutation.md` |
 
 ## Evidence scopes and resource size
 
@@ -104,6 +105,7 @@ Do not turn unknown incumbent output into a permanent golden master without an i
 - Mandatory strategy tables, extra approvals, or repeated full-suite and runtime checks treated as proof add process cost without new evidence → record the distinct risk and the cheapest credible check in the existing summary.
 - Fixture-generator, source-string-mutation, or checker-of-checker layers without an independent oracle protect test topology rather than product risk → test the public checker contract directly or delete the layer; do not ban a checker or topology test that protects a real contract.
 - Test count as a metric rewards volume rather than unique evidence → review distinct failure modes and decision rationale instead.
+- A mutation score treated as a target, quota, or merge gate rewards killing mutants over naming risk → triage each surviving mutant on the changed code and record the decision instead.
 - A narrow regression or fixture retirement grows shared catalogs, duplicate test matrices, or a replacement application emulator → preserve the reduction objective with case-local inputs and the smallest faithful consumer proof; retain independently useful guards after a document migration rather than imposing filename bans or line-count quotas.
 
 ## Portable runtime facts
