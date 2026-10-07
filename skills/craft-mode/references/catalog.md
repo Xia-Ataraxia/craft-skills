@@ -27,17 +27,17 @@ Resolve them through that skill's discovery location.
 | Upstream skill | Origin | Current craft owner | Craft destination | Kind | Notes |
 |---|---|---|---|---|---|
 | `poteto-mode` | pstack | none | `craft-mode` | command | Playbook router and working style; no persistent mode. |
-| `poteto-help` | pstack | none | `craft-mode/references/usage.md` | reference | Router help, read by craft-mode. |
+| `poteto-help` | pstack | none | `craft-help` | command | Router help for craft-mode. |
 | `how` | pstack | none | `how` | command | Spawns read-only subagents: one explainer for a simple question, parallel explorers then an explainer for a complex one. |
 | `why` | pstack | none | `why` | command | May compose how. |
 | `recall` | pstack | none | `recall` | command | Mines the active workspace's recent transcripts with parallel subagents; reads another project's only when asked. |
 | `blast-radius` | pstack | none | `blast-radius` | command | Proves the safety fact by running real code. |
 | `architect` | pstack | none | `architect` | command | Grounds through how and why; explores with arena. |
 | `arena` | pstack | none | `arena` | command | Parallel candidates on two model families, a judge from another family, then pick, graft, and verify. |
-| `swarm` | pstack | none | `swarm` | command | Concurrency depends on runtime workers. |
+| `swarm` | pstack | none | `swarm` | command | Fans bounded subagents out over slices or a race and drains one report. |
 | `interrogate` | pstack | none | `interrogate` | command | Uses whatever reviewers the runtime offers; no fixed model list. |
 | `automate-me` | pstack | none | `automate-me` | command | Mines the active workspace's transcripts and asks the user, then drafts one personal mode skill and lands it through a PR. |
-| `make-bot-ui` | pstack | none | none | dropped | Cursor-only backend; see [Unsupported boundaries](#unsupported-boundaries). |
+| `make-bot-ui` | pstack | none | `make-bot-ui` | command | Cursor routine creation, secret card, endpoint, headers, and wake envelope become neutral phrases; per-runtime routes live in `runtimes.md`. |
 | `setup-pstack` | pstack | none | `craft-mode/references/setup.md` | dropped | Model and budget configuration dropped by owner decision; the file documents native discovery only. |
 | `reflect` | pstack | none | `reflect` | command | Three parallel reviewers read the active transcript or a session digest; edits wait for user approval, backlog items file automatically. |
 | `correct` | pstack | none | `correct` | command | Fixes each repeated mistake class at the highest level that works, one commit per class, and proves each check fails on a real past mistake. |
@@ -88,11 +88,6 @@ craft-mode's SKILL.md indexes all of them.
 
 ## Unsupported boundaries
 
-`make-bot-ui` has no portable workflow, so no file or command offers it.
-Every step depends on Cursor-only backend features: creating a webhook routine through `update_state`, collecting the sender key through a `SendToUser` secret-request card and its connector credential file, posting to a Cursor automation webhook URL, and waking on that routine's `webhook_event`.
-Without that backend, the remaining local server and tailnet steps have nothing to wake.
-Tailnet reachability on its own belongs to the `tailscale` skill.
-
 `setup-pstack` configured per-role models and budgets for Cursor; the owner dropped that outcome.
 No package pins a model or a budget.
 
@@ -100,7 +95,7 @@ Elsewhere, Cursor-only parts are removed and the portable outcome stays: Custom 
 
 ## Composition edges
 
-[Playbooks](playbooks.md) owns the 23 playbooks and their workflow and principle edges.
+The 23 playbooks live in `playbooks/`, one upstream file each, and own their workflow and principle edges.
 These direct-skill edges are required:
 
 - `teach` composes `how` and `why`.

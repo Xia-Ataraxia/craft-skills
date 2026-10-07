@@ -16,7 +16,8 @@ These craft packages contain verbatim or adapted text from pstack at that commit
 - `principle-testing`, including `references/feature-map-example/` (from `pstack/skills/create-verification-skill/references/feature-map-example/`)
 - `debug`
 - `refactor`
-- `craft-mode`
+- `craft-mode`, including `scripts/` (from `pstack/skills/poteto-mode/scripts/`) and `references/bugbot-triage.md` (from `pstack/skills/poteto-mode/references/bugbot-triage.md`)
+- `craft-help`
 - `correct`
 - `how`
 - `why`
@@ -32,10 +33,11 @@ These craft packages contain verbatim or adapted text from pstack at that commit
 - `benchmark-checklist`
 - `automate-me`
 - `figure-it-out`
-- `show-me-your-work`
+- `show-me-your-work`, including `scripts/log.sh` (from `pstack/skills/show-me-your-work/scripts/log.sh`)
 - `unslop`
 - `recall`
 - `document`
+- `make-bot-ui`
 
 `skills/PROVENANCE.md` records the source and relationship for each package.
 

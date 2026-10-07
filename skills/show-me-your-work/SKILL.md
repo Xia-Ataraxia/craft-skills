@@ -2,7 +2,7 @@
 name: show-me-your-work
 description: "Keeps a reviewable TSV decision trail for long-running, autonomous, or multi-phase work, with evidence pointers and outcomes. It applies to '/show-me-your-work', 'keep a decision log', and work a human reviews after stepping away. It audits each run's rows and keeps the file local unless a reviewer needs the trail committed. Not for designing the workflow that produces the decisions - use figure-it-out."
 metadata:
-  version: "1.0.1"
+  version: "1.0.3"
 ---
 
 # Show me your work
@@ -27,7 +27,7 @@ An example, plain-spoken so a reviewer reads it at a glance.
 ```
 ts	phase	decision	why	evidence	result
 2026-05-24T09:02:00Z	frame	counted the work first, about 100 components and roughly 75 hours	wanted to know the size before starting a long run	commit 3a9f1c2	found 5 things to sort out before starting
-2026-05-24T09:40:00Z	harness	took screenshots of the old version before changing anything	so we can compare old against new and catch any visual change	snapshot.sh, baseline/	saved 120 reference screenshots
+2026-05-24T09:40:00Z	harness	took screenshots of the old version before changing anything	so we can compare old against new and catch any visual change	scripts/snapshot.sh, baseline/	saved 120 reference screenshots
 2026-05-24T11:15:00Z	widget	moved the widget styles over without changing how it looks	keep the change small and the result identical	commit 7c21e0a, pixel-diff 0	looks identical, tests pass
 2026-05-24T12:30:00Z	widget	threw out a helper's work because its screenshots were blank	checked the real files instead of trusting its summary	worktree reset	reverted, tightened the instructions for next time
 ```
@@ -36,7 +36,7 @@ ts	phase	decision	why	evidence	result
 
 Write each entry the way you'd tell a teammate what you did. Plain words, concrete actions, no AI speak or abstract jargon (the **unslop** skill applies to log text too).
 
-Append each row with a bare `printf`. Stamp `ts` and write the header on first use. If cells come from generated or user-supplied text, strip stray tabs/newlines and prefix any cell starting with `=`, `+`, `-`, or `@` with a single quote.
+Use the helper `scripts/log.sh <logfile> <phase> <decision> <why> <evidence> <result>`. It stamps `ts`, writes the header on first use, strips stray tabs/newlines, and prefixes any cell starting with `=`, `+`, `-`, or `@` with a single quote. A bare `printf` appending a row works too, but mind those same bytes if cells come from generated or user-supplied text.
 
 Log decision points and checkpoints, not every action: a fork chosen, a unit completed with its verification result, a pivot or revert with its trigger, a blocker surfaced, a gate fixed. For loop runs, one row per iteration. Skip the trivial and self-evident.
 

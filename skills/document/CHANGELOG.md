@@ -17,3 +17,5 @@
 - 2026-10-07: Documentation needed one sentence-level writing standard and a fixed final prose pass, so pstack's technical-writing guide lands as a reference and unslop closes every prose artifact. Provenance: technical-writing from Lauren Tan's pstack at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e.
 - 2026-10-07: inline-comments told agents to explain our own design choices in prose, which no-comments forbids, so owner decision (e) now keeps only comments about constraints we cannot change and ADR pointers.
 - 2026-10-07: Restored the pstack wording so poteto's method reads as written; only Cursor-only mechanics and links differ.
+- 2026-10-07: The owner replaced decision (e) with Comment Sicko's keep-list, so inline-comments keeps only those categories and ADR-pointer comments are deleted.
+- 2026-10-07: The inline-comments routing label still named the retired comment-the-why convention, so it now names the keep-list.

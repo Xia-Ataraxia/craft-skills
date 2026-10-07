@@ -5,32 +5,31 @@
 Each skill package is a single directory `skills/<skill-name>/` containing at
 least `SKILL.md` + `CHANGELOG.md`. This validator enforces, per package:
 
-  1. Every Agent Skills specification rule (frontmatter keys, `name`,
-     `description`, `compatibility`) through the official linter
-     `skills_ref.validate` (pinned in scripts/governance/requirements.txt);
-     each message is reported as `AGENT_SKILLS_SPEC`.
-  2. Local: `metadata` is a present mapping (`NO_METADATA`, `BAD_METADATA`).
-  3. Local: a shape warning (non-blocking) fires when `description` is under
-     200 or over 700 characters. See package-contract.md § Description.
-  4. Local: `metadata.version` is present and is semver `MAJOR.MINOR.PATCH`.
-     Changelog length and dated bullets are local release policy, not a
-     native loader requirement. See package-contract.md § Changelog and version.
-  5. SKILL.md body compactness is authoring guidance, not a format failure.
-     Sentence-boundary line breaks are a nonblocking typography preference
-     (`docs/skills/verification.md` § Typography) and are not a format error.
-  6. No SKILL.md is nested anywhere inside the package below the top-level one
-     (every skill is one flat directory). See package-contract.md § Package parts.
-  7. SKILL.md body contains no `## Change Log` (history lives in CHANGELOG.md).
-  8. CHANGELOG.md exists beside SKILL.md with >= 1 dated bullet `- YYYY-MM-DD ...`
-     and is at or under 100 lines (package-contract.md § Changelog and version).
-  9. No tracked real `.env` file in the package (only `.env.example` may be committed).
- 10. Every package-relative support path the body mentions (`scripts/`, `references/`,
-     `templates/`, `assets/`, `agents/`) exists in the package, and no markdown link
-     climbs out of the package with `../` (package-contract.md § Referenced paths).
-     Repository-root `tests/<name>/` paths are not package-local support paths.
- 11. Local: Git-visible top-level entries are only the directories `scripts/`,
+  1. Every Agent Skills specification rule (frontmatter syntax and keys,
+     `name`, `description` including its length limit, `compatibility`)
+     through the official linter `skills_ref.validate` (pinned in
+     scripts/governance/requirements.txt); each message is `AGENT_SKILLS_SPEC`.
+     No local rule duplicates the linter.
+  2. Local: `metadata` is a present mapping (`NO_METADATA`, `BAD_METADATA`) and
+     `metadata.version` is semver `MAJOR.MINOR.PATCH` (`NO_VERSION`, `BAD_VERSION`).
+     See package-contract.md § Changelog and version.
+  3. Local: SKILL.md contains no `## Change Log` (`CHANGELOG_IN_SKILL`).
+  4. Local: CHANGELOG.md exists beside SKILL.md with >= 1 dated bullet
+     `- YYYY-MM-DD ...` and is at or under 100 lines (`NO_CHANGELOG`,
+     `CHANGELOG_NO_DATED_BULLET`, `CHANGELOG_TOO_LONG`).
+  5. Local: no tracked real `.env` file in the package (`TRACKED_ENV`).
+  6. Local: no markdown link climbs out of the package with `../`
+     (`TRAVERSAL_LINK`; the Hermes tap fetcher aborts on such a path).
+  7. Local: Git-visible top-level entries are only the directories `scripts/`,
      `references/`, `assets/`, `templates/`, `agents/` and the files `SKILL.md`,
      `CHANGELOG.md`, `.env.example`, `env.example` (`DISALLOWED_PACKAGE_ENTRY`).
+  8. Local: no directory named `tests` anywhere in the package
+     (`TESTS_IN_PACKAGE`); tests live in repo-root `tests/<name>/`.
+  9. Local, --diff-base only: a removed package leaves no files
+     (`INCOMPLETE_RETIREMENT`) and no live references (`DANGLING_PACKAGE_REFERENCE`).
+
+Only top-level `skills/<name>/SKILL.md` files define packages. Paths the body
+mentions are not resolved, and body length or typography is not a format check.
 
 Modes (`docs/skills/verification.md` § Format checks):
   (default)       full scan; reports every violation; exit 1 if any hard error found.
@@ -40,7 +39,6 @@ Modes (`docs/skills/verification.md` § Format checks):
                   additive to --diff-base, never a glob or an escaping path.
   --advisory      report format findings without failing; input/Git errors exit 2.
 
-Warnings (description-length shape) never affect the exit code, in any mode.
 This validator owns FORMAT only. Secret/real-path leakage is owned by
 validate_runtime_hygiene.py — keep the two concerns separate.
 """
@@ -65,14 +63,8 @@ CHANGE_LOG_HEADING_RE = re.compile(r"^## +Change Log\b", re.MULTILINE)
 REAL_ENV_NAME_RE = re.compile(r"^\.env(?:\..+)?$")
 
 CHANGELOG_LINE_LIMIT = 100
-DESCRIPTION_MIN_WARN = 200
-DESCRIPTION_MAX_WARN = 700
 ALLOWED_PACKAGE_DIRS = frozenset({"scripts", "references", "assets", "templates", "agents"})
 ALLOWED_PACKAGE_FILES = frozenset({"SKILL.md", "CHANGELOG.md", ".env.example", "env.example"})
-PACKAGE_PATH_DIRS = ("scripts", "references", "templates", "assets", "tests", "agents")
-PACKAGE_PATH_RE = re.compile(
-    r"(?:\$SKILL_DIR/|\$\{SKILL_DIR\}/|(?<![A-Za-z0-9_./-]))(?:" + "|".join(PACKAGE_PATH_DIRS) + r")/[A-Za-z0-9_./-]*[A-Za-z0-9_]"
-)
 
 # Repository tools, docs, and CI need no skill owner.
 # Exact files and directory prefixes; a path is in scope when it equals a
@@ -124,7 +116,6 @@ class Finding:
     skill: str
     code: str
     detail: str
-    severity: str = "error"  # "error" | "warning"
 
 
 def tracked_env_files(skill_dir: Path) -> list[str]:
@@ -194,7 +185,7 @@ def current_owners() -> set[str]:
     for entry in SKILLS_DIR.iterdir():
         if entry.is_symlink() and not entry.resolve().is_relative_to(skills_root):
             raise ValueError(f"skill path escapes skills/: {entry.relative_to(REPO_ROOT)}")
-    for skill in SKILLS_DIR.rglob("SKILL.md"):
+    for skill in SKILLS_DIR.glob("*/SKILL.md"):
         if not skill.resolve().is_relative_to(SKILLS_DIR.resolve()):
             raise ValueError(f"SKILL.md escapes skills/: {skill.relative_to(REPO_ROOT)}")
         owners.add(skill.parent.relative_to(REPO_ROOT).as_posix())
@@ -380,63 +371,43 @@ TRAVERSAL_LINK_RE = re.compile(
 )  # mirrors the Hermes tap fetcher's traversal abort
 
 
-def _support_path_inside_package(skill_dir: Path, rel: str) -> bool:
-    """True when rel exists inside this package after resolving symlinks.
-
-    Sibling-package and repo-root containment are not enough. Dangling or
-    escaping links count as missing. Do not read target contents.
-    """
-    candidate = skill_dir / rel
-    try:
-        if not candidate.exists() and not candidate.is_symlink():
-            return False
-        resolved = candidate.resolve()
-        package_root = skill_dir.resolve()
-        return resolved.is_relative_to(package_root) and resolved.exists()
-    except OSError:
-        return False
-
-
-def check_referenced_paths(name: str, skill_dir: Path, body: str) -> list[Finding]:
-    findings: list[Finding] = []
-    if TRAVERSAL_LINK_RE.search(body):
-        findings.append(Finding(name, "TRAVERSAL_LINK",
-                                "SKILL.md links climb out of the package with `../`; "
-                                "the Hermes tap fetcher aborts the install on such a path "
-                                "(docs/skills/package-contract.md § Referenced paths)"))
-    seen: set[str] = set()
-    for match in PACKAGE_PATH_RE.finditer(body):
-        rel = re.sub(r"^\$\{?SKILL_DIR\}?/", "", match.group(0)).rstrip(".")
-        if rel in seen or "<" in rel or "*" in rel or rel.endswith("/"):
-            continue
-        if rel == "tests" or rel.startswith("tests/"):
-            continue  # repo-root tests/<name>/ is never a package path
-        seen.add(rel)
-        if rel.split("/", 1)[0] not in PACKAGE_PATH_DIRS:
-            continue
-        if not _support_path_inside_package(skill_dir, rel):
-            findings.append(Finding(name, "MISSING_REFERENCED_PATH",
-                                    f"SKILL.md mentions `{rel}` but the package does not ship it "
-                                    "(docs/skills/package-contract.md § Referenced paths)"))
-    return findings
+def check_traversal_link(name: str, body: str) -> list[Finding]:
+    if not TRAVERSAL_LINK_RE.search(body):
+        return []
+    return [Finding(name, "TRAVERSAL_LINK",
+                    "SKILL.md links climb out of the package with `../`; "
+                    "the Hermes tap fetcher aborts the install on such a path "
+                    "(docs/skills/package-contract.md § Referenced paths)")]
 
 
 def check_package_entries(name: str, skill_dir: Path) -> list[Finding]:
-    """Git-visible top-level entries must be on the package allowlist."""
+    """Git-visible top-level entries must be on the package allowlist,
+    and no directory anywhere in the package may be named `tests`."""
     rel = skill_dir.relative_to(REPO_ROOT).as_posix()
     entries: dict[str, bool] = {}
-    # Names only: entries are never resolved or read, so an escaping symlink
-    # stays the referenced-path check's finding rather than an input error.
+    test_dirs: set[str] = set()
+    # Names only: entries are never resolved or read.
     listing = git_output("ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", rel)
     for path in (os.fsdecode(value) for value in listing.split(b"\0") if value):
         if not os.path.lexists(REPO_ROOT / path):
             continue  # an uncommitted deletion is no longer a package entry
-        top, sep, _ = path[len(rel) + 1:].partition("/")
+        inner = path[len(rel) + 1:]
+        top, sep, _ = inner.partition("/")
         entries[top] = entries.get(top, False) or bool(sep)
-    findings: list[Finding] = []
+        dirs = inner.split("/")[:-1]
+        if "tests" in dirs:
+            test_dirs.add("/".join(dirs[:dirs.index("tests") + 1]))
+    findings: list[Finding] = [
+        Finding(name, "TESTS_IN_PACKAGE",
+                f"directory {test_dir + '/'!r} ships tests inside the install bundle; "
+                f"move them to repo-root tests/{name}/ (docs/skills/package-contract.md § Package)")
+        for test_dir in sorted(test_dirs)
+    ]
     for entry, is_dir in sorted(entries.items()):
         if entry in (ALLOWED_PACKAGE_DIRS if is_dir else ALLOWED_PACKAGE_FILES):
             continue
+        if is_dir and entry == "tests":
+            continue  # TESTS_IN_PACKAGE owns a top-level tests/ directory
         if not is_dir and REAL_ENV_NAME_RE.match(entry):
             continue  # TRACKED_ENV owns real env files
         kind = "directory" if is_dir else "file"
@@ -450,8 +421,6 @@ def check_skill(skill_dir: Path) -> list[Finding]:
     skills_ref = require_skills_ref()
     name = skill_dir.name
     findings: list[Finding] = []
-    if skill_dir.parent != SKILLS_DIR:
-        findings.append(Finding(name, "NESTED_SKILL_MD", "craft packages must be flat under skills/"))
     skill_md = skill_dir / "SKILL.md"
     text = skill_md.read_text(encoding="utf-8")
 
@@ -463,16 +432,6 @@ def check_skill(skill_dir: Path) -> list[Finding]:
         props = None  # validate() above already reported why the frontmatter is unreadable
 
     if props is not None:
-        desc_len = len(props.description)
-        if desc_len < DESCRIPTION_MIN_WARN:
-            findings.append(Finding(name, "DESCRIPTION_SHORT",
-                                    f"{desc_len} < {DESCRIPTION_MIN_WARN} chars (shape warning)",
-                                    severity="warning"))
-        elif desc_len > DESCRIPTION_MAX_WARN:
-            findings.append(Finding(name, "DESCRIPTION_LONG",
-                                    f"{desc_len} > {DESCRIPTION_MAX_WARN} chars (shape warning)",
-                                    severity="warning"))
-
         metadata = props.metadata
         if metadata is None:
             findings.append(Finding(name, "NO_METADATA", "missing metadata.version block"))
@@ -491,13 +450,8 @@ def check_skill(skill_dir: Path) -> list[Finding]:
 
     body = text[text.find("\n---", 3) + 4:] if text.startswith("---") else text
 
-    findings.extend(check_referenced_paths(name, skill_dir, body))
+    findings.extend(check_traversal_link(name, body))
     findings.extend(check_package_entries(name, skill_dir))
-
-    for nested in sorted(skill_dir.rglob("SKILL.md")):
-        if nested != skill_md:
-            findings.append(Finding(name, "NESTED_SKILL_MD",
-                                    f"nested SKILL.md not allowed: {nested.relative_to(skill_dir)}"))
 
     for env in tracked_env_files(skill_dir):
         findings.append(Finding(name, "TRACKED_ENV", f"committed real env file: {env}"))
@@ -559,21 +513,15 @@ def main() -> int:
         print(f"skill-format: input error: {exc}", file=sys.stderr)
         return 2
 
-    errors = [f for f in findings if f.severity == "error"]
-    warnings = [f for f in findings if f.severity == "warning"]
-
-    for f in warnings:
-        print(f"  [{f.code}] {f.skill}: {f.detail}")
-    for f in errors:
+    for f in findings:
         print(f"  [{f.code}] {f.skill}: {f.detail}")
 
     if not findings:
         print(f"skill-format: OK — {len(targets)} package(s) validated.")
         return 0
 
-    print(f"skill-format: {len(errors)} error(s), {len(warnings)} warning(s) "
-          f"across {len(targets)} package(s).")
-    return 0 if (args.advisory or not errors) else 1
+    print(f"skill-format: {len(findings)} error(s) across {len(targets)} package(s).")
+    return 0 if args.advisory else 1
 
 
 if __name__ == "__main__":

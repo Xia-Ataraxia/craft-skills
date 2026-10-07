@@ -18,3 +18,4 @@
 - 2026-10-07: Programming needs the complete TypeScript rules and single-owned principles with the agreed comment and execution decisions from Lauren Tan's pstack at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e.
 - 2026-10-07: Owner decision (a) points shortcut ceilings at the no-comments procedure, so that procedure now lives here step for step with a runtime-neutral reviewer in place of a named Cursor agent. Provenance: no-comments and its comment reviewer from Lauren Tan's pstack at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e.
 - 2026-10-07: Restored the pstack wording so poteto's method reads as written; only Cursor-only mechanics and links differ.
+- 2026-10-07: Owner decision (i) makes the tdd rule govern when a regression test is impractical or would be bad, so the reproducible-defect rule now defers to it.

@@ -2,7 +2,7 @@
 name: principle-programming
 description: Guides correctness-first, type-strict Python and TypeScript implementation. Use when asked to write a `.py` or `.ts` file, scaffold a Python/TypeScript project, add strict types, assess an implementation diff for correctness or type holes, or fix a reproducible defect. Not for smell-only assessment or behavior-preserving restructuring — use refactor; not for suite-level test architecture — use principle-testing.
 metadata:
-  version: 3.2.1
+  version: 3.2.2
 ---
 
 # principle-programming
@@ -79,6 +79,7 @@ awk '!/^[[:space:]]*$/ && !/^[[:space:]]*(\/\/|#)/' <file> | wc -l
 Use red-first TDD when adding or changing observable behavior, or when risk warrants a regression net: write a failing Given/When/Then test, confirm it fails for the intended reason, then write the minimum code to pass. For a localized low-risk mechanical edit, run the cheapest credible verification instead of manufacturing a test.
 
 For every reproducible defect, retain a failing-first regression test at the defect's natural layer before the fix makes it pass. Assert the contract, not the dump; prefer the real object, then an in-memory fake, then a wire-level fake. Mock only true unmockables (clock, randomness) at the narrowest seam, and inject a clock or subscribe to events instead of sleeping.
+When a test is impractical or would be a bad test, the tdd skill's rule governs instead: prefer no new test over a bad test and use the closest executable check (owner decision (i) in the craft-mode skill's `conflicts.md` file under `references`).
 
 ## Logging decisions
 

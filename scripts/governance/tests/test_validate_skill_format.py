@@ -139,83 +139,6 @@ class SkillFormatValidatorTest(unittest.TestCase):
             self._make_skill(root, "demo", body, GOOD_CHANGELOG)
             self.assertEqual(self.run_validator(root).returncode, 0)
 
-    def test_rejects_referenced_path_that_does_not_ship(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nRun `$SKILL_DIR/scripts/deploy.py` then read `references/schema.md`.\nGlob forms like `references/*.md` and `scripts/<name>` are fine.\n"
-            d = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            (d / "references").mkdir()
-            (d / "references" / "schema.md").write_text("# schema\n", encoding="utf-8")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("MISSING_REFERENCED_PATH", result.stdout)
-            self.assertNotIn("references/schema.md", result.stdout)
-            (d / "scripts").mkdir()
-            (d / "scripts" / "deploy.py").write_text("", encoding="utf-8")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout)
-
-    def test_sibling_package_support_file_is_not_this_package(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            sibling = self._make_skill(
-                root, "neighbor", GOOD_SKILL.replace("name: demo", "name: neighbor"),
-                GOOD_CHANGELOG, evals=None, triggers=None,
-            )
-            (sibling / "references").mkdir()
-            (sibling / "references" / "schema.md").write_text("# sibling\n", encoding="utf-8")
-            body = GOOD_SKILL + "\nRead `references/schema.md`.\n"
-            demo = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            (demo / "references").mkdir()
-            (demo / "references" / "schema.md").symlink_to(sibling / "references" / "schema.md")
-            result = self.run_validator(root, "--package", "skills/demo")
-            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-            self.assertIn("MISSING_REFERENCED_PATH", result.stdout)
-
-    def test_in_package_symlink_to_contained_file_is_valid(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nRead `references/alias.md`.\n"
-            demo = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            (demo / "references").mkdir()
-            (demo / "references" / "schema.md").write_text("# local\n", encoding="utf-8")
-            (demo / "references" / "alias.md").symlink_to("schema.md")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertNotIn("MISSING_REFERENCED_PATH", result.stdout)
-
-    def test_dangling_in_package_symlink_is_missing(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nRead `references/missing.md`.\n"
-            demo = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            (demo / "references").mkdir()
-            (demo / "references" / "missing.md").symlink_to("no-such.md")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-            self.assertIn("MISSING_REFERENCED_PATH", result.stdout)
-
-    def test_support_symlink_escaping_the_package_fails_closed(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as outside:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nRead `references/external.md`.\n"
-            demo = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            external = Path(outside) / "fixture.md"
-            external.write_text("outside\n", encoding="utf-8")
-            (demo / "references").mkdir()
-            (demo / "references" / "external.md").symlink_to(external)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-            self.assertIn("MISSING_REFERENCED_PATH", result.stdout)
-
-    def test_repository_test_reference_is_not_package_local(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nUse repo-root `tests/demo/evals/evals.json` for scenarios.\n"
-            self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-
     def test_unreadable_package_inputs_fail_closed_even_when_advisory(self) -> None:
         wrapper = """import pathlib, runpy, sys
 filename = sys.argv.pop(1)
@@ -406,41 +329,20 @@ runpy.run_path(script, run_name='__main__')
             self.assertIn("DISALLOWED_PACKAGE_ENTRY", stray.stdout)
             self.assertIn("'docs'", stray.stdout)
 
-    def test_rejects_nested_skill_md(self) -> None:
+    def test_tests_directory_anywhere_in_package_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            d = self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
-            nested = d / "child"
-            nested.mkdir()
-            (nested / "SKILL.md").write_text(GOOD_SKILL.replace("name: demo", "name: child"),
-                                             encoding="utf-8")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("NESTED_SKILL_MD", result.stdout)
-
-    def test_rejects_nested_agent_skill_md(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            d = self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
-            nested = d / "agents"
-            nested.mkdir()
-            (nested / "SKILL.md").write_text(GOOD_SKILL.replace("name: demo", "name: child"),
-                                             encoding="utf-8")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("NESTED_SKILL_MD", result.stdout)
-
-    def test_description_short_is_warning_not_error(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            short = GOOD_SKILL.replace(
-                "description: Does a demo thing end to end. Use when the user asks for a demo, wants a demo run, or says demo this for me please right now.",
-                "description: Does a demo thing. Use when asked.",
-            )
-            self._make_skill(root, "demo", short, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertIn("DESCRIPTION_SHORT", result.stdout)
+            demo = self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
+            (demo / "scripts").mkdir()
+            (demo / "scripts" / "x.test.ts").write_text("test('x', () => {});\n", encoding="utf-8")
+            allowed = self.run_validator(root)
+            self.assertEqual(allowed.returncode, 0, allowed.stdout + allowed.stderr)
+            (demo / "scripts" / "tests").mkdir()
+            (demo / "scripts" / "tests" / "test_x.py").write_text("pass\n", encoding="utf-8")
+            nested = self.run_validator(root)
+            self.assertEqual(nested.returncode, 1, nested.stdout + nested.stderr)
+            self.assertIn("TESTS_IN_PACKAGE", nested.stdout)
+            self.assertIn("'scripts/tests/'", nested.stdout)
 
     def test_description_over_hard_max_is_error(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

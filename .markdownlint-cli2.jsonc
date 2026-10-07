@@ -30,6 +30,9 @@
     "skills/principle-testing/references/explain-the-number.md",
     "skills/craft-mode/references/guard-the-context-window.md",
     "skills/craft-mode/references/never-block-on-the-human.md",
+    "skills/craft-mode/SKILL.md",
+    "skills/craft-mode/references/playbooks/**",
+    "skills/craft-mode/references/bugbot-triage.md",
     "skills/correct/references/encode-lessons-in-structure.md",
     "skills/unslop/SKILL.md",
     "skills/principle-programming/references/typescript/patterns.md",
@@ -76,7 +79,10 @@
     "skills/principle-programming/references/comments.md",
     "skills/principle-programming/references/comment-sicko.md",
     "skills/principle-testing/references/verification-skills.md",
-    "skills/principle-testing/references/feature-map-example/**"
+    "skills/principle-testing/references/feature-map-example/**",
+    "skills/craft-help/SKILL.md",
+    "skills/craft-help/references/**",
+    "skills/make-bot-ui/SKILL.md"
   ],
   "config": {
     "default": true,

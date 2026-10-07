@@ -15,3 +15,4 @@
 - 2026-10-07: Sibling handoffs must resolve the renamed broad principle owners rather than retired skill names.
 - 2026-10-07: Sequencing had no subtract-first rule, so subtract-before-you-add is added as a reference copied from pstack at cursor/plugins@d0ef80d; the boy-scout flag no longer names a craft: note and a planned change with declared breakage defers to outcome-oriented-execution.
 - 2026-10-07: The comment-deodorant grey zone still offered a `craft:` ceiling and a trade-off as acceptable comment content against decision (a), so it now keeps only external constraints and an ADR pointer and routes to principle-programming/references/comments.md.
+- 2026-10-07: Revised decision (e) makes comments no flagging channel, so an out-of-scope bug or smell is flagged only by a note, a follow-up issue, or a message.

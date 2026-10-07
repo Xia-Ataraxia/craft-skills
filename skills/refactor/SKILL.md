@@ -2,7 +2,7 @@
 name: refactor
 description: "Restructures code without changing what it does — extracting functions, renaming, removing duplication, flattening nested conditionals, and other mechanical moves backed by a detection command and threshold. Use when the user says \"refactor this\", \"clean up this code\", \"리팩토링 해줘\", or \"this function is a mess\", or a named smell (long function, deep nesting, feature envy) surfaces while reading code with no intended behavior change. Gates untested legacy code behind a characterization-test protocol first. Not for diagnosing why something is broken — use debug — or for behavior-changing feature work and bug fixes, which belong to principle-programming's red-green-refactor loop."
 metadata:
-  version: 2.6.0
+  version: 2.6.1
 ---
 
 # refactor
@@ -26,7 +26,7 @@ Before touching structure: a test suite exists for the path and is green right n
 2. Write characterization tests against representative inputs, including the odd already-in-production ones, asserting the actual observed output — not the output assumed correct. `assert compute(weird_input) == 47` is right if `47` is genuinely what today's code returns, even if it looks wrong.
 3. Get them green against current behavior. They pin what the code does now, bugs included — not yet a fix.
 4. Only then refactor, keeping every characterization test green after each step below.
-5. A real bug surfacing mid-characterization gets flagged (a comment, a note, a follow-up issue), never fixed in this pass — unless the task at hand is that fix, which runs as its own red-green-refactor cycle via `principle-programming`, before or after the restructuring, never blended into it.
+5. A real bug surfacing mid-characterization gets flagged (a note, a follow-up issue), never fixed in this pass — unless the task at hand is that fix, which runs as its own red-green-refactor cycle via `principle-programming`, before or after the restructuring, never blended into it.
 
 ## Safety protocol
 
@@ -44,7 +44,7 @@ Before touching structure: a test suite exists for the path and is green right n
 ## Scope guard
 
 - Split when the change no longer forms one cohesive, independently reviewable and revertible structural unit. File count is a reviewability signal, not a fixed ceiling.
-- Boy-scout boundary, restated: spotting an unrelated smell mid-task is never license to fix it inline — flag it (a comment, a follow-up note, or a message proposing a follow-up) and keep the current diff scoped to the stated task.
+- Boy-scout boundary, restated: spotting an unrelated smell mid-task is never license to fix it inline — flag it (a follow-up note or a message proposing a follow-up) and keep the current diff scoped to the stated task.
 
 ## Routing
 

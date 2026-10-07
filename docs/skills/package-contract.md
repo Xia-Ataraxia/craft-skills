@@ -20,7 +20,7 @@ Do not copy official product usage into this library.
 ## Package
 
 A package is one flat directory, `skills/<name>/`, with a root `SKILL.md`.
-No nested `SKILL.md` anywhere inside it, including `agents/`.
+Only that root `SKILL.md` defines the package; the validator does not look for other `SKILL.md` files inside it.
 No routing-index file and no grouping subfolders.
 **(local)** Top-level directories are only `scripts/`, `references/`, `assets/`, `templates/`, and `agents/`; top-level files are only `SKILL.md`, `CHANGELOG.md`, `.env.example`, and `env.example` (`DISALLOWED_PACKAGE_ENTRY`).
 The check reads Git-visible entries, so gitignored scratch does not count.
@@ -33,6 +33,8 @@ A destination that forbids auxiliary files inside a skill, including the histori
 
 Tests do not live in the package.
 They live at repo-root `tests/<name>/`, so an install bundle does not ship fixtures.
+**(local)** A directory named `tests` anywhere inside the package, top level or nested such as `scripts/tests/`, fails as `TESTS_IN_PACKAGE`.
+A test file beside its script, such as `scripts/orch/orch.test.ts`, is not a directory and stays allowed.
 Generated transcripts, scores, and judge notes stay in gitignored scratch.
 They are never a pass condition and never committed as policy.
 
@@ -99,8 +101,7 @@ Name concrete situations, including ones that never say the skill's name.
 Runtimes consult a skill only when the description names the situation, and they err toward not consulting.
 The body loads after that decision, so "when to use" prose in the body does not route.
 
-300–700 characters is the target shape.
-**(local)** The validator warns, without failing, under 200 (`DESCRIPTION_SHORT`) or over 700 (`DESCRIPTION_LONG`).
+300–700 characters is the target shape, judged in review; no local check enforces it.
 The official linter hard-fails only outside 1..1024 (`AGENT_SKILLS_SPEC`).
 Use the languages operators actually use for the intent.
 Do not pad the description to meet a language quota.
@@ -166,20 +167,12 @@ No script fails a package for line wrapping.
 
 ## Referenced paths
 
-**(local)** Every package-relative path the body mentions under `scripts/`, `references/`, `templates/`, `assets/`, or `agents/` must exist inside that package after symlink resolution.
-A dangling, missing, or out-of-package path fails as `MISSING_REFERENCED_PATH`.
-A sibling file that exists elsewhere in the repository still fails.
-Fix it by adding the file to this package or by removing the mention.
-Do not leave a placeholder.
-
-Repo-root `tests/<name>/` is not a package-local support path.
-The validator does not treat a `tests/` mention as a missing package file.
+Ship the support files the body mentions inside the package, and do not leave a placeholder.
+The validator checks folder names, not the paths the body mentions; review owns that.
 
 **(local)** A Markdown link that climbs out of the package with `../` is `TRAVERSAL_LINK`.
 The Hermes tap fetcher treats that shape as a traversal attempt and aborts the install.
 Cross-package pointers are prose that names the skill and the file.
-In-package symlinks to contained files are valid.
-Escaping or dangling links are missing.
 Other destinations may use their own cross-package convention, without treating an external file as a contained support resource or bypassing access checks.
 
 ## Local version and changelog
@@ -256,17 +249,16 @@ Official linter (`skills_ref.validate`, reported as `AGENT_SKILLS_SPEC`):
 Local checks:
 
 - `metadata` presence and mapping shape (`NO_METADATA`, `BAD_METADATA`) and `metadata.version` semver (`NO_VERSION`, `BAD_VERSION`), read through `skills_ref.read_properties`.
-- Non-failing description shape warnings outside 200..700.
 - The top-level folder and file allowlist (`DISALLOWED_PACKAGE_ENTRY`).
-- No nested `SKILL.md` (`NESTED_SKILL_MD`).
-- No `## Change Log` in `SKILL.md`.
-- `CHANGELOG.md` present, at least one `- YYYY-MM-DD` bullet, at most 100 lines.
+- No directory named `tests` anywhere in the package (`TESTS_IN_PACKAGE`).
+- No `## Change Log` in `SKILL.md` (`CHANGELOG_IN_SKILL`).
+- `CHANGELOG.md` present, at least one `- YYYY-MM-DD` bullet, at most 100 lines (`NO_CHANGELOG`, `CHANGELOG_NO_DATED_BULLET`, `CHANGELOG_TOO_LONG`).
 - No tracked real `.env` in the package. `.env` and `.env.*` are real; only the exact name `.env.example` is exempt (`TRACKED_ENV`).
-- Support paths mentioned in the body resolve inside the package (`MISSING_REFERENCED_PATH`).
 - No `../` climb-out link (`TRAVERSAL_LINK`).
 - Retirement tombstones: a removed owner with remaining files is `INCOMPLETE_RETIREMENT`; a live reference to a removed owner is `DANGLING_PACKAGE_REFERENCE`. Historical changelog mentions are not that check.
 
-It does not fail a package for sentence wrapping, an eval corpus, a `MUST USE` phrase, an output-contract heading, body length, two-token names, or description quality.
+No local check duplicates the official linter.
+It does not fail a package for sentence wrapping, an eval corpus, a `MUST USE` phrase, an output-contract heading, body length, two-token names, description length or quality, paths the body mentions, or other `SKILL.md` files inside a package.
 Those are authoring and review obligations.
 
 Default mode scans packages and exits 1 on a hard finding.
@@ -276,7 +268,6 @@ Without `skills-ref` installed the script exits 2 with an install hint; the lint
 `--advisory` reports format findings without failing; input and Git errors still exit 2.
 Every mode needs a Git worktree.
 `--root` identifies that worktree root; it is not a standalone non-Git package directory.
-Description-length warnings never affect the exit code.
 
 Shared repository surfaces — docs, CI, and `scripts/governance/` — are repository-tool scope.
 A change there selects no skill package and does not require any particular live package owner.
