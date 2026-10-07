@@ -41,4 +41,4 @@ Route public HTTP request and response conventions to the `api` skill. This refe
 
 ## Post-selection handoff
 
-[`db`](../../db/SKILL.md)
+The db skill's SKILL.md owns post-selection database work.
