@@ -18,6 +18,7 @@ Resolve them through that skill's discovery location.
 ## Contents
 
 - [Direct skills](#direct-skills)
+- [pstack automations](#pstack-automations)
 - [Principles](#principles)
 - [Unsupported boundaries](#unsupported-boundaries)
 - [Composition edges](#composition-edges)
@@ -53,6 +54,12 @@ Resolve them through that skill's discovery location.
 | `unslop` | pstack | none | `unslop` | command | Always applies to prose; code and fixed machine formats are excluded. |
 | `bro` | pstack | none | `bro` | command | Short plain-language restatement on request. |
 | `technical-writing` | pstack | `document` | `document/references/technical-writing.md` | reference | Read by document for prose work. |
+
+## pstack automations
+
+| Upstream pack | Origin | Current craft owner | Craft destination | Kind | Notes |
+|---|---|---|---|---|---|
+| `automations/benny` | pstack | none | `benny` | command | One issue workflow: triage, classify and dedupe, then reproduce confirmed bugs or performance reports; verify an existing fix or attempt a bounded fix with before/after proof. Slack source mechanics become the report's source issue/thread or pasted text; setup retains tracker, routing, feature-map, and control-adapter configuration. |
 
 ## Principles
 

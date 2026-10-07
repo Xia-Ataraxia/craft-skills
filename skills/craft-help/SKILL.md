@@ -2,7 +2,7 @@
 name: craft-help
 description: Guides users through craft-skills setup, craft-mode, and picking the skill, playbook, or principle for a task, then hands back a prompt they can send and the file the answer came from. Use for "craft-help", "which skill should I use", "how do I use craft-mode", "which playbook fits this", "how do I install craft-skills", or "my craft-mode run went wrong". Answers the question without starting the work. Not for doing the work - use craft-mode.
 metadata:
-  version: 1.0.2
+  version: 1.0.3
 ---
 
 # Craft help
@@ -69,6 +69,7 @@ The default answer is `/craft-mode`, which runs most of the others when its step
 | Get several attempts at one brief, merged into the best one | `/arena` |
 | Run parallel checks over slices, or race workers, as cloud agents | `/swarm` |
 | Have different models review a diff and try to break it | `/interrogate` |
+| Triage an issue report, then reproduce and fix confirmed bugs | `/benny` |
 | Fix a bug test-first when a cheap local test exists | `/tdd` |
 | Apply TypeScript rules to `.ts` or `.tsx` work | `principle-programming/references/typescript.md` |
 | Strip comments before review, using a reviewer that didn't write them | `principle-programming/references/comments.md` |
