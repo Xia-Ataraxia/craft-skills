@@ -99,6 +99,8 @@ PY
 }
 
 job_layer1_format() {
+  python3 -m pip install -q -r scripts/governance/requirements.txt &&
+  python3 scripts/governance/tools/validate_skill_format.py &&
   python3 scripts/governance/tools/validate_skill_format.py --diff-base "$INTEGRATION_BASE" &&
   python3 -m unittest scripts.governance.tests.test_validate_skill_format
 }

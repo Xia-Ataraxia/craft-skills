@@ -1,6 +1,6 @@
 # Repository Guidelines
 
-<!-- init:managed id=init-root sha256=4968ee501b1724cc9f16d19a5df2cb3c79e328f55bd10a277f78a46ef33ad3cc -->
+<!-- init:managed id=init-root sha256=3e245caaa32f811b863291204e1dab3afebbfcb3858ac2d57ce8e662d4b5bad8 -->
 ## Project Overview
 
 craft-skills is a public library of reusable research and engineering methods, not an application.
@@ -35,6 +35,8 @@ These commands come from `.github/workflows/pr-check.yml`; `--diff-base` takes o
 ```sh
 BASE_REF=main # replace with the actual PR target branch
 BASE=$(git merge-base "origin/$BASE_REF" HEAD)
+python3 -m pip install -r scripts/governance/requirements.txt # official skills-ref linter, Python 3.11+
+python3 scripts/governance/tools/validate_skill_format.py
 python3 scripts/governance/tools/validate_skill_format.py --diff-base "$BASE"
 python3 scripts/governance/tools/validate_runtime_hygiene.py --diff-base "$BASE"
 python3 scripts/governance/tools/check_version_bump.py --diff-base "$BASE"
@@ -61,7 +63,7 @@ Do not use `../` cross-package links: name the sibling skill and file in prose i
 Keep `.env` private and gitignored; only `.env.example` with placeholders is committed. Never reproduce secret values in reports or logs.
 Keep one owner per rule and link to it; tables, rigid heading schemas, wording corpora, provider quorums, and checker-of-checker aggregators are not requirements.
 Sentence-per-line is nonblocking taste, not a reflow or formatting gate.
-Changelog bullets use `- YYYY-MM-DD — [vX.Y.Z: ]why → what.`; retain at most 100 lines by dropping oldest whole entries, without a sidecar archive.
+Changelog bullets use `- YYYY-MM-DD: <why it changed>`: date plus reason only, no em dash; leave retained older entries as written and keep at most 100 lines by dropping oldest whole entries, without a sidecar archive.
 Per-change credit belongs in the package changelog; update `skills/PROVENANCE.md` when primary lineage changes, preserving upstream attribution and applicable NOTICE/LICENSE obligations.
 
 ## Important Files

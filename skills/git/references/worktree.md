@@ -48,7 +48,7 @@ sh skills/git/scripts/install.sh
 
 1. Copies the guard scripts into the repo at `scripts/git-guard/` (skip per-file if present).
 2. Copies three guard entries into `.githooks/guards.d/` (skip per-file if present) — real files in the skill, not improvised stubs.
-3. Copies the shipped `githooks/pre-push` into `.githooks/` (skip if present).
+3. Copies the shipped `assets/githooks/pre-push` into `.githooks/` (skip if present).
 4. Runs `scripts/git-guard/setup-hooks.sh` to register `alias.wt` and `chmod +x` the scripts and hooks.
 
 **Hand-off — the target repository owns `core.hooksPath` and its pre-commit dispatcher.** This installer never writes `.githooks/pre-commit` and never sets `git config core.hooksPath`. Preserve the incumbent hook mechanism instead of installing a competing owner.
@@ -183,10 +183,10 @@ Dependencies: `git` >= 2.5 (worktree support); `tmux` + `tailscale` (or equivale
 | Script | Role |
 |---|---|
 | `../scripts/install.sh` | Bundled first-run installer: copies guard scripts into the repo, registers them into `.githooks/guards.d/`, installs `.githooks/pre-push`, then runs `setup-hooks.sh`. The single entry point `worktree`/`init` delegate to. |
-| `../githooks/guards.d/10-assert-not-main.sh` | Shipped guards.d entry — execs `assert-not-main.sh`. Registered by `install.sh`; dispatched by the repository's pre-commit hook. |
-| `../githooks/guards.d/20-deny-assets.sh` | Shipped guards.d entry — execs `deny-assets.sh staged`. |
-| `../githooks/guards.d/30-check-freshness.sh` | Shipped guards.d entry — execs `check-freshness.sh warn`. |
-| `../githooks/pre-push` | Shipped hook, installed directly if absent — not via guards.d: assert-not-main + check-freshness (warn) + deny-assets (push). |
+| `../assets/githooks/guards.d/10-assert-not-main.sh` | Shipped guards.d entry — execs `assert-not-main.sh`. Registered by `install.sh`; dispatched by the repository's pre-commit hook. |
+| `../assets/githooks/guards.d/20-deny-assets.sh` | Shipped guards.d entry — execs `deny-assets.sh staged`. |
+| `../assets/githooks/guards.d/30-check-freshness.sh` | Shipped guards.d entry — execs `check-freshness.sh warn`. |
+| `../assets/githooks/pre-push` | Shipped hook, installed directly if absent — not via guards.d: assert-not-main + check-freshness (warn) + deny-assets (push). |
 | `../scripts/lib.sh` | Shared helpers: `gg_warn`, `gg_die`, protected-branch list. |
 | `../scripts/assert-not-main.sh` | Exits 1 when HEAD is on a protected branch. |
 | `../scripts/check-freshness.sh` | Compares HEAD to upstream; `block` (exit 1) or `warn` mode. |

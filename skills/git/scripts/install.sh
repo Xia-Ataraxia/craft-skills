@@ -15,9 +15,9 @@
 #   sh /path/to/skills/git/scripts/install.sh
 set -eu
 
-# Source: this script lives in scripts/; githooks/ is a sibling.
+# Source: this script lives in scripts/; the hooks live in ../assets/githooks/.
 src=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-hooks_src=$(CDPATH= cd -- "$src/../githooks" && pwd)
+hooks_src=$(CDPATH= cd -- "$src/../assets/githooks" && pwd)
 
 # Target: the repo we are standing in.
 root=$(git rev-parse --show-toplevel)

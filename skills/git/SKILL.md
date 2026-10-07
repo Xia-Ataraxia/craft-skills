@@ -2,7 +2,7 @@
 name: git
 description: 'Guides version-control craft: a ground-truth and incumbent-style detection gate before the first git mutation, the atomic-commit `git add -p` split protocol, commit/branch/PR conventions matched to the repo''s own history, and non-interactive-safe history surgery (fixup, reword, split, scripted bisect, undo). Use when committing a change ("commit this", "커밋해줘"), rebasing or squashing history, sizing a PR, recovering from a broken rebase, or running "git wt" to create an isolated worktree with the git-guard rails. Not for general runtime-hook or linter configuration; preserve the target repository''s enforcement tooling.'
 metadata:
-  version: 2.2.5
+  version: 2.2.6
 ---
 
 # git

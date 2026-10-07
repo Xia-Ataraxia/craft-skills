@@ -169,6 +169,8 @@ Do not copy the harness into this repository, and do not require its generated o
 ## Format check
 
 Run `scripts/governance/tools/validate_skill_format.py` on the snapshot that would be admitted, not on a stale `HEAD`.
+It runs the official Agent Skills linter `skills-ref` (install with `python3 -m pip install -r scripts/governance/requirements.txt`) for specification rules, then local checks, including the package allowlist of `scripts/`, `references/`, `assets/`, `templates/`, and `agents/` directories.
+CI runs it once over every package and once with `--diff-base` for retirement tombstones.
 
 ```bash
 set -e
