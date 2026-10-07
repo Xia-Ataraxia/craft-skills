@@ -24,7 +24,7 @@ Inventory before advice:
 - Design-token authority and generated outputs.
 - Component library and supported styling escape hatches.
 - PostCSS/framework plugins, asset/font handling, and build configuration.
-- Exact installed versions and matching official capability evidence from [`../SKILL.md#requirements`](../SKILL.md#requirements).
+- Exact installed versions and matching official capability evidence from this skill's SKILL.md Requirements section.
 
 Continue one coherent incumbent system. A mixture introduced by migration is not a stable architecture; document its migration boundary and do not add a third system.
 

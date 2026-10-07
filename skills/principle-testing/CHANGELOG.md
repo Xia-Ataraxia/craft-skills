@@ -15,3 +15,4 @@
 
 - 2026-10-06 — v2.6.1: retired agent-evaluation ownership would name a missing package → keep model-training methodology with ml and agent methodology with the target project.
 - 2026-10-07: Broad engineering owners need consistent principle-prefixed names so discovery distinguishes policy from procedures.
+- 2026-10-07: Testing needs the upstream behavior, direct-verification, sequencing, and measurement principles beside suite guidance from Lauren Tan's pstack at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e.

@@ -22,7 +22,7 @@ A valuable test names behavior or risk, uses an independent oracle, has lifecycl
 
 Name the contract, invariant, failure mode, or user outcome rather than a file, method, private call, assertion count, or implementation path.
 
-Choose the cheapest credible scope and resource size from `../SKILL.md`.
+Choose the cheapest credible scope and resource size from this skill's SKILL.md.
 
 Retain repetition only when it protects a distinct residual risk that cheaper existing evidence does not prove.
 

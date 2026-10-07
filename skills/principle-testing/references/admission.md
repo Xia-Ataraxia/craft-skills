@@ -22,5 +22,5 @@ Inspect the real consumer before calling a wrapper trivial: registration, instal
 
 Treat a checker as a valid test subject only when its public or deployment contract creates a distinct residual risk and the test uses an independent counterfactual oracle.
 Do not add a checker that enforces this reference, and do not turn taste or wording into a format gate.
-Generic mirrored-answer, serialization, process-artifact, and reduction-catalog mistakes are owned by the anti-pattern registry in `../SKILL.md`; apply those verdicts here instead of keeping a second registry.
+Generic mirrored-answer, serialization, process-artifact, and reduction-catalog mistakes are owned by the anti-pattern registry in this skill's SKILL.md; apply those verdicts here instead of keeping a second registry.
 A policy document remains a legitimate subject when its instruction is the contract and the check has a consumer or independent obligation.

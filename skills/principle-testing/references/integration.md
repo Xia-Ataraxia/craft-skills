@@ -86,4 +86,4 @@ Use a contract test for independently deployed sides that need request or respon
 
 Do not use a contract test to replace real dependency behavior when the dependency semantics are the risk.
 
-Return to `../SKILL.md` for scope and resource-size selection and to `conventions.md` for oracle, audit, and suite-health rules.
+Return to this skill's SKILL.md for scope and resource-size selection and to `conventions.md` for oracle, audit, and suite-health rules.

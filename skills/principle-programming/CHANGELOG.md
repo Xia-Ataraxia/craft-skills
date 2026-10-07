@@ -15,3 +15,4 @@
 - 2026-09-21 — v2.4.0: the TypeScript baseline listed extra strict flags but omitted unused-local checking → add `noUnusedLocals` in package-local `assets/tsconfig.strict.json` without enabling `noUnusedParameters`, and require removing unused locals/imports instead of suppressing the compiler.
 - 2026-09-21 — v2.4.1: caller grep implied semantic coverage → prefer source-project LSP capabilities, use AST and existing code graphs only for concrete needs, and bound text fallback without assuming infrastructure installation. Provenance: operator-supplied Craft issue33 evaluation.
 - 2026-10-07: Broad engineering owners need consistent principle-prefixed names so discovery distinguishes policy from procedures.
+- 2026-10-07: Programming needs the complete TypeScript rules and single-owned principles with the agreed comment and execution decisions from Lauren Tan's pstack at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e.

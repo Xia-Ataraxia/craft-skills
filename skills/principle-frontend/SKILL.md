@@ -2,12 +2,16 @@
 name: principle-frontend
 description: 'Routes frontend engineering through incumbent-aware rendering, ownership, reuse, state, CSS, and performance decisions. Use when building or reorganizing a React/Vue/Svelte UI ("프론트엔드 구조 잡아줘"); choosing a React + Vite or Next.js shell, folder/public-API, or server/client boundary; improving component reuse or state ownership; selecting CSS Modules/Tailwind/CSS-in-JS and token structure; or setting frontend dependency, bundle, and CSS performance strategy. Not for material visual/UX judgment or DESIGN.md — use design; public API/server contracts — use api/principle-backend; TypeScript-only work — use principle-programming/refactor; test suites — use principle-testing; skill updates — follow docs/skills/authoring.md.'
 metadata:
-  version: 4.0.0
+  version: 4.1.0
 ---
 
 # principle-frontend
 
 Frontend structure is correct only relative to the incumbent framework, rendering model, product boundaries, and styling system. Establish those facts first, then keep framework mechanics in the shell, product behavior in cohesive slices, and shared code behind narrow supported APIs.
+
+## Principle references
+
+- [experience-first](references/experience-first.md) chooses the user's result over implementation convenience.
 
 ## Governing principles
 
@@ -59,6 +63,7 @@ Keep code route- or feature-private first. Promote it only when multiple real co
 ## Design judgment handoff
 
 Call `design` only when work changes what users perceive, understand, decide, or can accomplish, or changes reusable visual/interaction language, tokens, primitives, cross-state/cross-viewport presentation, or accessibility experience.
+Apply [experience-first](references/experience-first.md) when product, UX, or feature-scope tradeoffs arise.
 `design` owns `DESIGN.md` and the design judgment; `principle-frontend` implements approved design decisions.
 Keep rendering architecture, established-system implementation, faithful use of existing primitives, small fixes, CSS regressions, state placement, components, folders, and API boundaries within `principle-frontend`.
 

@@ -61,4 +61,4 @@ Route reproduction, diagnosis, and repair of one intermittent e2e failure to `de
 
 Resume testing after `debug` returns diagnosis and fix evidence to decide quarantine removal, retry removal, and portfolio health.
 
-Return to `../SKILL.md` for scope and size selection and to `conventions.md` for independent-oracle and deterministic-test rules.
+Return to this skill's SKILL.md for scope and size selection and to `conventions.md` for independent-oracle and deterministic-test rules.

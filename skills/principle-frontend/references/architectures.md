@@ -1,6 +1,6 @@
 # Frontend Rendering Architectures
 
-A rendering model defines when and where markup, data access, and interactivity run. Preserve the detected framework's native model and keep its runtime shell separate from product slices. Version-sensitive behavior follows the evidence owner in [`../SKILL.md#requirements`](../SKILL.md#requirements).
+A rendering model defines when and where markup, data access, and interactivity run. Preserve the detected framework's native model and keep its runtime shell separate from product slices. Version-sensitive behavior follows the evidence owner in this skill's SKILL.md Requirements section.
 
 ## Contents
 

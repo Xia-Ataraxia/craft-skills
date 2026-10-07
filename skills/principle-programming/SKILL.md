@@ -2,7 +2,7 @@
 name: principle-programming
 description: Guides correctness-first, type-strict Python and TypeScript implementation. Use when asked to write a `.py` or `.ts` file, scaffold a Python/TypeScript project, add strict types, assess an implementation diff for correctness or type holes, or fix a reproducible defect. Not for smell-only assessment or behavior-preserving restructuring — use refactor; not for suite-level test architecture — use principle-testing.
 metadata:
-  version: 3.0.0
+  version: 3.1.0
 ---
 
 # principle-programming
@@ -20,6 +20,14 @@ Load only the references the task needs before touching code; a one-off script d
 | `.ts`, `.tsx`, `.mts`, `.cts`, or TypeScript task | `references/typescript.md` — tooling table, iron list, and this package's `assets/tsconfig.strict.json`; load `references/typescript/clean-code.md` when naming, function shape, or structure is in scope |
 | Smell-only review | Route to `refactor`; it owns the code-smell catalog and the resulting restructuring |
 
+## Principle references
+
+- [laziness-protocol](references/laziness-protocol.md) prefers deletion and the smallest change that solves the problem.
+- [minimize-reader-load](references/minimize-reader-load.md) collapses layers and hidden state a reader must hold in their head.
+- [build-the-lever](references/build-the-lever.md) builds the script that does or proves the work, so a reviewer can rerun it. When an agent keeps doing the same thing by hand, have it write the tool or skill it wishes it had. If a script can do a step the same way every time, use the script, and save agents for the judgment calls.
+- [model-the-domain](references/model-the-domain.md) encodes repeated rules in one structure, not scattered conditionals.
+- [type-system-discipline](references/type-system-discipline.md) makes illegal states unrepresentable.
+
 ## Write only what the task needs
 
 Stop at the first rung that holds, after the correctness requirements are already known — this ladder never substitutes for them:
@@ -32,6 +40,8 @@ Stop at the first rung that holds, after the correctness requirements are alread
 6. **Can it be one line?** One line.
 7. **Only then:** the minimum code that works.
 
+Apply [laziness-protocol](references/laziness-protocol.md) to this ladder and [build-the-lever](references/build-the-lever.md) when non-trivial work needs a rerunnable tool.
+
 When two rungs hold, take the higher one. When two options are the same size, take the one correct on edge cases — fewer lines never means the flimsier algorithm. Validation at trust boundaries, error handling that prevents data loss, security, and accessibility are correctness, not brevity — never skimp on these.
 
 Deletion beats addition, boring beats clever, fewest files wins — and a complex request earns one question before it earns code: "do you actually need X, or does Y already cover it?" A bug report names a symptom, not the cause: inspect affected callers of the function you touch and fix the shared function once — one guard there is a smaller diff than one per caller, and patching only the reported path leaves a sibling caller broken.
@@ -41,20 +51,19 @@ Use an available AST tool when syntax-aware matching or transformation helps; co
 When semantic support is unavailable, use bounded text search and source inspection, disclose coverage limits, and validate with the project's checks rather than claiming semantic proof or complete caller coverage.
 Stop when that fallback cannot establish the safety the change needs; do not assume missing support requires installing a server, hook, or skill wrapper.
 
-A deliberate shortcut carries a `craft:` comment naming its ceiling and upgrade path, so a reader sees intent, not ignorance:
-
-```python
-# craft: in-memory dedup, fine to ~10k ids; swap for a Redis set if this grows multi-process
-```
+Record a deliberate shortcut's ceiling and upgrade path in a follow-up note, type, test, or lint rule, per no-comments step 5.
 
 ## Core decisions
 
-- Make illegal states unrepresentable when a bug can become a type error.
+- Make illegal states unrepresentable when a bug can become a type error ([type-system-discipline](references/type-system-discipline.md)).
 - Parse untrusted input into a typed value once at the boundary, then trust that contract internally.
-- Give each concept its own type and name; match tagged variants exhaustively.
+- Give each concept its own type and name; match tagged variants exhaustively ([model-the-domain](references/model-the-domain.md)).
 - Keep a change as one logical, independently reversible unit; split unrelated work rather than using file count as a proxy.
+  For planned changes that declare where temporary breakage is acceptable, defer to the principle-architecture skill's `outcome-oriented-execution.md` file under `references`; verify at the declared phase boundaries.
 
 ## The 250 pure LOC review signal
+
+Use [minimize-reader-load](references/minimize-reader-load.md) to judge cohesion.
 
 A source file over 250 pure LOC deserves a cohesion review, not an automatic split. Split it when independent responsibilities make the file hard to reason about; keep a cohesive unit intact when extraction would only scatter its contract. For an existing large file, improve the unit being touched when that is a bounded, clearer change rather than expanding the task to reorganize it. Generated tables and genuinely indivisible state machines may exceed the signal with a one-line justification comment.
 
@@ -97,7 +106,7 @@ Use the repository's incumbent package manager, type checker, linter, test runne
 ## Anti-patterns
 
 - Skipping types on a throwaway script → use the smallest project-compatible setup; disposable code still needs an honest contract.
-- Leaving a shortcut uncommented → mark it with a `craft:` comment naming its ceiling and upgrade path.
+- Leaving a shortcut's constraint unenforced → use a follow-up note, type, test, or lint rule, per no-comments step 5.
 - Using `except Exception` / an empty `catch` that swallows the stack trace → catch specific exceptions and handle or log them explicitly.
 - Introducing an interface/Protocol with exactly one implementation, or a factory for one product → use the concrete type directly until a second implementation exists.
 - Adding `# type: ignore` / `@ts-ignore` with no explanation → fix the type, or add a comment explaining why the escape hatch is unavoidable.

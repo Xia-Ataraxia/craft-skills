@@ -2,7 +2,7 @@
 
 Naming, function shape, and structural discipline that make TypeScript readable by the next person, not just the compiler.
 
-The iron list (`../typescript.md`) owns type discipline; this file owns naming, function shape, and structure.
+The iron list (references/typescript.md in this skill) owns type discipline; this file owns naming, function shape, and structure.
 
 ## Contents
 
@@ -36,7 +36,7 @@ setTimeout(restart, MILLISECONDS_PER_DAY);
 
 ## Functions
 
-- **Two parameters, ideally; beyond that, one object with destructuring.** Destructuring documents the call site and lets the compiler flag an unused field.
+- **Object args.** Pass objects, not positional, so argument order is self-documenting. Skip on hot paths (per-frame render, tokenizers, parsers).
 - **One thing per function.** A function doing two things is two functions that haven't been split yet.
 - **The name says what it does.** `addMonthToDate(date, 1)`, not `addToDate(date, 1)` — the reader shouldn't need the body to know what the `1` means.
 - **One level of abstraction per function.** Don't mix tokenizing, parsing, and walking the result in one body; give each phase its own function.
@@ -48,7 +48,7 @@ setTimeout(restart, MILLISECONDS_PER_DAY);
 - **Favor `map`/`filter`/`reduce` over imperative loops.** An accumulator built with a `for` loop hides the operation inside control flow; `reduce` names it.
 - **Remove duplicate code and dead code.** Two call sites doing the same thing are one abstraction away from a single source of truth; unused code is noise — version control already remembers it.
 - **Use generators for on-demand streams.** A generator yields lazily; a function that materializes a large or infinite sequence into an array pays for items nobody asked for.
-- **Avoid type-checking conditionals.** An `instanceof`/`typeof` chain branching on a variant is the same smell the iron list already bans for tagged unions — model the variants as a discriminated union and match exhaustively with `assertNever` (see `../typescript.md`), never reintroduce a manual chain to "simplify" it.
+- **Avoid type-checking conditionals.** An `instanceof`/`typeof` chain branching on a variant is the same smell the iron list already bans for tagged unions — model the variants as a discriminated union and match exhaustively with an inline `const _exhaustive: never` default (see references/typescript.md in this skill), never reintroduce a manual chain to "simplify" it.
 
 ```typescript
 // BAD — flag parameter, imperative accumulation, instanceof chain
@@ -72,7 +72,10 @@ function travel(vehicle: Vehicle): void {
   switch (vehicle.kind) {
     case "bicycle": return pedal(vehicle);
     case "car": return drive(vehicle);
-    default: return assertNever(vehicle);
+    default: {
+      const _exhaustive: never = vehicle;
+      void _exhaustive;
+    }
   }
 }
 ```

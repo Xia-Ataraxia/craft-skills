@@ -7,6 +7,7 @@ Load this file in full before writing or editing TypeScript. The rules below are
 ## Contents
 
 - [Tooling](#tooling)
+- [Upstream rules](#upstream-rules)
 - [The iron list](#the-iron-list)
 - [Data modeling — which construct, when](#data-modeling--which-construct-when)
 - [Exhaustive switch — the canonical shape](#exhaustive-switch--the-canonical-shape)
@@ -33,13 +34,38 @@ Load this file in full before writing or editing TypeScript. The rules below are
 
 Override a default only when the project manifest explicitly picks something else.
 
+## Upstream rules
+
+Apply [type-system-discipline](type-system-discipline.md) first.
+
+| Rule | Summary |
+|------|---------|
+| Discriminated unions | Model variants with a `kind` literal discriminant so impossible states can't be represented. No optional-field bags. |
+| Branded types | Brand primitives with `& { readonly __brand: "X" }` so they can't be mixed up. Validate once at the boundary. |
+| Constructive modeling | Build the shape so the illegal value can't be constructed. `[T, ...T[]]` for non-empty, `[T, T][]` for even length, `start` plus `duration` for a range. Not a runtime guard, not a wish for refinement types. |
+| Simplest total type | Keep `T[]` while every operation on it stays total. Strengthen to `NonEmpty<T>` only where the loose type forces `!`, a cast, or a "should never happen" throw. |
+| `unknown` over `any` | External data is `unknown`. |
+| Schemas before guards | Before hand-writing a property-by-property type guard, use the repository's runtime schema library and infer the type from the schema, such as `z.infer`. |
+| No `as` casts | Every `as` is a runtime crash waiting. Cast only after validation. |
+| Narrowing hierarchy | Discriminant switch > `in` operator > `typeof`/`instanceof` > user-defined type guard > `as`. |
+| Type guards | Must verify the claim. A lying guard is worse than `as` because the bug hides behind a name that says it's safe. Name them `isX` or `hasX`. |
+| Exhaustiveness | Inline `const _exhaustive: never = x;` in default arms so the compiler errors when a new variant is added. |
+| `satisfies` over `as` | Validates the value without widening literal types. |
+| Boundary validation | Parse where data crosses in, into a named domain type. `Record<string, unknown>` (however spelled) stops at that parse. Trust types inside. See the **boundary-discipline** principle in the principle-backend skill's references/boundary-discipline.md. |
+| Schema-derived types | Reach for `Pick`/`Omit`/`Parameters`/`ReturnType`/`Awaited`/`typeof` before declaring a new interface. |
+| Object args | Pass objects, not positional, so argument order is self-documenting. Skip on hot paths (per-frame render, tokenizers, parsers). |
+| Real tests | Don't mock what you can run. Prefer the framework's real test primitives with leak/disposable checks, and verify UI in a running build. Mock only what you can't run locally. |
+| Structured telemetry | Prefer structured logger diagnostics with enough context to debug from an id. No `console.log` in shipped code. |
+
+Examples: [TypeScript patterns](typescript/patterns.md).
+
 ## The iron list
 
 1. **Readonly by default** — all `type` / `interface` properties are `readonly`; arrays are `readonly T[]`. Mutable only when mutation is the documented purpose.
-2. **Branded types for distinct primitives** — `type UserId = Brand<string, "UserId">`. Never pass a raw `string`/`number` where a branded type exists.
-3. **Exhaustive switch** — every `switch` on a discriminated union ends with `default: assertNever(x)`. No fall-through.
+2. **Branded types for distinct primitives** — Brand primitives with `& { readonly __brand: "X" }` so they can't be mixed up. Validate once at the boundary.
+3. **Exhaustive switch** — Inline `const _exhaustive: never = x;` in default arms so the compiler errors when a new variant is added.
 4. **No `any`** — banned in annotations, returns, and parameters. Use `unknown` and narrow.
-5. **No type assertions** — `as T` is banned; it overrides the checker. The only allowed forms are `as const` and `satisfies`. To change a type, narrow with a type guard or re-parse — never assert.
+5. **No `as` casts** — Every `as` is a runtime crash waiting. Cast only after validation.
 6. **No non-null assertion** — `x!` is banned. Narrow, or use optional chaining (`x?.y`).
 7. **No `@ts-ignore` / `@ts-expect-error`** — fix the type.
 8. **No `enum`** — use an `as const` object plus a literal union type.
@@ -73,10 +99,6 @@ type Event =
   | { kind: "click"; x: number; y: number }
   | { kind: "scroll"; delta: number };
 
-function assertNever(x: never): never {
-  throw new Error(`unreachable: ${JSON.stringify(x)}`);
-}
-
 function handle(event: Event): void {
   switch (event.kind) {
     case "click":
@@ -85,8 +107,10 @@ function handle(event: Event): void {
     case "scroll":
       handleScroll(event.delta);
       return;
-    default:
-      assertNever(event); // build fails when a new variant is added
+    default: {
+      const _exhaustive: never = event;
+      void _exhaustive;
+    }
   }
 }
 ```
@@ -142,7 +166,7 @@ HTTP rule: production code never uses bare `fetch()` — it has no retry, timeou
 
 | Catches | Resolution |
 |---|---|
-| an `as` assertion other than `as const` / `satisfies` | redesign the types or narrow with a guard |
+| an `as` cast before validation | Every `as` is a runtime crash waiting. Cast only after validation. |
 | `@ts-ignore` / `@ts-expect-error` | fix the type |
 | `enum` declaration | use `as const` + literal union |
 | `x!` non-null assertion | narrow or `?.` |
@@ -151,13 +175,13 @@ HTTP rule: production code never uses bare `fetch()` — it has no retry, timeou
 | `: any` annotation or `(): Promise<any>` return | type it precisely |
 | `catch {}` / `catch (e) {}` empty | narrow with `instanceof` or re-throw |
 | `catch (e)` without narrowing or re-throw | handle each case or re-throw |
-| `switch` without `default: assertNever` | add the exhaustive default |
+| `switch` without an inline `const _exhaustive: never` default | add the exhaustive default |
 | bare `fetch()` in prod | use `ky` / `undici` |
 | file > 250 pure LOC | split by responsibility |
 
 ## In tests
 
-Tests follow the iron list — branded types, typed errors, exhaustive switch. They may use `expect()`, magic numbers as test data, bracket-notation access to internals, and mutable fixtures. Prefer real objects and in-memory fakes over mocks; mock only the unmockable (clock, randomness) at the narrowest seam.
+Tests follow the iron list — branded types, typed errors, exhaustive switch. They may use `expect()`, magic numbers as test data, bracket-notation access to internals, and mutable fixtures. Don't mock what you can run. Prefer the framework's real test primitives with leak/disposable checks, and verify UI in a running build. Mock only what you can't run locally.
 
 ## Editing an existing file
 

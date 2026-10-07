@@ -2,7 +2,7 @@
 name: principle-testing
 description: Designs, improves, and audits test suites around behavior and risk, independent oracles, counterfactual evidence, deterministic diagnosis, and cost. Use for generated-test review, unit/component/integration/e2e or smoke placement, test-suite health, flaky-test policy, fixtures, and test audits. Not for production-code red-green implementation, which belongs to principle-programming; diagnosis or repair of one currently failing or intermittent test, which belongs to debug; structural-change characterization, which belongs to refactor; ML evaluation methodology, which belongs to ml; or project-specific agent evaluation methodology.
 metadata:
-  version: 3.0.0
+  version: 3.1.0
 ---
 
 # principle-testing
@@ -12,6 +12,13 @@ Leave a reviewable strategy that selects the cheapest credible layer and records
 Keep deterministic protocol, schema, version, registration, containment, secret, permission, and routing contracts in code when a current consumer or independent obligation needs them.
 Keep taste, context, and judgment in docs; a policy document is a legitimate subject when its instruction is the contract under test.
 
+## Principle references
+
+- [prove-it-works](references/prove-it-works.md) verifies the real artifact, not a proxy.
+- [sequence-verifiable-units](references/sequence-verifiable-units.md) ends each small unit in a check before starting the next.
+- [test-behavior-not-implementation](references/test-behavior-not-implementation.md) calls the code the way its users do and asserts a literal expected value, and deletes a test that would still pass if every imported function returned `undefined`.
+- [explain-the-number](references/explain-the-number.md) names what limits a measured number and rules out that it measured something else, before anyone trusts or reports it. `/benchmark-checklist` in the benchmark-checklist skill turns it into seven questions you answer from real runs.
+
 ## Output contract
 
 Record the decision, independent oracle, cheapest credible evidence, and residual risk in the existing task summary before adding or changing tests.
@@ -20,6 +27,8 @@ Use `templates/test-strategy.md` as an optional audit aid when a multi-risk revi
 Name the existing higher contract test when a `no-test` decision relies on coverage, and return the decision with its evidence state.
 When a failure cannot be reproduced, report unavailable reproduction evidence and the limit rather than inventing a failing test.
 Choose `no-test` when no credible additional check is justified; lack of reproduction does not invalidate independent contract evidence.
+Apply [test-behavior-not-implementation](references/test-behavior-not-implementation.md) when writing, changing, or keeping a test.
+When reporting measured results, apply [explain-the-number](references/explain-the-number.md).
 When the oracle is the implementation, rewrite the test against a specification, contract, recorded fixture, or independent reference.
 When a test is flaky, quarantine it with a root-cause investigation and remove the nondeterminism instead of retrying in a loop.
 When behavior is ambiguous, ask which contract governs it before choosing a test layer.
@@ -33,6 +42,7 @@ When the task is codebase reduction, account in the existing rationale for retir
 Apply `references/structure.md` to keep regression setup proportional and `references/integration.md` before replacing a fake.
 For a reproducible defect, obtain a strong fail-before and pass-after result in a disposable consumer when that demonstration is safe.
 Scale observed, safely demonstrable, and unavailable evidence to the risk and lifecycle, as defined in `references/conventions.md`.
+Use [prove-it-works](references/prove-it-works.md) for direct artifact checks and [sequence-verifiable-units](references/sequence-verifiable-units.md) for multi-step work.
 A green run alone does not prove sensitivity, and missing history alone does not authorize deletion.
 
 ## Workflow and references
