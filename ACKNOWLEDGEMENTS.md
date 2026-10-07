@@ -38,6 +38,7 @@ These craft packages contain verbatim or adapted text from pstack at that commit
 - `recall`
 - `document`
 - `make-bot-ui`
+- `benny`, including its procedures and templates (from `pstack/automations/benny/`)
 
 `skills/PROVENANCE.md` records the source and relationship for each package.
 

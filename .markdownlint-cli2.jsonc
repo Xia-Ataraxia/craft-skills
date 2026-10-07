@@ -82,7 +82,9 @@
     "skills/principle-testing/references/feature-map-example/**",
     "skills/craft-help/SKILL.md",
     "skills/craft-help/references/**",
-    "skills/make-bot-ui/SKILL.md"
+    "skills/make-bot-ui/SKILL.md",
+    "skills/benny/references/**",
+    "skills/benny/templates/**"
   ],
   "config": {
     "default": true,
