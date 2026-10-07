@@ -2,12 +2,12 @@
 name: interrogate
 description: "Synthesizes an adversarial verdict from independent reviewers available in the runtime without assigning fixed models. It applies to 'interrogate', 'adversarial review', 'challenge this', 'stress test this code', 'find blind spots', and 'tear this apart'. It separates actionable findings from tradeoffs and rejected claims without applying fixes. Not for proving one change's downstream safety fact - use blast-radius."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Interrogate
 
-Use the independent reviewers the runtime offers to adversarially review code changes. Each reviewer gets the same prompt and rubric. Prefer model diversity when available, not assigned personas.
+Spawn one reviewer per configured model to adversarially review code changes. Each model gets the same prompt and rubric. The adversarial signal comes from model diversity, not assigned personas.
 
 The deliverable is a synthesized verdict. Do NOT auto-apply changes.
 
@@ -34,10 +34,9 @@ Write one clear paragraph. If you're unsure about the intent, ask the user befor
 
 ## Step 3, Spawn Reviewers
 
-Launch available independent reviewers readonly through the runtime's native interface, concurrently within its limit or sequentially. Identify each actual reviewer and keep the prompts identical. When no independent reviewers are available, report independent review unavailable; a direct lead review may still surface findings, but is not a multi-reviewer verdict.
+Launch all reviewers in a single message, each readonly. Use one reviewer per configured model, extending or shrinking the Reviewer A/B labels to the configured entry count. If none is configured, run Reviewer A and Reviewer B on two different model families.
 
 Read `references/reviewer-prompt.md` and fill in the template with:
-
 1. The stated intent
 2. The diff or file contents
 3. The review rubric from `references/rubric.md`
@@ -69,7 +68,6 @@ Categorize every finding using these buckets:
 - **Dismissed**. Wrong, nitpicky, or missing context. Brief explanation why.
 
 For each finding, include:
-
 - Which model(s) raised it
 - The category (act on / consider / noted / dismissed)
 - A one-line rationale for the categorization
@@ -79,29 +77,22 @@ For each finding, include:
 Present the verdict in this structure:
 
 ### Intent
-
 > [The stated intent paragraph from Step 2]
 
 ### Reviewers
-
 - Reviewer [label]: [model name], [N findings] (one bullet per reviewer)
 
 ### Act On
-
 [Findings that should be addressed. For each: description, which models raised it, why it matters.]
 
 ### Consider
-
 [Findings worth thinking about. For each: description, which models raised it, tradeoff involved.]
 
 ### Noted
-
 [Valid but low-priority. Brief list.]
 
 ### Dismissed
-
 [Rejected findings with brief rationale.]
 
 ### Agreement Map
-
 [Where did models agree, where did they diverge, and what does the pattern of agreement/disagreement tell us?]

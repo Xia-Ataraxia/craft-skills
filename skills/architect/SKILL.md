@@ -2,14 +2,12 @@
 name: architect
 description: "Sketches types, signatures, caller usage, and module boundaries before implementation and stays in the loop while code fills in the chosen shape. Use for \"/architect\", \"architect this\", \"design this\", or non-trivial work where jumping to code would lock in the wrong structure. Grounds through how and why, explores alternatives through arena, and applies principle-architecture. Not for explaining existing architecture alone - use how; not for behavior-preserving cleanup - use refactor."
 metadata:
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 # Architect
 
-Design before implementing. Sketch types, function signatures, class shapes, and module boundaries with `not implemented` bodies and pseudocode. Synthesize across independent candidate perspectives, then fill in code against the chosen sketch. If implementation proves the sketch wrong, throw it out and redesign.
-
-Apply principle-architecture for cross-domain structural decisions and read its relevant references before sketching.
+Design before implementing. Sketch types, function signatures, class shapes, and module boundaries with `not implemented` bodies and pseudocode. Synthesize across multiple model perspectives, then fill in code against the chosen sketch. If implementation proves the sketch wrong, throw it out and redesign.
 
 ## Start
 
@@ -33,9 +31,7 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 
 Run the **arena** skill with the design-sketch task and the Phase A grounding artifacts. Pass `references/runner-prompt.md` as each runner's prompt. Each candidate produces a design package shaped per `references/rationale-template.md`.
 
-Use the runtime's available reviewer/worker for independent candidates. When parallel workers are unavailable, produce the same structurally distinct candidates sequentially through arena before synthesis.
-
-Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the **principle-architecture** reference `principle-architecture/references/exhaust-the-design-space.md` made concrete. Whole-shape alternatives, not point fixes inside one shape.
+Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the `principle-architecture/references/exhaust-the-design-space.md` principle made concrete. Whole-shape alternatives, not point fixes inside one shape.
 
 Screen every candidate against [`references/design-red-flags.md`](references/design-red-flags.md) before synthesis. Assume the next contributor is an agent that sees only the files it opened, copies the nearest example, and takes the shortest path that compiles. Prefer the design where a change that looks right from one file is right for the whole repo.
 
@@ -49,7 +45,7 @@ Default: proceed directly to implementation with the synthesized design. No huma
 
 Opt in to a checkpoint when the invoker explicitly asks: "/architect with checkpoint," "stop and show me before implementing," or similar. Then surface the synthesized design and pause for sign-off.
 
-The synthesis can ship as its own commit when commits are explicitly authorized, as the "scaffold first" mode of the **principle-architecture** reference `principle-architecture/references/foundational-thinking.md`. Planned and scoped breakage during fill-in is fine, per the **principle-architecture** reference `principle-architecture/references/outcome-oriented-execution.md`. For adversarial pressure on the design before implementing, run the **interrogate** skill on the synthesized sketch.
+The synthesis can ship as its own commit either way, as the "scaffold first" mode of the `principle-architecture/references/foundational-thinking.md` principle. Planned and scoped breakage during fill-in is fine, per the `principle-architecture/references/outcome-oriented-execution.md` principle. For adversarial pressure on the design before implementing, run the **interrogate** skill on the synthesized sketch.
 
 If the human pushes back on the shape (in a checkpoint or after the fact), treat that as Phase A evidence. Re-ground and re-run Phase B before writing more code.
 
@@ -61,7 +57,7 @@ Deviations from the sketch are signal worth surfacing, not friction to absorb si
 
 ## Phase E: Scrap when the architecture is wrong
 
-If implementation keeps producing friction the sketch can't absorb, throw the sketch out. Don't bolt fixes onto a wrong design, per principle-architecture reference `principle-architecture/references/redesign-from-first-principles.md` and debug reference `debug/references/fix-root-causes.md`.
+If implementation keeps producing friction the sketch can't absorb, throw the sketch out. Don't bolt fixes onto a wrong design, per the `principle-architecture/references/redesign-from-first-principles.md` and `debug/references/fix-root-causes.md` principles.
 
 The signal is a *pattern*, not single instances. Tells:
 
@@ -77,8 +73,8 @@ Use judgment. A few edge cases don't condemn an architecture. Some problems are 
 When you scrap:
 
 1. Re-run the **how** skill over what's been built.
-2. Redesign as if the new constraints had been day-one assumptions, per principle-architecture reference `principle-architecture/references/redesign-from-first-principles.md`.
-3. Subtract before adding, per the **refactor** reference `refactor/references/subtract-before-you-add.md`. The new sketch should be smaller than the old one before it grows.
+2. Redesign as if the new constraints had been day-one assumptions, per `principle-architecture/references/redesign-from-first-principles.md`.
+3. Subtract before adding, per the `refactor/references/subtract-before-you-add.md` principle. The new sketch should be smaller than the old one before it grows.
 4. Return to Phase B and re-run arena.
 
 ## Outputs

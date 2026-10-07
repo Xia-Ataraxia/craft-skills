@@ -2,7 +2,7 @@
 name: why
 description: "Investigates why code or a decision has its current shape through available source history, tickets, documents, chat, telemetry, error records, and analytics. Use for \"why does X work this way\", \"why did we pick Y\", design rationale, postmortems, regressions, or \"where did this threshold come from\". Returns cited findings, calibrated inferences, competing explanations, and source gaps. Not for runtime mechanics - use how; not for repairing a failure - use debug."
 metadata:
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 # Why
@@ -10,8 +10,6 @@ metadata:
 Investigate the motivation and intent behind code.
 
 Companion to the `how` skill. `how` answers what the code does and how it works. `why` answers what forces led to its shape.
-
-Use the runtime's available reviewer/worker when delegation is supported. Otherwise perform the same source-specific investigation and synthesis passes sequentially. Give each pass only its assigned evidence source, preserve read access to the available integrations, and do not modify files or external state.
 
 ## Operating Posture
 
@@ -62,7 +60,7 @@ Capture this as seed context (file paths, symbols, commits, PR numbers, linked t
 
 ### Discovery
 
-Before investigating, discover the evidence sources the runtime exposes through its available-tools map, integration discovery, or a source the user names. MCPs, APIs, local history, and supplied documents are evidence transports, not required vendors. Record unavailable sources as gaps.
+Before spawning investigators, list the available MCPs from the environment. Use the available-tools map when present. Otherwise inspect the runtime's MCP configuration for enabled MCP servers.
 
 Map each available MCP to one evidence category:
 
@@ -74,16 +72,16 @@ Map each available MCP to one evidence category:
 6. Error / exception tracking
 7. Product analytics warehouse
 
-Source control uses git when available; PR discussion uses an available repository integration or `gh` when installed and authenticated. If either is unavailable, record the gap rather than claiming it was searched. For the other six, classify using the MCP name, server instructions, tool names, and resource descriptors. If an MCP could fit more than one category, choose the one matching its primary evidence. Record ambiguous cases in the coverage map.
+Source control is always available through git and `gh`. For the other six, classify using the MCP name, server instructions, tool names, and resource descriptors. If an MCP could fit more than one category, choose the one matching its primary evidence. Record ambiguous cases in the coverage map.
 
 Aim for a complete **coverage map**, not a minimal one. Document the null, don't skip the search.
 
 Launch all matching investigators in a single message so they run concurrently. Don't ask one agent to cover multiple MCPs.
 
-Use the runtime's available reviewer/worker for each source. Preserve read access to the selected integration; do not write files or external state. When workers are unavailable, run the same bounded source passes sequentially.
+Subagent config (each):
+- not read-only. **Do not use a read-only mode.** It strips MCP access, which disables MCP-backed investigators entirely. Investigators still shouldn't write anything.
 
 Each investigator gets:
-
 1. The base prompt from `references/investigator-prompt.md`
 2. The category playbook `references/sources/<source>.md` for the selected MCP, adapted from the examples in `references/source-playbook.md`
 3. The cross-cutting `references/sources/incident-postmortem.md` **if the target code looks defensive** (null checks, retry logic, timeout handling, rate limiting, feature flags, egress guards, OOM handlers)
@@ -96,7 +94,7 @@ Spawn one investigator per category that has a matching MCP. Each owns exactly o
 
 Each entry names the category and the kind of "why" it uniquely surfaces. Use it to know what to expect back, how to name a gap when a category returns empty, and (only in the rare provably-irrelevant case) to justify a skip.
 
-1. **Source control investigator**. Git history, available PR discussion, code comments, tests. Always attempt this source; record any unavailable history or PR access. Best at surfacing *implementation-time rationale captured during review*.
+1. **Source control investigator**. Git history, `gh` for PRs, code comments, tests. Always spawn. The only guaranteed source. Best at surfacing *implementation-time rationale captured during review*.
 
 2. **Issue / ticket tracker investigator** (e.g. Linear, Jira, GitHub Issues, Plane, Shortcut MCP). Best at surfacing *the product or business forcing function*. Strongest when the why is external to engineering.
 
@@ -121,10 +119,11 @@ If your scope assessment suggests a single-commit trivial target where the PR de
 
 ## Step 4. Synthesize
 
-Use the runtime's available reviewer/worker for synthesis, or synthesize directly after the source passes. Preserve read access needed to spot-verify citations; do not write files or external state.
+Spawn one synthesizer subagent:
+
+- not read-only. The synthesizer's quality check spot-verifies citations, which can require MCP access. A read-only mode strips MCPs and defeats that.
 
 The synthesizer gets:
-
 1. The investigator findings, including any null results and any categories skipped with justification
 2. The code anchor from Step 2 (file paths, symbols, commit hashes, PR numbers, ticket IDs)
 3. The user's original question

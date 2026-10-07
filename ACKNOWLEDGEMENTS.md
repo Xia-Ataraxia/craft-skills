@@ -11,9 +11,9 @@ These craft packages contain verbatim or adapted text from pstack at that commit
 
 - `principle-architecture`
 - `principle-backend`
-- `principle-programming`, including its TypeScript references
+- `principle-programming`, including its TypeScript references and the no-comments reviewer `references/comment-sicko.md` (from `pstack/agents/comment-sicko.md`)
 - `principle-frontend`
-- `principle-testing`
+- `principle-testing`, including `references/feature-map-example/` (from `pstack/skills/create-verification-skill/references/feature-map-example/`)
 - `debug`
 - `refactor`
 - `craft-mode`

@@ -1,6 +1,6 @@
 # TypeScript patterns
 
-Code examples for each rule in `SKILL.md`. The underlying principles are language-agnostic. For **type-system-discipline**, see references/type-system-discipline.md in this skill; for **boundary-discipline**, see the principle-backend skill's references/boundary-discipline.md.
+Code examples for each rule in `SKILL.md`. The underlying principles are language-agnostic. See the **type-system-discipline** (`references/type-system-discipline.md`) and **boundary-discipline** (`principle-backend/references/boundary-discipline.md`) principle skills.
 
 ## Branded types
 
@@ -269,7 +269,7 @@ const config = { theme: "dark", cols: 3 } satisfies Config;
 
 ## Boundary validation
 
-Validate once where data crosses in. Trust types inside. For **boundary-discipline**, see the principle-backend skill's references/boundary-discipline.md.
+Validate once where data crosses in. Trust types inside. See the **boundary-discipline** principle skill (`principle-backend/references/boundary-discipline.md`).
 
 - **Wire formats** (proto, JSON-RPC): parse with `ignoreUnknownFields` so forward-compatible changes don't break old clients.
 - **Persisted JSON:** versioned blob with a try/catch around the parse.

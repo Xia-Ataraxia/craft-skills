@@ -16,3 +16,4 @@
 - 2026-08-30 — v4.0.1: repository documentation scaffolding belongs to document, not init.
 - 2026-10-07: Documentation needed one sentence-level writing standard and a fixed final prose pass, so pstack's technical-writing guide lands as a reference and unslop closes every prose artifact. Provenance: technical-writing from Lauren Tan's pstack at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e.
 - 2026-10-07: inline-comments told agents to explain our own design choices in prose, which no-comments forbids, so owner decision (e) now keeps only comments about constraints we cannot change and ADR pointers.
+- 2026-10-07: Restored the pstack wording so poteto's method reads as written; only Cursor-only mechanics and links differ.

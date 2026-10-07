@@ -1,8 +1,8 @@
 ---
 name: arena
-description: "Runs N candidates at the same task, picks a base, and grafts the strongest parts into one verified artifact. It applies to '/arena', 'arena this', 'throw it in the arena', and design choices where one attempt could lock in the wrong shape. It uses native parallel workers when available and separate sequential attempts otherwise. Not for partitioning independent work slices - use swarm."
+description: "Runs N candidates at the same task, picks a base, and grafts the strongest parts into one verified artifact. It applies to '/arena', 'arena this', 'throw it in the arena', and design choices where one attempt could lock in the wrong shape. It fans out parallel subagents across model families and has a judge from another family cross-check the pick. Not for partitioning independent work slices - use swarm."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Arena
@@ -26,12 +26,12 @@ The N candidates will receive the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick N runners from the native workers the runtime offers. Use independent candidates with the same task. When parallel workers are unavailable, run N separate attempts sequentially and record that limitation. Never report a worker that did not run.
-4. Assign output paths. Each candidate writes to its own location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the principle-architecture principle at `principle-architecture/references/separate-before-serializing-shared-state.md`.
+3. Pick the runners. Default to one each on two model families. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
+4. Assign output paths. Each candidate writes to its own location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the `principle-architecture/references/separate-before-serializing-shared-state.md` principle.
 
 ## Phase B: Fan out
 
-Launch candidates through the runtime's native worker interface, bounded by its concurrency limit, each with the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale. Without workers, produce the same candidates sequentially in separate locations.
+Spawn all N subagents in one message, in the background, each with the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale.
 
 Each rationale names the alternatives the candidate considered and what it rejected.
 
@@ -39,7 +39,7 @@ If a candidate fails to produce output, proceed with N-1 and note the dropout in
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, use an independent readonly judge the runtime offers. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It can run alongside the parent's reading in Phase D, not with candidates still writing. If no independent judge is available, score the candidates directly and mark cross-judgment unavailable, not passed.
+After all Phase B candidates complete, choose one model. Prefer a different model family from the parent's. Spawn one readonly judge subagent on that model. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Don't spawn the judge while candidates are still writing.
 
 ## Phase D: Pick a base
 
@@ -47,7 +47,7 @@ Read every candidate end to end before picking.
 
 Score each candidate against the rubric criterion by criterion, not on holistic feel. Compare against the cross-judge. Agreement on the base confirms the pick. Disagreement means one of you is biased or the rubric was ambiguous. Read both rationales before deciding.
 
-Pick the base on which candidate a future maintainer can extend most easily without breaking invariants. Prefer the cleaner boundary or smaller API when two feel tied, per principle-programming at `principle-programming/references/laziness-protocol.md`.
+Pick the base on which candidate a future maintainer can extend most easily without breaking invariants. Prefer the cleaner boundary or smaller API when two feel tied, per the Laziness Protocol.
 
 Record the pick and the reason in a short synthesis note alongside the base artifact, including the cross-judge's verdict.
 
@@ -55,7 +55,7 @@ Record the pick and the reason in a short synthesis note alongside the base arti
 
 Walk each losing candidate once more and identify what is worth porting into the base. The signal is usually one or two things per candidate, not most of it.
 
-Fold each graft in by hand, per the principle-architecture principle at `principle-architecture/references/redesign-from-first-principles.md`. Don't paste mechanically. The result has to remain coherent under one mental model.
+Fold each graft in by hand, per the `principle-architecture/references/redesign-from-first-principles.md` principle. Don't paste mechanically. The result has to remain coherent under one mental model.
 
 Record what was grafted, from which candidate, and what was rejected and why.
 
@@ -63,7 +63,7 @@ When N candidates converge on the same shape, that is a strong agreement signal.
 
 ## Phase F: Verify
 
-The synthesized artifact has to hold up under the same scrutiny as any other output, per the principle-testing principle at `principle-testing/references/prove-it-works.md`.
+The synthesized artifact has to hold up under the same scrutiny as any other output, per the `principle-testing/references/prove-it-works.md` principle.
 
 If verification surfaces a problem the arena did not catch, either Phase A was wrong (re-frame and re-run) or one candidate caught it and you missed the graft (go back to Phase E). Don't paper over.
 

@@ -1,8 +1,8 @@
 ---
 name: show-me-your-work
-description: "Keeps a reviewable TSV decision trail for long-running, autonomous, or multi-phase work, with evidence pointers and outcomes. It applies to '/show-me-your-work', 'keep a decision log', and work a human reviews after stepping away. It audits each run's rows and keeps the file local unless publication is authorized. Not for designing the workflow that produces the decisions - use figure-it-out."
+description: "Keeps a reviewable TSV decision trail for long-running, autonomous, or multi-phase work, with evidence pointers and outcomes. It applies to '/show-me-your-work', 'keep a decision log', and work a human reviews after stepping away. It audits each run's rows and keeps the file local unless a reviewer needs the trail committed. Not for designing the workflow that produces the decisions - use figure-it-out."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Show me your work
@@ -24,23 +24,19 @@ Copy `references/decision-log-template.tsv` (the header row) to start a clean lo
 
 An example, plain-spoken so a reviewer reads it at a glance.
 
-<!-- markdownlint-disable MD010 -->
-
-```tsv
+```
 ts	phase	decision	why	evidence	result
 2026-05-24T09:02:00Z	frame	counted the work first, about 100 components and roughly 75 hours	wanted to know the size before starting a long run	commit 3a9f1c2	found 5 things to sort out before starting
-2026-05-24T09:40:00Z	harness	took screenshots of the old version before changing anything	so we can compare old against new and catch any visual change	snapshot command, baseline/	saved 120 reference screenshots
+2026-05-24T09:40:00Z	harness	took screenshots of the old version before changing anything	so we can compare old against new and catch any visual change	snapshot.sh, baseline/	saved 120 reference screenshots
 2026-05-24T11:15:00Z	widget	moved the widget styles over without changing how it looks	keep the change small and the result identical	commit 7c21e0a, pixel-diff 0	looks identical, tests pass
 2026-05-24T12:30:00Z	widget	threw out a helper's work because its screenshots were blank	checked the real files instead of trusting its summary	worktree reset	reverted, tightened the instructions for next time
 ```
-
-<!-- markdownlint-enable MD010 -->
 
 ## Logging a row
 
 Write each entry the way you'd tell a teammate what you did. Plain words, concrete actions, no AI speak or abstract jargon (the **unslop** skill applies to log text too).
 
-Append a row using the runtime's supported file-editing interface. Stamp `ts` with the current ISO8601 time, copy the template header on first use, replace stray tabs/newlines in cell values with spaces, and prefix any cell starting with `=`, `+`, `-`, or `@` with a single quote. Write exactly six tab-separated cells followed by a newline.
+Append each row with a bare `printf`. Stamp `ts` and write the header on first use. If cells come from generated or user-supplied text, strip stray tabs/newlines and prefix any cell starting with `=`, `+`, `-`, or `@` with a single quote.
 
 Log decision points and checkpoints, not every action: a fork chosen, a unit completed with its verification result, a pivot or revert with its trigger, a blocker surfaced, a gate fixed. For loop runs, one row per iteration. Skip the trivial and self-evident.
 
@@ -50,16 +46,16 @@ A run is one agent conversation, including its later turns and any summary of it
 
 By default the log is a working artifact, not committed. Keep it at `decisions.tsv` in the work dir, or `.audit/<task-slug>.tsv` when several efforts run at once, and leave it out of git.
 
-Commit it only when requested and the reviewer needs the trail to trust the result.
+Commit it only when the work is ambitious enough that a reviewer needs the trail to trust the result.
 
 ## Rules
 
 - Append-only. A wrong call gets a new row that supersedes it. Never edit or delete history.
-- Prefer evidence produced by committed scripts over hand-made one-offs (the correct principle at `correct/references/encode-lessons-in-structure.md`).
+- Prefer evidence produced by committed scripts over hand-made one-offs (the `correct/references/encode-lessons-in-structure.md` principle).
 
 ## Audit the log against the transcript
 
-At the end of the run, before handing back, check the log told the truth. Read this run's transcript only when the runtime exposes it or the user names that source; do not discover private stores or read unrelated chats. If the transcript is unavailable, audit against this conversation's observed tool results and the artifacts, and mark transcript audit unavailable. Walk this run's rows against what actually happened. Each stretch begins at one of this run's `start` rows, or at the first row if this run created the log, and ends at the next `start` row of another run:
+At the end of the run, before handing back, check the log told the truth. Read this run's transcript under the active workspace's transcript directory. Don't glob across other projects' transcripts. That reads unrelated private chats. Walk this run's rows against what actually happened. Each stretch of them begins at one of this run's `start` rows, or at the first row if this run created the log, and ends at the next `start` row of another run:
 
 - Check that every row maps to a real decision or action.
 - Check that each row's evidence resolves and shows what the row claims.
@@ -69,14 +65,14 @@ Correct the log, not the story. The audit never edits or removes a row, even an 
 
 ## Cross-model review of the trail
 
-Before handing back, use an independent readonly reviewer the runtime offers. Prefer a different model when available. The reviewer reads the audit trail and the authorized run transcript or observed evidence, then flags what the user should pay attention to. Not a redo of the work, a scan for what's suboptimal or risky. If independent review is unavailable, say so; self-audit does not count as independent review.
+Before handing back, spawn a subagent on a different model family from the one that did the work. Self-review is not a substitute. The subagent reads the audit trail and the run's transcript, then flags what the user should pay attention to. Not a redo of the work, a scan for what's suboptimal or risky.
 
 - Decisions logged with weak or absent evidence.
 - Verification steps skipped or claimed without proof in the transcript.
 - Choices that look risky in hindsight (premature, scope-creeping, papering over a symptom).
 - Gaps the user would otherwise miss on a casual skim.
 
-Every reply for a run that produced a trail ends with an "Attention" section. Lead with the actual reviewer identity on its own line (`reviewed by <reviewer>`), then list each flag pointing to specific rows or moments. "No flags" is a valid value only after review. Without independent review, write `independent review unavailable` and list any self-audit flags without inventing a reviewer.
+Every reply for a run that produced a trail ends with an "Attention" section. Lead with the reviewer's model on its own line (`reviewed by <model>`), then list each flag pointing to specific rows or moments. "No flags" is a valid value. The model name is not.
 
 ## Reviewing the trail
 

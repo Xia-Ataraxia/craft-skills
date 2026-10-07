@@ -2,12 +2,12 @@
 name: benchmark-checklist
 description: "Vets performance measurements for the limiter, tuning, physical limits, errors, repeatability, relevance, and proof that timed work happened. It applies to 'check this benchmark', 'report this speedup', measured regressions, and choosing a library or configuration from numbers. It reports spread and gaps before drawing a conclusion. Not for general testing policy or choosing test oracles - use principle-testing."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Benchmark checklist
 
-Use this when you produce a performance number: a PR's before and after, a regression claim, a hillclimb harness, or a library or config choice. The principle-testing reference `principle-testing/references/explain-the-number.md` says why. Answer each question below with evidence from a run, not from a guess about the code.
+Use this when you produce a performance number: a PR's before and after, a regression claim, a hillclimb harness, or a library or config choice. `principle-testing/references/explain-the-number.md` says why. Answer each question below with evidence from a run, not from a guess about the code.
 
 For a quick ballpark the user asked for, one run is enough. Still check questions 4 and 7, and say that it is one run. Skip the rest unless that run looks wrong. A choice between options is never a ballpark.
 

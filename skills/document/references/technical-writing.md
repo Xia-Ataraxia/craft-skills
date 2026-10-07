@@ -12,16 +12,6 @@ The codebase is the word list. Write the real symbol, file, flag, or command nam
 
 Don't invent jargon. Use the words a developer would say out loud: "move", "delete", "a budget that only decreases", not "evacuate", "ratchet", or "endgame". A named pattern is fine when the doc says what it means the first time. Propose a new offender and its replacement as an addition to `unslop`'s abstract-metaphor rule in your reply, with the diff. Don't edit that skill.
 
-## Contents
-
-- [Vary the rhythm](#vary-the-rhythm)
-- [Pick the mode first (Diátaxis)](#pick-the-mode-first-diátaxis)
-- [Write sentences to the reader (Google developer style)](#write-sentences-to-the-reader-google-developer-style)
-- [Make statements load one at a time (STE rules)](#make-statements-load-one-at-a-time-ste-rules)
-- [Leave no sentence open to two readings (Global English)](#leave-no-sentence-open-to-two-readings-global-english)
-- [Voice and repo specifics](#voice-and-repo-specifics)
-- [Worked example](#worked-example)
-
 ## Vary the rhythm
 
 The layers decide what a document says and how much each sentence carries. A doc can obey all of them and still read machine-written: every sentence clipped short, no view anywhere, nothing specific.
@@ -97,7 +87,7 @@ Don't mix modes: no reference tables inside a tutorial, no tutorial hand-holding
 - Apply the **unslop** skill to every doc this skill touches. That skill owns the slop-pattern catalog: AI vocabulary, filler, hedging, formatting tells.
 - PR descriptions and commit messages are writing too. Every layer except Diátaxis applies to them. A PR body is a briefing that a reviewer can read in under a minute. Do not paste swarm logs, SHA lists, or metric tables. Link them.
 - Product UI strings are not documentation. Use your product's copy guidelines for those.
-- Indent code snippets the way the target repository's docs already do. Write real paths and real symbols. Make every count or tree claim true at the commit that lands it, and include the command that regenerates it.
+- Indent code snippets with tabs. Write real paths and real symbols. Make every count or tree claim true at the commit that lands it, and include the command that regenerates it.
 
 ## Worked example
 

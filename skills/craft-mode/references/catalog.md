@@ -28,28 +28,28 @@ Resolve them through that skill's discovery location.
 |---|---|---|---|---|---|
 | `poteto-mode` | pstack | none | `craft-mode` | command | Playbook router and working style; no persistent mode. |
 | `poteto-help` | pstack | none | `craft-mode/references/usage.md` | reference | Router help, read by craft-mode. |
-| `how` | pstack | none | `how` | command | Workers are optional; runs sequentially without them. |
+| `how` | pstack | none | `how` | command | Spawns read-only subagents: one explainer for a simple question, parallel explorers then an explainer for a complex one. |
 | `why` | pstack | none | `why` | command | May compose how. |
-| `recall` | pstack | none | `recall` | command | Reads only a history source the user names. |
+| `recall` | pstack | none | `recall` | command | Mines the active workspace's recent transcripts with parallel subagents; reads another project's only when asked. |
 | `blast-radius` | pstack | none | `blast-radius` | command | Proves the safety fact by running real code. |
 | `architect` | pstack | none | `architect` | command | Grounds through how and why; explores with arena. |
-| `arena` | pstack | none | `arena` | command | Sequential candidates when the runtime has no parallel workers. |
+| `arena` | pstack | none | `arena` | command | Parallel candidates on two model families, a judge from another family, then pick, graft, and verify. |
 | `swarm` | pstack | none | `swarm` | command | Concurrency depends on runtime workers. |
 | `interrogate` | pstack | none | `interrogate` | command | Uses whatever reviewers the runtime offers; no fixed model list. |
-| `automate-me` | pstack | none | `automate-me` | command | Writes one private personal skill; mines history only from a source the user names. |
+| `automate-me` | pstack | none | `automate-me` | command | Mines the active workspace's transcripts and asks the user, then drafts one personal mode skill and lands it through a PR. |
 | `make-bot-ui` | pstack | none | none | dropped | Cursor-only backend; see [Unsupported boundaries](#unsupported-boundaries). |
 | `setup-pstack` | pstack | none | `craft-mode/references/setup.md` | dropped | Model and budget configuration dropped by owner decision; the file documents native discovery only. |
-| `reflect` | pstack | none | `reflect` | command | Reads the current session only when the runtime exposes it. |
-| `correct` | pstack | none | `correct` | command | Encodes a repeated mistake in structure with a negative control. |
+| `reflect` | pstack | none | `reflect` | command | Three parallel reviewers read the active transcript or a session digest; edits wait for user approval, backlog items file automatically. |
+| `correct` | pstack | none | `correct` | command | Fixes each repeated mistake class at the highest level that works, one commit per class, and proves each check fails on a real past mistake. |
 | `teach` | pstack | none | `teach` | command | Composes how and why. |
-| `tdd` | pstack | `programming` (now `principle-programming`), red-green TDD | `tdd` | command | principle-testing keeps oracle and policy ownership. |
+| `tdd` | pstack | `programming` (now `principle-programming`), red-green TDD | `tdd` | command | Failing-first regression test when practical; otherwise the closest executable check, reported as such. |
 | `benchmark-checklist` | pstack | none | `benchmark-checklist` | command | Applies `principle-testing/references/explain-the-number.md`. |
-| `no-comments` | pstack | `programming` shortcut comments and `document` inline comments | `principle-programming/references/comments.md` | reference | One reviewer pass, or a reported self-review when no reviewer exists. |
+| `no-comments` | pstack | `programming` shortcut comments and `document` inline comments | `principle-programming/references/comments.md` | reference | Spawns one comment-review subagent with `principle-programming/references/comment-sicko.md` and acts on accepted findings. |
 | `typescript-best-practices` | pstack | `programming` (now `principle-programming`) TypeScript reference | `principle-programming/references/typescript.md` and `principle-programming/references/typescript/patterns.md` | reference | Absorbed whole; upstream wins on conflicts. |
 | `figure-it-out` | pstack | none | `figure-it-out` | command | Designs an auditable playbook when none fits. |
 | `show-me-your-work` | pstack | none | `show-me-your-work` | command | Local decision log by default. |
-| `create-verification-skill` | pstack | `testing` (now `principle-testing`) e2e guidance | `principle-testing/references/verification-skills.md` | reference | Writes into the runtime's project-local skill directory. |
-| `maintain-verification-skill` | pstack | `testing` (now `principle-testing`) e2e guidance | `principle-testing/references/verification-skills.md` | reference | Source readers run sequentially without workers; a PR needs user authorization. |
+| `create-verification-skill` | pstack | `testing` (now `principle-testing`) e2e guidance | `principle-testing/references/verification-skills.md` | reference | Writes a project-local `.agents/skills/verify-<app>/` skill with a feature map. |
+| `maintain-verification-skill` | pstack | `testing` (now `principle-testing`) e2e guidance | `principle-testing/references/verification-skills.md` | reference | Read-only source subagents per feature, a live pass, then one PR of proven corrections or a clean or blocked report. |
 | `unslop` | pstack | none | `unslop` | command | Always applies to prose; code and fixed machine formats are excluded. |
 | `bro` | pstack | none | `bro` | command | Short plain-language restatement on request. |
 | `technical-writing` | pstack | `document` | `document/references/technical-writing.md` | reference | Read by document for prose work. |
@@ -94,10 +94,9 @@ Without that backend, the remaining local server and tailnet steps have nothing 
 Tailnet reachability on its own belongs to the `tailscale` skill.
 
 `setup-pstack` configured per-role models and budgets for Cursor; the owner dropped that outcome.
-No package selects a model family.
+No package pins a model or a budget.
 
 Elsewhere, Cursor-only parts are removed and the portable outcome stays: Custom Mode persistence, fixed model tables, Cursor transcript paths, and Cursor's built-in skill authoring.
-Worker-dependent steps run sequentially when the runtime has no workers, and the report says so.
 
 ## Composition edges
 
