@@ -117,3 +117,13 @@ Affected files:
 Affected files:
 
 - `craft-help/SKILL.md`, the Get set up loading sentence, the note under the skill table, the principles paragraph and the fix-table row; the `/setup-pstack` sentence has no craft equivalent and is dropped.
+
+## (l) Model roles
+
+(l) Where pstack assigned a model per role, the port restores the role distinction as one plain-language sentence instead of the earlier "two different model families" generalization: the fastest, cheapest setting for high-volume reading and code-writing roles, the most capable setting for synthesis and judgment, and a capable model from a different family where a step needs cross-family review; bodies name no models or effort levels, the agent picks the actual model in its runtime, pinning is optional per runtime, and a runtime with one model needs nothing extra.
+
+Affected files:
+
+- `how/SKILL.md`, `why/SKILL.md`, `reflect/SKILL.md`, `swarm/SKILL.md`, `interrogate/SKILL.md`, `arena/SKILL.md` and `architect/SKILL.md`, at each upstream model assignment.
+- `craft-mode/SKILL.md`, the Subagents defaults, and `craft-mode/references/playbooks/` `bug-fix.md`, `feature.md`, `hillclimb.md`, `perf-issue.md`, `refactoring.md` and `multi-phase-plan.md`.
+- `craft-mode/references/runtimes.md`, the Models row.

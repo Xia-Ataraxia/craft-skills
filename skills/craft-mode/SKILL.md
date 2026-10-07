@@ -2,7 +2,7 @@
 name: craft-mode
 description: "Routes multi-step engineering work through a chosen playbook, situational workflows, and domain-owned principles. Use for craft-mode, a rigorous feature or bug fix, a migration, a measured performance problem, or work that needs a clear finish condition and evidence. Keeps replies concise, applies unslop to prose, and delegates to background subagents by default. A named procedure such as how, why, correct, or tdd can run directly; domain policy stays with its principle owner."
 metadata:
-  version: 1.3.1
+  version: 1.3.2
 ---
 
 # Craft mode
@@ -89,7 +89,7 @@ Read the leaf file in full for any principle you apply. Each entry names when it
 
 **Use a craft-mode subagent, briefed to read this skill in full first, for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). `/craft-mode` and that subagent follow the same skill. Routed workflow skills (`how`, `why`, `interrogate`, `reflect`, `swarm`) set their own subagents for diverse-model review. Respect what the skill prescribes, don't override it.
 
-**Defaults for every subagent call.** Background, full tool access (read-only strips MCP), file pointers not inlined context, explicit model per role. Code delegates tier by difficulty. The hardest changes (cross-cutting design, gnarly concurrency, subtle algorithms) go to your strongest judgment model, whether the task needs judgment on vague intent or is a precisely specified sequence of steps to execute to the letter. Trivial mechanical edits go to your fast code model.
+**Defaults for every subagent call.** Background, full tool access (read-only strips MCP), file pointers not inlined context, explicit model per role. Pick a model per role from what the runtime offers: the fastest adequate setting for high-volume reading and code-writing roles, the most capable setting for synthesis and judgment, and a different family where a step asks for one. Code delegates tier by difficulty. The hardest changes (cross-cutting design, gnarly concurrency, subtle algorithms) go to your strongest judgment model, whether the task needs judgment on vague intent or is a precisely specified sequence of steps to execute to the letter. Trivial mechanical edits go to your fast code model.
 
 You own every subagent's work. Review the diff and write your own summary, don't pass through what it said. A second opinion is the same prompt against a different model. Agreement is high-signal.
 

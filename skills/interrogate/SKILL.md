@@ -2,7 +2,7 @@
 name: interrogate
 description: "Synthesizes an adversarial verdict from independent reviewers available in the runtime without assigning fixed models. It applies to 'interrogate', 'adversarial review', 'challenge this', 'stress test this code', 'find blind spots', and 'tear this apart'. It separates actionable findings from tradeoffs and rejected claims without applying fixes. Not for proving one change's downstream safety fact - use blast-radius."
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 # Interrogate
@@ -34,7 +34,7 @@ Write one clear paragraph. If you're unsure about the intent, ask the user befor
 
 ## Step 3, Spawn Reviewers
 
-Launch all reviewers in a single message, each readonly. Use one reviewer per configured model, extending or shrinking the Reviewer A/B labels to the configured entry count. If none is configured, run Reviewer A and Reviewer B on two different model families.
+Launch all reviewers in a single message, each readonly. Use one reviewer per configured model, extending or shrinking the Reviewer A/B labels to the configured entry count. If none is configured, run Reviewer A and Reviewer B. For Reviewer A, use the most capable setting available; this role runs once and weighs evidence. For Reviewer B, use a capable model from a different family than Reviewer A, so its blind spots differ.
 
 Read `references/reviewer-prompt.md` and fill in the template with:
 1. The stated intent

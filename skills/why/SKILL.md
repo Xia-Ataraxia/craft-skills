@@ -2,7 +2,7 @@
 name: why
 description: "Investigates why code or a decision has its current shape through available source history, tickets, documents, chat, telemetry, error records, and analytics. Use for \"why does X work this way\", \"why did we pick Y\", design rationale, postmortems, regressions, or \"where did this threshold come from\". Returns cited findings, calibrated inferences, competing explanations, and source gaps. Not for runtime mechanics - use how; not for repairing a failure - use debug."
 metadata:
-  version: 1.0.1
+  version: 1.0.2
 ---
 
 # Why
@@ -79,6 +79,7 @@ Aim for a complete **coverage map**, not a minimal one. Document the null, don't
 Launch all matching investigators in a single message so they run concurrently. Don't ask one agent to cover multiple MCPs.
 
 Subagent config (each):
+- Use the fastest, cheapest setting that still reads and reports accurately; this role runs many times over broad material.
 - not read-only. **Do not use a read-only mode.** It strips MCP access, which disables MCP-backed investigators entirely. Investigators still shouldn't write anything.
 
 Each investigator gets:
@@ -121,6 +122,7 @@ If your scope assessment suggests a single-commit trivial target where the PR de
 
 Spawn one synthesizer subagent:
 
+- Use the most capable setting available; this role runs once and weighs evidence.
 - not read-only. The synthesizer's quality check spot-verifies citations, which can require MCP access. A read-only mode strips MCPs and defeats that.
 
 The synthesizer gets:

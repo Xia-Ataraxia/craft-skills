@@ -2,7 +2,7 @@
 name: arena
 description: "Runs N candidates at the same task, picks a base, and grafts the strongest parts into one verified artifact. It applies to '/arena', 'arena this', 'throw it in the arena', and design choices where one attempt could lock in the wrong shape. It fans out parallel subagents across model families and has a judge from another family cross-check the pick. Not for partitioning independent work slices - use swarm."
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 # Arena
@@ -26,7 +26,7 @@ The N candidates will receive the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Default to one each on two model families. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
+3. Pick the runners. Default to one each on two model families. For the second runner, use a capable model from a different family than the first runner, so its blind spots differ. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
 4. Assign output paths. Each candidate writes to its own location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the `principle-architecture/references/separate-before-serializing-shared-state.md` principle.
 
 ## Phase B: Fan out

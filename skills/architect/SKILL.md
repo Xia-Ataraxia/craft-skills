@@ -2,7 +2,7 @@
 name: architect
 description: "Sketches types, signatures, caller usage, and module boundaries before implementation and stays in the loop while code fills in the chosen shape. Use for \"/architect\", \"architect this\", \"design this\", or non-trivial work where jumping to code would lock in the wrong structure. Grounds through how and why, explores alternatives through arena, and applies principle-architecture. Not for explaining existing architecture alone - use how; not for behavior-preserving cleanup - use refactor."
 metadata:
-  version: 1.0.1
+  version: 1.0.2
 ---
 
 # Architect
@@ -30,6 +30,8 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 ## Phase B: Sketch
 
 Run the **arena** skill with the design-sketch task and the Phase A grounding artifacts. Pass `references/runner-prompt.md` as each runner's prompt. Each candidate produces a design package shaped per `references/rationale-template.md`.
+
+For the arena's second runner, use a capable model from a different family than the first runner, so its blind spots differ.
 
 Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the `principle-architecture/references/exhaust-the-design-space.md` principle made concrete. Whole-shape alternatives, not point fixes inside one shape.
 

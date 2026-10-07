@@ -2,7 +2,7 @@
 name: reflect
 description: "Reviews durable learnings from the current session through judgment, tooling, and divergent lenses, then routes each accepted learning to an edit on an existing skill. Use for \"reflect\", \"/reflect\", \"what did this session teach us\", or \"capture the workflow lessons from this conversation\". Reads a current-session source only when the runtime exposes it and presents edits for approval. Not for enforcing repeated repository mistakes - use correct; not for recovering older sessions - use recall."
 metadata:
-  version: 1.0.1
+  version: 1.0.2
 ---
 
 # Reflect
@@ -31,17 +31,17 @@ For each candidate, read the first JSONL line and check that `message.content[0]
 
 One message, three subagents, agent mode (not readonly). Reviewers need MCP access for context lookups (tickets, chat threads, observability traces referenced in the transcript). Readonly strips MCPs.
 
-| Lens | Prompt template |
-|---|---|
-| Judgment | `references/judgment-reviewer.md` |
-| Tooling | `references/tooling-reviewer.md` |
-| Divergent | `references/divergent-reviewer.md` |
+| Lens | Model | Prompt template |
+|---|---|---|
+| Judgment | Use the most capable setting available; this role runs once and weighs evidence. | `references/judgment-reviewer.md` |
+| Tooling | Use the fastest, cheapest setting that still reads and reports accurately; this role runs many times over broad material. | `references/tooling-reviewer.md` |
+| Divergent | Use the most capable setting available; this role runs once and weighs evidence. | `references/divergent-reviewer.md` |
 
 Pass each template verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the subagent response body.
 
 ### 3. Synthesize
 
-One subagent, agent mode (not readonly). The synthesizer's quality check includes spot-verifying citations, which can require MCP access. Readonly strips MCPs. Use `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. The synthesizer returns a structured Accepted / Rejected / Backlog list.
+One subagent, agent mode (not readonly). Use the most capable setting available; this role runs once and weighs evidence. The synthesizer's quality check includes spot-verifying citations, which can require MCP access. Readonly strips MCPs. Use `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. The synthesizer returns a structured Accepted / Rejected / Backlog list.
 
 ### 4. Structural enforcement check
 

@@ -2,7 +2,7 @@
 name: how
 description: "Explains how a system or process works by tracing entry points, data flow, boundaries, and ownership in real source evidence. Use for \"how does X work\", \"walk me through this code\", \"where should this live\", \"which package owns this\", or onboarding to a subsystem before changing it. Scales exploration to the question and reports untraced gaps. Not for historical motivation - use why; not for paced coaching combining both - use teach."
 metadata:
-  version: 1.0.1
+  version: 1.0.2
 ---
 
 # How
@@ -22,6 +22,7 @@ When in doubt, take the simple path.
 
 Decompose the question into 2 to 4 exploration angles, each a distinct slice of the subsystem. Spawn all explorers in a single message:
 
+- Use the fastest, cheapest setting that still reads and reports accurately; this role runs many times over broad material.
 - read-only
 
 Each explorer gets the prompt in `references/explorer-prompt.md` with its angle filled in. Then go to Step 3.
@@ -30,6 +31,7 @@ Each explorer gets the prompt in `references/explorer-prompt.md` with its angle 
 
 Spawn one subagent that explores and explains in one pass:
 
+- Use the most capable setting available; this role runs once and weighs evidence.
 - read-only
 
 Build its prompt from `references/explainer-prompt.md` without the explorer-findings section. Go to Step 4.
@@ -38,6 +40,7 @@ Build its prompt from `references/explainer-prompt.md` without the explorer-find
 
 Once all explorers have returned, spawn one subagent to synthesize their findings into one explanation:
 
+- Use the most capable setting available; this role runs once and weighs evidence.
 - read-only
 
 Build its prompt from `references/explainer-prompt.md` with every explorer's findings filled in.
