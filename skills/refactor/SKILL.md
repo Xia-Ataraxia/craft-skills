@@ -2,7 +2,7 @@
 name: refactor
 description: "Restructures code without changing what it does — extracting functions, renaming, removing duplication, flattening nested conditionals, and other mechanical moves backed by a detection command and threshold. Use when the user says \"refactor this\", \"clean up this code\", \"리팩토링 해줘\", or \"this function is a mess\", or a named smell (long function, deep nesting, feature envy) surfaces while reading code with no intended behavior change. Gates untested legacy code behind a characterization-test protocol first. Not for diagnosing why something is broken — use debug — or for behavior-changing feature work and bug fixes, which belong to principle-programming's red-green-refactor loop."
 metadata:
-  version: 2.5.3
+  version: 2.6.0
 ---
 
 # refactor
@@ -33,7 +33,7 @@ Before touching structure: a test suite exists for the path and is green right n
 1. Tests green before starting (from Phase 0, or from the characterization protocol).
 2. One move at a time from `references/catalog.md` — never combine two into one step.
 3. Verify proportionally to blast radius: run a focused test after a local move, a broader suite after a cohesive checkpoint, and the final relevant suite when the refactor is complete. A red result reverts the move or cohesive group that caused it rather than debugging forward on a refactor that just broke something.
-4. Refactor commits stay separate from behavior commits. Detect a commit mixing the two before it lands:
+4. Refactor commits stay separate from behavior commits. A planned change with declared breakage defers to the `principle-architecture` skill's outcome-oriented-execution reference instead. Detect a commit mixing the two before it lands:
    ```bash
    git diff --staged --diff-filter=M -- '*test*' '*spec*' '*_test.*' '*.test.*' | grep -E '^[+-][^+-].*\b(assert|expect)\b'
    ```
@@ -42,10 +42,11 @@ Before touching structure: a test suite exists for the path and is green right n
 ## Scope guard
 
 - Split when the change no longer forms one cohesive, independently reviewable and revertible structural unit. File count is a reviewability signal, not a fixed ceiling.
-- Boy-scout boundary, restated: spotting an unrelated smell mid-task is never license to fix it inline — flag it (a comment, a `craft:`-style note, or a message proposing a follow-up) and keep the current diff scoped to the stated task.
+- Boy-scout boundary, restated: spotting an unrelated smell mid-task is never license to fix it inline — flag it (a comment, a follow-up note, or a message proposing a follow-up) and keep the current diff scoped to the stated task.
 
 ## Routing
 
+- Sequencing an addition, refactor, or rewrite → [Subtract Before You Add](references/subtract-before-you-add.md): remove dead code, redundant validators, and stub references first, then build on the simpler base.
 - Which smell, which detect command, which threshold → `references/code-smells.md`.
 - Which mechanical move fixes which smell, with worked Python/TypeScript examples → `references/catalog.md`.
 - Shrinking a whole package rather than one function — measure candidate linter rule sets, enable what pays, autofix, then hand-simplify what lint cannot express → `references/lint-first.md`. Prefer linter configuration to a bespoke script, and keep the mechanical and judgment commits separate.
@@ -86,7 +87,7 @@ For mutable language-server, test, runtime, and tool behavior, consult official 
 
 - [ ] Phase 0 passed: trigger identified, tests confirmed green (or the characterization protocol completed first).
 - [ ] Verification matched blast radius: focused test after each local move, broader suite at cohesive checkpoints, and final relevant suite at completion.
-- [ ] No commit mixes a structural change with a changed test assertion (checked with the detection command above).
+- [ ] No commit mixes a structural change with a changed test assertion (checked with the detection command above); a planned change with declared breakage follows the `principle-architecture` skill's outcome-oriented-execution reference instead.
 - [ ] Any applicable smell fixed cites its `references/code-smells.md` entry and the detect command's result.
 - [ ] Scope stayed within the stated task; anything spotted-but-out-of-scope was flagged, not fixed inline.
 - [ ] For a lint-first pass: candidate rule sets were counted before being enabled, autofixes landed in their own commit ahead of the hand edits, and every reverted autofix is recorded as a scoped ignore with its reason.

@@ -199,4 +199,6 @@ Hermes integration is covered by the isolated plugin install/load contract test 
 
 ## License
 
+Third-party credits and the pstack MIT notice are in [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md).
+
 MIT, as declared in `.claude-plugin/plugin.json`. No `LICENSE` file is present in this repository yet.

@@ -2,7 +2,7 @@
 name: debug
 description: 'Diagnoses a failing program under a hypothesis-driven loop: reproduce the failure before theorizing, log observed facts separately from inferences, hold competing hypotheses until the cheapest probe discriminates between them, and confirm the mechanism with instrumentation before any fix lands. Use when a test or command fails for an unclear reason, a bug needs bisecting to the commit or input that caused it, a failure only reproduces intermittently, or asked to find out why something is broken ("이거 왜 안 되는지 찾아줘"). Not for restructuring working code (use refactor), suite-level test architecture (use principle-testing), or triaging a vulnerability class (use security).'
 metadata:
-  version: 1.2.1
+  version: 1.3.0
 ---
 
 # debug
@@ -35,6 +35,11 @@ A decision the system cannot explain is a decision nobody can triage: one detect
 So when adding instrumentation, persist for every automated decision the score, the threshold applied, the policy or model identity, and a link to the evidence artefact it produced.
 Make success countable rather than only emitting failures, and delete any counter nothing reads — one incremented on every dropped unit and read nowhere made a silent drop look identical to a healthy stream.
 `principle-programming` owns log level, placement, and structured-field style; this skill owns what has to be recoverable afterwards.
+
+## Principles
+
+- [Fix Root Causes](references/fix-root-causes.md): trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes.
+- [Attack the Premise](references/attack-the-premise.md): when two or more fixes that share one premise have failed the same gate, take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it.
 
 ## Hand-offs
 

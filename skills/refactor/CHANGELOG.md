@@ -13,3 +13,4 @@
 
 - 2026-10-06 — v2.5.2: retired enforcement routing would lose autofix review lessons → retain the five failure classes and formatter ratchet in lint-first.md and use incumbent enforcement tooling. Provenance: skills/guardrails/references/autofix-failure-classes.md and lint-config.md at ea1a8123933e2fad19541118d363f2b015b6956e.
 - 2026-10-07: Sibling handoffs must resolve the renamed broad principle owners rather than retired skill names.
+- 2026-10-07: Sequencing had no subtract-first rule, so subtract-before-you-add is added as a reference copied from pstack at cursor/plugins@d0ef80d; the boy-scout flag no longer names a craft: note and a planned change with declared breakage defers to outcome-oriented-execution.
