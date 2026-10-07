@@ -2,7 +2,7 @@
 name: why
 description: "Investigates why code or a decision has its current shape through available source history, tickets, documents, chat, telemetry, error records, and analytics. Use for \"why does X work this way\", \"why did we pick Y\", design rationale, postmortems, regressions, or \"where did this threshold come from\". Returns cited findings, calibrated inferences, competing explanations, and source gaps. Not for runtime mechanics - use how; not for repairing a failure - use debug."
 metadata:
-  version: 1.0.2
+  version: 1.0.3
 ---
 
 # Why
@@ -84,7 +84,7 @@ Subagent config (each):
 
 Each investigator gets:
 1. The base prompt from `references/investigator-prompt.md`
-2. The category playbook `references/sources/<source>.md` for the selected MCP, adapted from the examples in `references/source-playbook.md`
+2. The category playbook from `references/sources/*.md` that matches the selected MCP, adapted from the examples in `references/source-playbook.md`
 3. The cross-cutting `references/sources/incident-postmortem.md` **if the target code looks defensive** (null checks, retry logic, timeout handling, rate limiting, feature flags, egress guards, OOM handlers)
 4. The code anchor from Step 2 (file paths, symbols, commit hashes, PR numbers, ticket IDs)
 5. The user's original question
