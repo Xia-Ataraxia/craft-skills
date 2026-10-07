@@ -16,6 +16,26 @@ These craft packages contain verbatim or adapted text from pstack at that commit
 - `principle-testing`
 - `debug`
 - `refactor`
+- `craft-mode`
+- `correct`
+- `how`
+- `why`
+- `architect`
+- `teach`
+- `bro`
+- `reflect`
+- `tdd`
+- `blast-radius`
+- `arena`
+- `swarm`
+- `interrogate`
+- `benchmark-checklist`
+- `automate-me`
+- `figure-it-out`
+- `show-me-your-work`
+- `unslop`
+- `recall`
+- `document`
 
 `skills/PROVENANCE.md` records the source and relationship for each package.
 

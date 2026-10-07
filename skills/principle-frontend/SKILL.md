@@ -1,8 +1,8 @@
 ---
 name: principle-frontend
-description: 'Routes frontend engineering through incumbent-aware rendering, ownership, reuse, state, CSS, and performance decisions. Use when building or reorganizing a React/Vue/Svelte UI ("프론트엔드 구조 잡아줘"); choosing a React + Vite or Next.js shell, folder/public-API, or server/client boundary; improving component reuse or state ownership; selecting CSS Modules/Tailwind/CSS-in-JS and token structure; or setting frontend dependency, bundle, and CSS performance strategy. Not for material visual/UX judgment or DESIGN.md — use design; public API/server contracts — use api/principle-backend; TypeScript-only work — use principle-programming/refactor; test suites — use principle-testing; skill updates — follow docs/skills/authoring.md.'
+description: 'Routes frontend engineering through rendering, ownership, reuse, state, CSS, and performance decisions. Use when building or reorganizing a React/Vue/Svelte UI ("프론트엔드 구조 잡아줘"); choosing a React + Vite or Next.js shell, folder/public-API, or server/client boundary; improving component reuse or state ownership; selecting CSS Modules/Tailwind/CSS-in-JS and token structure; or setting dependency, bundle, and CSS performance strategy. Not for material visual/UX judgment or DESIGN.md — use design; public API/server contracts — use api/principle-backend; TypeScript-only work — use principle-programming/refactor; test suites — use principle-testing; skill updates — follow docs/skills/authoring.md.'
 metadata:
-  version: 4.1.0
+  version: 4.1.1
 ---
 
 # principle-frontend
