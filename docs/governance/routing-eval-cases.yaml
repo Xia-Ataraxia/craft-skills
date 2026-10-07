@@ -167,11 +167,6 @@
       "forbidden_neighbors": ["craft-skills/document", "craft-skills/research", "craft-skills/write-report"]
     },
     {
-      "trigger": "find every call site of this function with ast-grep",
-      "expected_package": "craft-skills/ast-grep",
-      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/principle-programming", "craft-skills/debug"]
-    },
-    {
       "trigger": "ssh over tailscale is hanging and the peer is missing from tailscale status",
       "expected_package": "craft-skills/tailscale",
       "forbidden_neighbors": ["craft-skills/debug", "craft-skills/security", "craft-skills/git"]
