@@ -3,7 +3,7 @@
 Preserve upstream principle bodies unchanged.
 Apply these owner decisions at the existing craft rule owners instead of editing a principle to remove the disagreement.
 The decision paragraphs below retain the plan's wording.
-File lists identify the affected owners; they do not claim those integration edits are already complete.
+File lists identify the affected owners; the listed edits are applied in this branch.
 
 ## (a) Shortcut comments
 

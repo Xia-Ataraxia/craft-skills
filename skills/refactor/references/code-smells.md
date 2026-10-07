@@ -426,7 +426,7 @@ Threshold: ratio > 0.3 in a file with 20+ non-blank lines.
 
 **Fix:** [Extract Variable](catalog.md#3-extract-variable) or [Extract Function](catalog.md#1-extract-function) to name the thing instead of describing it; [Rename](catalog.md#4-rename-via-idelsp-not-sed) often removes the need for the comment entirely.
 
-Grey zone: a comment stating *why* — a non-obvious constraint, a trade-off, a `craft:` ceiling — is documentation, never this smell. The smell is specifically a comment narrating *what* the very next line already says.
+Grey zone: a comment that records a constraint we cannot change — an external API quirk, a workaround for an upstream bug, a value that must stay in sync with an external system — or that points to an ADR is documentation, never this smell; a *why* about our own design choice is not, and belongs in a clearer name, structure, type, or test. See `principle-programming/references/comments.md`. The smell is specifically a comment narrating *what* the very next line already says.
 
 ### Commented-Out Code
 
