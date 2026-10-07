@@ -169,6 +169,8 @@ Do not copy the harness into this repository, and do not require its generated o
 ## Format check
 
 Run `scripts/governance/tools/validate_skill_format.py` on the snapshot that would be admitted, not on a stale `HEAD`.
+It runs the official Agent Skills linter `skills-ref` (install with `python3 -m pip install -r scripts/governance/requirements.txt`) for specification rules, then local checks, including the package allowlist of `scripts/`, `references/`, `assets/`, `templates/`, and `agents/` directories and the ban on any `tests` directory inside a package.
+CI runs it once over every package and once with `--diff-base` for retirement tombstones.
 
 ```bash
 set -e
@@ -187,7 +189,6 @@ Repeat `--package skills/<name>` to add an existing owner.
 Without either selector the script scans all packages.
 `--advisory` is an explicitly non-blocking format inventory.
 Input and Git errors still exit 2.
-Warnings never affect the exit code.
 
 The script maps body, references, scripts, assets, and repo-root test changes to the nearest real `SKILL.md` owner.
 Docs, CI, and governance-tool changes are repository-tool scope and select no package.
@@ -197,9 +198,11 @@ Deleted owners get a tombstone check and a concrete inbound-path check.
 Independent review still owns semantic routing, outcome and failure wording, and whether a retirement preserved unique knowledge.
 
 The script rejects repeated base flags, revision ranges, noncanonical or escaping paths, nonexistent package selectors, and unresolved support ownership.
-It does not require an output-contract heading, anti-pattern registry wording, a `MUST USE` grammar, a generated eval corpus, or sentence-boundary line breaks.
+It does not require an output-contract heading, anti-pattern registry wording, a `MUST USE` grammar, a generated eval corpus, sentence-boundary line breaks, or that paths the body mentions exist.
 Sentence line breaks are a nonblocking typography preference.
 The reflow helper is retired.
+
+Markdown style is checked by `npx -y markdownlint-cli2@0.23.3` against the root `.markdownlint-cli2.jsonc`, in CI and `scripts/ci-local.sh`.
 
 After an authorized merge or update, verify the resulting revision and rerun the relevant checks.
 Report unrelated work without stashing it or changing the operator's branch implicitly.

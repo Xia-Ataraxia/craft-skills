@@ -21,7 +21,7 @@ Configuration lives under `~/.obsidian-headless/` (note: **not** `~/.config/obsi
 
 ## Command surface
 
-```
+```text
 ob login                 login to Obsidian account or show login status
 ob logout                log out
 ob sync-list-remote      list vaults available on the server
@@ -37,7 +37,7 @@ ob publish-*             publish-site family (different code path, out of scope)
 
 ## `sync-setup`
 
-```
+```text
 --vault <id-or-name>             remote vault identifier
 --path <local-path>              local vault path (default: cwd)
 --password <passphrase>          E2E encryption password (prompted if omitted)
@@ -51,7 +51,7 @@ In a Claude Code chat, use the `!` prefix so the command attaches to the user's 
 
 ## `sync-config`
 
-```
+```text
 --path <local-path>              which local vault
 --mode <mode>                    bidirectional | pull-only | mirror-remote
 --conflict-strategy <strategy>   merge | conflict
@@ -73,7 +73,7 @@ Markdown is always synced regardless.
 
 ## `sync`
 
-```
+```text
 --path <local-path>              target vault
 --continuous                     run as a long-lived daemon
 ```

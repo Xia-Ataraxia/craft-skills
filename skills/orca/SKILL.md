@@ -2,7 +2,7 @@
 name: orca
 description: Organizes Orca around low-clutter project identities and preserves running work while diagnosing which local connection layer still needs evidence. Use to "organize Orca", "reduce sidebar clutter", consolidate the "same repo across hosts", clean old branches in Orca, reuse or account for task terminals, resolve selector_not_found or remote_runtime_unavailable, investigate SSH failures to an Orca host, or handle "orca에 연결이 안된다". Not for standalone Git maintenance (use git), vault taxonomy (use obsidian and local policy), network-versus-SSH reachability triage (use tailscale), or executable command mechanics (use the installed orca-cli and orchestration guides).
 metadata:
-  version: 1.2.0
+  version: 1.2.1
 ---
 
 # orca
@@ -45,13 +45,16 @@ When diagnosis cannot succeed, report the last confirmed layer instead of a reco
 
 Use [operations](references/operations.md) for grouping, cross-host identity, naming, task-terminal inventory and disposition, and old-branch cleanup.
 Keep connection diagnosis below as the owner of which layer still needs evidence.
-For executable usage, retries, handoffs, terminal control, and worktree mechanics, read the installed `orca-cli` guide from the same `orca` already selected for the task.
-For explicit supervised work only — monitor, wait, track completion, coordinate a DAG, use a decision gate, or manage ask/reply — read the installed `orchestration` guide from that same executable.
+For executable usage, retries, handoffs, terminal control, and worktree mechanics, check the version-matched `orca-cli` guide bundled with the `orca` already selected for the task before any other guide — list them with `orca skills list` and read one with `orca skills get <name>`.
+For explicit supervised work only — monitor, wait, track completion, coordinate a DAG, use a decision gate, or manage ask/reply — check the bundled `orchestration` guide from that same executable the same way.
+Only when a task-relevant official Orca skill is proven absent or stale against that bundled set, refresh it — install or update — through the official Orca skill channel (`orca skills install` / `orca skills update`) and only when that effect is separately authorized; otherwise no-op and keep using the bundled guide.
+Verify the installed result before relying on it, and record the version the guides were checked against.
 Do not copy those guides into this package, and do not revive a remembered flag, payload, or private RPC path.
 Use the `git` skill for Git mechanics under the operation's preservation and approval boundaries.
 Keep informational questions read-only; mutate the actual setup only when the operator requests or approves that effect.
 An organization request does not authorize unrelated pairing, application or remote upgrades, restarts, publication, installed-skill changes, GUI interference, or bulk terminal closure.
-When updating guidance, prefer an authorized official skill refresh over an application or remote upgrade.
+A skill refresh installs or updates skill guides; it is not an application or remote-host upgrade, restart, or pairing.
+Choose a skill refresh for stale skill guidance, not for a stale binary: the application upgrade, remote-host upgrade, restart, and pairing stay separate effects with their own authorization.
 If that refresh is already complete, use it without repeating the effect.
 Source authoring follows [ordinary authoring documentation](https://github.com/Xia-Ataraxia/craft-skills/blob/main/docs/skills/authoring.md); it neither refreshes installed skills nor upgrades applications or remote hosts.
 
@@ -126,7 +129,7 @@ Do not revive unrelated hosts merely to complete an organization inventory.
 
 - `orca` — official source: the installed application's bundled `orca-cli` and `orchestration` guides, fetched with the already selected executable; version probe: `orca --version`; readiness probe: `orca status --json`. This package does not copy their command inventory. Organization support depends on the installed group, project, and host capabilities, not private implementation paths.
 - `git` — official sources: [branch deletion](https://git-scm.com/docs/git-branch), [worktrees](https://git-scm.com/docs/git-worktree), and [reflogs](https://git-scm.com/docs/git-reflog); version probe: `git --version`; cleanup requires linked-worktree enumeration, reflog timestamps, ancestor checks, and non-forced branch deletion.
-- `ssh` — official source: https://man.openbsd.org/ssh_config; version probe: `ssh -V`; configuration probe: `ssh -G <host-alias>`; support boundary: an OpenSSH client supporting `ControlPersist`, `RemoteCommand`, `BatchMode`, and `ConnectTimeout`.
+- `ssh` — official source: <https://man.openbsd.org/ssh_config>; version probe: `ssh -V`; configuration probe: `ssh -G <host-alias>`; support boundary: an OpenSSH client supporting `ControlPersist`, `RemoteCommand`, `BatchMode`, and `ConnectTimeout`.
 - Dependency trigger — an Orca, Git, or OpenSSH update, changed capability probe, or changed status, identity, grouping, or deletion behavior requires official-documentation review and affected scenarios before reusing the operation.
 
 ## Anti-patterns

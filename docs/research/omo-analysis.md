@@ -84,6 +84,7 @@ omo는 Codex 단일 런타임 위에 세운 수직 통합 하네스다. 강점�
 감사에서 처분=change로 확정된 19개 스킬(재감사 2026-07-12: 신규 api·cicd·write-prd 포함, 기존 5종 재검증 — 전부 change 유지)의 구체 수정 목록. 배치 PR이 이 목록을 스코프로 삼는다.
 
 ### 배치1: skillify · distil · research · programming · testing
+
 - **skillify**: `stash unrelated work`를 비변형 clean-worktree 체크+격리 worktree 경로로 교체(SKILL.md:73-74); branch→PR 규칙을 references/lifecycle.md §6 단일 소유로 통합(5회 중복 제거); CHANGELOG/secret/validator 규칙 중복 제거.
 - **distil**: `&`/`$` denylist를 https 스킴 파싱+구조화 인자 전달로 교체(SKILL.md:21-23); no-execute 불변조건을 Intake 1곳 소유로.
 - **research**: 위험 비례 검증 추가(경합 주장 최소 실행 probe, 중대 비코드 주장 반증 탐색+독립 확증 — omo ulw-research 이식); 인용 불변조건 중복 제거.
@@ -91,6 +92,7 @@ omo는 Codex 단일 런타임 위에 세운 수직 통합 하네스다. 강점�
 - **testing**: 커버리지 quota를 위험/계약 결정 규칙으로(:32-46); prove-it을 재현 가능 결함에 스코프(:48-50); 파일명 스캔은 advisory(:52-60).
 
 ### 배치2: refactor · debug · frontend · backend · security
+
 - **refactor**: 검증 체크포인트를 blast radius 비례로(:31-40); 10-15파일 상한을 응집도 기준으로(:42-45); smell 스캔은 해당 클래스만(:47-53); omo lsp 시맨틱 연산 규칙 1줄.
 - **debug**: 직접 증거(스택 트레이스/실패 테스트)로 첫 가설 허용(:14); 복수 가설·계측은 증거 모호 시에만(:16,21); omo debugging 이식 — 아티팩트 전수 인벤토리·실제 시나리오 QA(:10,22).
 - **frontend**: 무히트=greenfield 제거, known/unknown-incumbent/greenfield 3분기(:14-54 — omo frontend 라우터 이식); design.md 게이트를 설계 변경에만 스코프; visual-qa 증거 수명주기 참고 반영.
@@ -98,6 +100,7 @@ omo는 Codex 단일 런타임 위에 세운 수직 통합 하네스다. 강점�
 - **security**: supply-chain ref·의존성 감사를 full audit 또는 해당 reachability로 스코프(:20-29); review-only와 fix 요청 구분(:52); omo remove-ai-slops 적대적 회귀 규칙 이식.
 
 ### 배치3: agents · ml · git · hookify · init
+
 - **agents**: tool 행동 변경(agents) vs 권한 집행(security) 라우팅 분리(:3,58-62); 10-line prompt 규칙을 리뷰 가능성 결정으로(:42-54); 5+5 케이스를 위험 기반 시작점으로(references/evals.md:18-45).
 - **ml**: uv/src/pyproject를 greenfield 예시로, incumbent 우선(:18,35-37,65); "costs nothing" 제거(:43); 검증을 관찰 가능한 결과 중심으로.
 - **git**: BASE 결정을 origin/HEAD→실재 브랜치→"비교 기준 없음" 순으로(:12-25); "first edit 이전"을 "첫 git mutation 이전"으로(:134-143); omo git-master 이식 — 요청 파일만 커밋+dirty work 보존, 조사 요청 비변형.
@@ -105,6 +108,7 @@ omo는 Codex 단일 런타임 위에 세운 수직 통합 하네스다. 강점�
 - **init**: bootstrap/cartography를 outcome별 분기로(:10-21); 정적 phase ordering·final-report 반복 단일화(:61-72,106-133); 발견 에이전트 수를 파일 수 quota가 아닌 불확실성/위험 기준으로(references/phase-1-discovery.md:14-61); omo ulw-plan 참고. (hook 소유권 충돌은 git 위임으로 이미 해소 — 재감사 확인)
 
 ### 배치4: document · api · cicd · write-prd
+
 - **document**: "setting up docs/" 트리거 제거(7→6개)+`Not for repository docs scaffolding (use init)` 추가(:2-3); root >3 자동 이동을 조사·제안 신호로(:49-59); plan 불변성을 명시적 계약(opt-in)으로(:93-111); omo ulw-plan의 단계별 QA 명시를 plan 템플릿에 반영.
 - **api** (신규, 재감사 2026-07-12): /api/v1·무-envelope·전 목록 pagination·단일 ProblemDetail을 greenfield 기본값으로 한정하고 기존 API는 incumbent 계약(URL base/envelope/pagination/error shape) 탐지·보존(:14-35, references/conventions.md:1-3와 정합화); 공개 계약 변경은 명시적 version/migration 스코프에서만; 트리거를 3–6개·한국어 최대 1개로 정리; 본문/references 중복 규칙을 references 단일 소유로.
 - **cicd** (신규): incumbent CI provider/배포 토폴로지 판별 게이트 추가 또는 description을 현 토폴로지로 축소(:2,12-20); registry 없는 Jenkins/Compose·main·shared tag는 선택 토폴로지의 recipe로 강등, 공통 불변조건은 값싼 PR 피드백·fail-closed·증거 보존·가역 복구만; 트리거 3–6개 정리.

@@ -15,7 +15,7 @@ A release is not real because a tag exists; it is real once the live stack resol
 
 ## The shape
 
-```
+```text
 push tag <product>-v<semver>
         │
         ▼
@@ -65,10 +65,10 @@ push tag <product>-v<semver>
 
 ## Swap the live stack
 
-7. **Record the pre-swap baseline before touching anything** — it is the evidence the swap is about to overwrite.
+1. **Record the pre-swap baseline before touching anything** — it is the evidence the swap is about to overwrite.
    Capture the image reference and image id, the data-volume mount source, the work-queue depth, the restart count, the start timestamp, the input-source count, and whatever domain counters exist.
    Save it outside the deployment tree.
-8. **Swap one service at a time with the shell scrubbed.**
+2. **Swap one service at a time with the shell scrubbed.**
    Exported variables override an env file, so unset them explicitly for the call; on one cutover a polluted project name and image variables took the stack down twice.
 
    ```bash
@@ -79,7 +79,7 @@ push tag <product>-v<semver>
 
    Back up the env file before editing an image reference in it.
    After a restart, transient states are normal: an input-source count read 2 of 13 eight seconds after a restart and 13 of 13 a minute later, so wait before calling it an outage.
-9. **Rollback rule.** Keep the previous released digest pullable, restore the env backup, and re-run the same command.
+3. **Rollback rule.** Keep the previous released digest pullable, restore the env backup, and re-run the same command.
    Never bring the stack down with its volumes removed — the state volumes are the only copy.
 
 ## Measure the deployed result

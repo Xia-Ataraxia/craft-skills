@@ -4,3 +4,6 @@
 - 2026-07-12 — v1.1.0: fixed API defaults could break published clients → applied incumbent-convention and observable-behavior principles through contract detection, versioned migration notes, and greenfield-only references. Provenance: docs/research/omo-analysis.md.
 - 2026-08-28 — v1.2.0: an incumbent HTTP surface drifted from its written convention with nothing failing, and interfaces between two components were owned by neither side → added a per-rule drift audit with detection greps, method completeness for HEAD-on-GET routes, the client normalizer rule, a single-error-discriminator rule, and provider-owns/consumer-parses interface ownership with a round-trip contract test. Provenance: absorbed from the operator-supplied `api-and-interface-design` and `code-review-and-quality` skills (~/seeon-backups/omc-learned-backup-20260828T105212Z/), grounded in a measured SeeON-edge surface inventory.
 - 2026-08-28 — v1.2.1: the enforcement skill this routes mechanical-convention work to was renamed → the routing line now names `guardrails`.
+
+- 2026-10-06 — v1.2.2: retired enforcement routing would name a missing package → use the target repository's existing tooling.
+- 2026-10-07: Sibling handoffs must resolve the renamed broad principle owners rather than retired skill names.

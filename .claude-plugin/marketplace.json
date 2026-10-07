@@ -1,6 +1,6 @@
 {
   "name": "craft-skills",
-  "description": "Work-craft skills for research + engineering: UI/UX design, documentation, database diagnosis and schema/operations tradeoffs, browser automation, Obsidian, version control, structural AST search, write-prd product requirements, ML, agents, security, and skill authoring.",
+  "description": "Vendor-neutral research and engineering skills: craft-mode playbooks, principle-owned policy, situational workflows, and domain tools discovered from skills/*/SKILL.md.",
   "owner": {
     "name": "GoBeromsu"
   },
@@ -8,7 +8,7 @@
     {
       "name": "craft-skills",
       "source": "./",
-      "description": "Work-craft Claude Code skills for UI/UX design, research, engineering, database diagnosis and schema/operations tradeoffs, browser automation, Obsidian, structural AST search, and write-prd product requirements by Beomsu Koh"
+      "description": "Research and engineering skills by Beomsu Koh: craft-mode, principle owners, explanation, correction, TDD, evidence, review, and domain workflows discovered from skills/*/SKILL.md."
     }
   ]
 }

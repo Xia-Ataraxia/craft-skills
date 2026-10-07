@@ -137,6 +137,13 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
+      - uses: actions/setup-python@v6.3.0
+        with:
+          python-version: "3.12"
+      - name: Install the official Agent Skills linter
+        run: python3 -m pip install -r scripts/governance/requirements.txt
+      - name: Validate every package
+        run: python3 scripts/governance/tools/validate_skill_format.py
       - name: Validate actual changed package owners
         env:
           BASE_REF: ${{ github.base_ref }}
@@ -145,6 +152,17 @@ jobs:
           python3 scripts/governance/tools/validate_skill_format.py --diff-base "$BASE"
       - name: Exercise package-selection regressions
         run: python3 -m unittest scripts.governance.tests.test_validate_skill_format
+
+  markdown-lint:
+    name: markdown-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: "22"
+      - name: Lint Markdown with the pinned markdownlint-cli2
+        run: npx -y markdownlint-cli2@0.23.3
 
   layer1-hygiene:
     name: layer1-hygiene
@@ -186,18 +204,4 @@ jobs:
       - name: Install current official TypeScript compiler
         run: npm install --global typescript@latest
       - name: Verify unused-local and parameter boundaries
-        run: python3 -m unittest tests.programming.test_typescript_baseline
-
-  offline-transcribe-macos:
-    name: offline-transcribe-macos
-    runs-on: macos-26
-    steps:
-      - uses: actions/checkout@v7.0.1
-      - name: Create isolated Python environment and install current offline dependencies
-        run: |
-          python3 -m venv "$RUNNER_TEMP/offline-transcribe-venv"
-          "$RUNNER_TEMP/offline-transcribe-venv/bin/python" -m pip install --upgrade pip
-          "$RUNNER_TEMP/offline-transcribe-venv/bin/python" -m pip install --upgrade mlx-whisper huggingface-hub
-      - name: Exercise offline transcription tests
-        run: |
-          "$RUNNER_TEMP/offline-transcribe-venv/bin/python" -B -m unittest discover -s tests/offline-transcribe -p test_transcribe_offline.py
+        run: python3 -m unittest discover -s tests/principle-programming -p 'test_*.py'

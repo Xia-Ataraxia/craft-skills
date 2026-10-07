@@ -69,7 +69,7 @@ GOOD_TRIGGERS = json.dumps({
 class SkillFormatValidatorTest(unittest.TestCase):
     def run_validator(self, root: Path, *args: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            ["python3", str(SCRIPT), "--root", str(root), *args],
+            [sys.executable, str(SCRIPT), "--root", str(root), *args],
             cwd=root, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
             env=_isolated_git_env(),
         )
@@ -138,83 +138,6 @@ class SkillFormatValidatorTest(unittest.TestCase):
             body = GOOD_SKILL + "\nThe neighbor package's contract reference owns provenance.\n"
             self._make_skill(root, "demo", body, GOOD_CHANGELOG)
             self.assertEqual(self.run_validator(root).returncode, 0)
-
-    def test_rejects_referenced_path_that_does_not_ship(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nRun `$SKILL_DIR/scripts/deploy.py` then read `references/schema.md`.\nGlob forms like `references/*.md` and `scripts/<name>` are fine.\n"
-            d = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            (d / "references").mkdir()
-            (d / "references" / "schema.md").write_text("# schema\n", encoding="utf-8")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("MISSING_REFERENCED_PATH", result.stdout)
-            self.assertNotIn("references/schema.md", result.stdout)
-            (d / "scripts").mkdir()
-            (d / "scripts" / "deploy.py").write_text("", encoding="utf-8")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout)
-
-    def test_sibling_package_support_file_is_not_this_package(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            sibling = self._make_skill(
-                root, "neighbor", GOOD_SKILL.replace("name: demo", "name: neighbor"),
-                GOOD_CHANGELOG, evals=None, triggers=None,
-            )
-            (sibling / "references").mkdir()
-            (sibling / "references" / "schema.md").write_text("# sibling\n", encoding="utf-8")
-            body = GOOD_SKILL + "\nRead `references/schema.md`.\n"
-            demo = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            (demo / "references").mkdir()
-            (demo / "references" / "schema.md").symlink_to(sibling / "references" / "schema.md")
-            result = self.run_validator(root, "--package", "skills/demo")
-            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-            self.assertIn("MISSING_REFERENCED_PATH", result.stdout)
-
-    def test_in_package_symlink_to_contained_file_is_valid(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nRead `references/alias.md`.\n"
-            demo = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            (demo / "references").mkdir()
-            (demo / "references" / "schema.md").write_text("# local\n", encoding="utf-8")
-            (demo / "references" / "alias.md").symlink_to("schema.md")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertNotIn("MISSING_REFERENCED_PATH", result.stdout)
-
-    def test_dangling_in_package_symlink_is_missing(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nRead `references/missing.md`.\n"
-            demo = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            (demo / "references").mkdir()
-            (demo / "references" / "missing.md").symlink_to("no-such.md")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-            self.assertIn("MISSING_REFERENCED_PATH", result.stdout)
-
-    def test_support_symlink_escaping_the_package_fails_closed(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as outside:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nRead `references/external.md`.\n"
-            demo = self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            external = Path(outside) / "fixture.md"
-            external.write_text("outside\n", encoding="utf-8")
-            (demo / "references").mkdir()
-            (demo / "references" / "external.md").symlink_to(external)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-            self.assertIn("MISSING_REFERENCED_PATH", result.stdout)
-
-    def test_repository_test_reference_is_not_package_local(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            body = GOOD_SKILL + "\nUse repo-root `tests/demo/evals/evals.json` for scenarios.\n"
-            self._make_skill(root, "demo", body, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_unreadable_package_inputs_fail_closed_even_when_advisory(self) -> None:
         wrapper = """import pathlib, runpy, sys
@@ -303,59 +226,16 @@ runpy.run_path(script, run_name='__main__')
             self.assertEqual(result.returncode, 1)
             self.assertIn("CHANGELOG_IN_SKILL", result.stdout)
 
-    def test_rejects_name_dir_mismatch(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            self._make_skill(root, "demo", GOOD_SKILL.replace("name: demo", "name: other"), GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("NAME_MISMATCH", result.stdout)
-
-    def test_rejects_non_kebab_case_name(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            bad = GOOD_SKILL.replace("name: demo", "name: Demo_Skill")
-            self._make_skill(root, "Demo_Skill", bad, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("NAME_NOT_KEBAB_CASE", result.stdout)
-
-    def test_accepts_name_at_64_character_limit(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            name = "a" * 64
-            skill = GOOD_SKILL.replace("name: demo", f"name: {name}")
-            self._make_skill(root, name, skill, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-
-    def test_rejects_name_over_64_character_limit(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            name = "a" * 65
-            skill = GOOD_SKILL.replace("name: demo", f"name: {name}")
-            self._make_skill(root, name, skill, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("NAME_TOO_LONG", result.stdout)
-
-    def test_rejects_non_string_metadata_values(self) -> None:
+    def test_rejects_non_mapping_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             cases = (
-                "  labels: [one, two]\n",
-                "  labels:\n    - one\n    - two\n",
-                "  source: {owner: team}\n",
-                "  source:\n    owner: team\n",
-                "  enabled: true\n",
-                "  priority: 1\n",
+                "metadata: plain\n",
+                "metadata:\n  - one\n  - two\n",
             )
             for index, value in enumerate(cases):
                 with self.subTest(value=value):
-                    skill = GOOD_SKILL.replace(
-                        "  version: 1.0.0\n",
-                        f"  version: 1.0.0\n{value}",
-                    )
+                    skill = GOOD_SKILL.replace("metadata:\n  version: 1.0.0\n", value)
                     case_root = root / str(index)
                     self._make_skill(case_root, "demo", skill, GOOD_CHANGELOG)
                     result = self.run_validator(case_root)
@@ -410,9 +290,10 @@ runpy.run_path(script, run_name='__main__')
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             demo = self._make_skill(root, "demo", GOOD_SKILL, None)
-            real = demo / "HISTORY.md"
+            real = demo / "references" / "HISTORY.md"
+            real.parent.mkdir()
             real.write_text("- 2026-06-07 — initial; created the demo skill.\n", encoding="utf-8")
-            (demo / "CHANGELOG.md").symlink_to("HISTORY.md")
+            (demo / "CHANGELOG.md").symlink_to("references/HISTORY.md")
             result = self.run_validator(root)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
@@ -424,77 +305,6 @@ runpy.run_path(script, run_name='__main__')
             self.assertEqual(result.returncode, 0)
             self.assertIn("NO_CHANGELOG", result.stdout)
 
-    def test_rejects_forbidden_top_level_version_key(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            legacy = GOOD_SKILL.replace(
-                "metadata:\n  version: 1.0.0\n",
-                "version: 1.0.0\nmetadata:\n  version: 1.0.0\n",
-            )
-            self._make_skill(root, "demo", legacy, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("FORBIDDEN_KEY", result.stdout)
-            self.assertIn("version", result.stdout)
-
-    def test_accepts_agent_skills_optional_frontmatter(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            optional = GOOD_SKILL.replace(
-                "metadata:\n  version: 1.0.0\n",
-                "metadata:\n  version: 1.0.0\n"
-                "license: Apache-2.0\n"
-                "compatibility: Requires a POSIX shell.\n"
-                "allowed-tools: Bash Read\n",
-            )
-            self._make_skill(root, "demo", optional, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-
-    def test_rejects_invalid_agent_skills_optional_frontmatter(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            cases = [
-                ("license: []\n", "BAD_LICENSE"),
-                ("license: '   '\n", "BAD_LICENSE"),
-                ("compatibility: []\n", "BAD_COMPATIBILITY"),
-                ("compatibility: \n", "BAD_COMPATIBILITY"),
-                (f"compatibility: {'x' * 501}\n", "BAD_COMPATIBILITY"),
-                ("allowed-tools: [Bash, Read]\n", "BAD_ALLOWED_TOOLS"),
-                ("allowed-tools: \n", "BAD_ALLOWED_TOOLS"),
-            ]
-            for index, (field, finding) in enumerate(cases):
-                with self.subTest(field=field):
-                    skill = GOOD_SKILL.replace(
-                        "metadata:\n  version: 1.0.0\n",
-                        f"metadata:\n  version: 1.0.0\n{field}",
-                    )
-                    case_root = root / str(index)
-                    self._make_skill(case_root, "demo", skill, GOOD_CHANGELOG)
-                    result = self.run_validator(case_root)
-                    self.assertEqual(result.returncode, 1)
-                    self.assertIn(finding, result.stdout)
-
-    def test_rejects_cursor_and_grok_frontmatter(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            for index, field in enumerate((
-                "paths: src/**\n",
-                "disable-model-invocation: true\n",
-                "when-to-use: Use for runtime-specific routing.\n",
-                "argument-hint: <request>\n",
-            )):
-                with self.subTest(field=field):
-                    skill = GOOD_SKILL.replace(
-                        "metadata:\n  version: 1.0.0\n",
-                        f"metadata:\n  version: 1.0.0\n{field}",
-                    )
-                    case_root = root / str(index)
-                    self._make_skill(case_root, "demo", skill, GOOD_CHANGELOG)
-                    result = self.run_validator(case_root)
-                    self.assertEqual(result.returncode, 1)
-                    self.assertIn("FORBIDDEN_KEY", result.stdout)
-
     def test_long_body_is_not_a_format_failure(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -504,41 +314,35 @@ runpy.run_path(script, run_name='__main__')
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertNotIn("BODY_TOO_LONG", result.stdout)
 
-    def test_rejects_nested_skill_md(self) -> None:
+    def test_package_entries_follow_the_folder_allowlist(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            d = self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
-            nested = d / "child"
-            nested.mkdir()
-            (nested / "SKILL.md").write_text(GOOD_SKILL.replace("name: demo", "name: child"),
-                                             encoding="utf-8")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("NESTED_SKILL_MD", result.stdout)
+            demo = self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
+            (demo / "references").mkdir()
+            (demo / "references" / "notes.md").write_text("# notes\n", encoding="utf-8")
+            allowed = self.run_validator(root)
+            self.assertEqual(allowed.returncode, 0, allowed.stdout + allowed.stderr)
+            (demo / "docs").mkdir()
+            (demo / "docs" / "guide.md").write_text("# guide\n", encoding="utf-8")
+            stray = self.run_validator(root)
+            self.assertEqual(stray.returncode, 1, stray.stdout + stray.stderr)
+            self.assertIn("DISALLOWED_PACKAGE_ENTRY", stray.stdout)
+            self.assertIn("'docs'", stray.stdout)
 
-    def test_rejects_nested_agent_skill_md(self) -> None:
+    def test_tests_directory_anywhere_in_package_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            d = self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
-            nested = d / "agents"
-            nested.mkdir()
-            (nested / "SKILL.md").write_text(GOOD_SKILL.replace("name: demo", "name: child"),
-                                             encoding="utf-8")
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("NESTED_SKILL_MD", result.stdout)
-
-    def test_description_short_is_warning_not_error(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            short = GOOD_SKILL.replace(
-                "description: Does a demo thing end to end. Use when the user asks for a demo, wants a demo run, or says demo this for me please right now.",
-                "description: Does a demo thing. Use when asked.",
-            )
-            self._make_skill(root, "demo", short, GOOD_CHANGELOG)
-            result = self.run_validator(root)
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertIn("DESCRIPTION_SHORT", result.stdout)
+            demo = self._make_skill(root, "demo", GOOD_SKILL, GOOD_CHANGELOG)
+            (demo / "scripts").mkdir()
+            (demo / "scripts" / "x.test.ts").write_text("test('x', () => {});\n", encoding="utf-8")
+            allowed = self.run_validator(root)
+            self.assertEqual(allowed.returncode, 0, allowed.stdout + allowed.stderr)
+            (demo / "scripts" / "tests").mkdir()
+            (demo / "scripts" / "tests" / "test_x.py").write_text("pass\n", encoding="utf-8")
+            nested = self.run_validator(root)
+            self.assertEqual(nested.returncode, 1, nested.stdout + nested.stderr)
+            self.assertIn("TESTS_IN_PACKAGE", nested.stdout)
+            self.assertIn("'scripts/tests/'", nested.stdout)
 
     def test_description_over_hard_max_is_error(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -551,7 +355,7 @@ runpy.run_path(script, run_name='__main__')
             self._make_skill(root, "demo", too_long, GOOD_CHANGELOG)
             result = self.run_validator(root)
             self.assertEqual(result.returncode, 1)
-            self.assertIn("DESCRIPTION_TOO_LONG", result.stdout)
+            self.assertIn("AGENT_SKILLS_SPEC", result.stdout)
 
     def _description_result(self, description: str, *args: str) -> subprocess.CompletedProcess[str]:
         tmp = tempfile.TemporaryDirectory()
@@ -580,20 +384,6 @@ runpy.run_path(script, run_name='__main__')
                 self.assertNotIn("MUST_USE", result.stdout)
                 self.assertNotIn("DIRECTIVE_", result.stdout)
                 self.assertNotIn("MISPLACED_DIRECTIVE_ANY", result.stdout)
-
-    def test_rejects_noncanonical_double_quoted_yaml_escape(self) -> None:
-        result = self._description_result(
-            r'"\x4dUST USE for deployment requests. Handle production deployments."'
-        )
-        self.assertEqual(result.returncode, 1)
-        self.assertIn("NO_DESCRIPTION", result.stdout)
-
-    def test_rejects_multiline_description_scalar(self) -> None:
-        result = self._description_result(
-            ">-\n  MUST USE for ANY deployment request. Handle deployments."
-        )
-        self.assertEqual(result.returncode, 1)
-        self.assertIn("NO_DESCRIPTION", result.stdout)
 
     def test_multi_suffix_tracked_env_is_rejected_example_exempt(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

@@ -1,3 +1,5 @@
+# Changelog
+
 - 2026-10-01 — v2.0.1: local authoring and API guidance were still routed through skillify invocation or the upgrade gate → follow docs/skills/authoring.md instead.
 - 2026-08-28 — v1.0.0: the deprecated `aside` redirect fragmented browser guidance → consolidated its lineage and browser procedures into the active `browser` package. Provenance: former `craft-skills/aside` history and `bstack/skills/browser/*` at `d3e291c`.
 - 2026-08-28 — the Chrome reference promised a fixed MCP tool inventory across runtimes → v1.0.1 requires `/mcp` or ToolSearch discovery and records current official Anthropic Chrome sources.
@@ -6,3 +8,5 @@
 - 2026-09-02 — v1.1.1: Aside browser-agent availability could be inferred from stale assumptions → link the shared tool preflight reference and collapse the contract into `## Output contract` with its stop condition. verified_against: aside@1.26.709.1533.
 - 2026-09-03 — v1.1.2: a cross-package link climbed out of the package, which the Hermes tap fetcher treats as traversal and refuses to install → name the owning skill and file in prose; add the Output contract and eval corpus the contract requires.
 - 2026-09-21 — v2.0.0: local browser copied Aside CLI/manuals and kept agent-browser plus existing-session as managed fallbacks, including a forced macOS quit/relaunch → Aside is the sole managed route, official aside-browser/aside guide own product syntax, and this package keeps only personal identity, existing-app protection, same-session continuation, and observed-result readback. Retires agent-browser.md, existing-session.md, and the duplicate aside.md reference. verified_against: aside@1.26.916.1741
+
+- 2026-10-06 — v2.0.2: retired static-extraction routing would name a missing package → keep static pages outside the Aside route, require non-empty readable extraction, and preserve caller-owned persistence.

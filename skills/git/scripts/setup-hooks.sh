@@ -3,11 +3,11 @@
 #   - registers the `git wt` alias      (simple worktree front door)
 #   - chmod +x all hooks, guards.d entries, and guard scripts
 #
-# Deliberately does NOT set core.hooksPath: guardrails is the sole owner of that
-# setting and of .githooks/pre-commit (issue #29). The three checks registered
+# Deliberately does NOT set core.hooksPath: the target repository owns that
+# setting and .githooks/pre-commit. The three checks registered
 # into .githooks/guards.d/ by install.sh stay inert until core.hooksPath points
-# at .githooks — wire that by installing guardrails in this repo, or by hand if
-# this repo doesn't use guardrails: git config core.hooksPath .githooks
+# at .githooks and a pre-commit dispatcher runs them. Follow the repository's
+# hook policy; see references/worktree.md for the dispatcher contract.
 #
 # Safe to re-run — git config is idempotent, chmod on already-executable files is a no-op.
 set -eu
@@ -36,8 +36,8 @@ printf '[git-guard] alias.wt        = %s\n' "$(git config alias.wt)"
 printf '[git-guard] guards.d        : .githooks/guards.d/{10-assert-not-main,20-deny-assets,30-check-freshness}.sh\n'
 printf '[git-guard] pre-push hook   : .githooks/pre-push\n'
 if [ "$hooks_path" = ".githooks" ]; then
-  printf '[git-guard] core.hooksPath  = .githooks (already active — checks will fire)\n'
+  printf '[git-guard] core.hooksPath  = .githooks (pre-push active; pre-commit needs the repository dispatcher)\n'
 else
-  printf '[git-guard] core.hooksPath  is not ".githooks" yet — install guardrails, or run: git config core.hooksPath .githooks\n'
+  printf '[git-guard] core.hooksPath  is not ".githooks" yet — wire the repository pre-commit dispatcher, then run: git config core.hooksPath .githooks\n'
 fi
 printf '[git-guard] setup complete  — run `git wt <name>` to create a worktree.\n'

@@ -6,6 +6,8 @@ The portable shape of a skill package in this library, plus the local rules this
 Deterministic format checks live in `scripts/governance/tools/validate_skill_format.py`.
 This page owns the policy; the script owns the check.
 Do not add a second checker that only restates the script.
+The script runs the official Agent Skills linter, [`skills-ref`](https://pypi.org/project/skills-ref/) pinned in `scripts/governance/requirements.txt`, for every specification rule and reports its messages as `AGENT_SKILLS_SPEC`.
+A rule marked **(local)** on this page is this repository's policy, not the specification; the script checks it on top of the linter.
 
 For a package written somewhere else, use the portable format, evidence, dependency, and containment rules here.
 That destination's own policy governs placement, supported metadata, history, test location, admission, and delivery.
@@ -18,11 +20,12 @@ Do not copy official product usage into this library.
 ## Package
 
 A package is one flat directory, `skills/<name>/`, with a root `SKILL.md`.
-No nested `SKILL.md` anywhere inside it, including `agents/`.
+Only that root `SKILL.md` defines the package; the validator does not look for other `SKILL.md` files inside it.
 No routing-index file and no grouping subfolders.
-An extra directory needs a concrete execution purpose not covered by the parts below; document that purpose instead of using the directory for grouping.
+**(local)** Top-level directories are only `scripts/`, `references/`, `assets/`, `templates/`, and `agents/`; top-level files are only `SKILL.md`, `CHANGELOG.md`, `.env.example`, and `env.example` (`DISALLOWED_PACKAGE_ENTRY`).
+The check reads Git-visible entries, so gitignored scratch does not count.
 
-This library also requires `CHANGELOG.md` beside `SKILL.md`.
+**(local)** This library also requires `CHANGELOG.md` beside `SKILL.md`.
 That file is a local history convention consumed by release tooling and by the format validator.
 It is not a native loader requirement.
 A destination that keeps history elsewhere follows its own rule.
@@ -30,6 +33,8 @@ A destination that forbids auxiliary files inside a skill, including the histori
 
 Tests do not live in the package.
 They live at repo-root `tests/<name>/`, so an install bundle does not ship fixtures.
+**(local)** A directory named `tests` anywhere inside the package, top level or nested such as `scripts/tests/`, fails as `TESTS_IN_PACKAGE`.
+A test file beside its script, such as `scripts/orch/orch.test.ts`, is not a directory and stays allowed.
 Generated transcripts, scores, and judge notes stay in gitignored scratch.
 They are never a pass condition and never committed as policy.
 
@@ -57,7 +62,8 @@ metadata:
 ---
 ```
 
-`name`, `description`, and `metadata` are required in this library.
+`name` and `description` are required by the specification.
+**(local)** `metadata` is also required in this library.
 `version` is never a top-level key.
 `metadata` is a string-to-string map.
 
@@ -70,22 +76,20 @@ On the Grok-native runtime it neither grants nor restricts tools.
 Do not add vendor-specific fields (`metadata.hermes.*`, Cursor `paths` / `icon` / `color`, Grok `when-to-use` / `user-invocable`, OpenAI `agents/openai.yaml`) to the portable baseline.
 Keep a field only when a current consumer or an independent safety obligation needs it.
 
-The format validator accepts only those top-level keys.
-Anything else is `FORBIDDEN_KEY`.
-Missing frontmatter is `NO_FRONTMATTER`.
-A missing or non-map `metadata` block is `NO_METADATA` or `BAD_METADATA`.
+The official linter rejects missing or unparsable frontmatter and any other top-level key (`AGENT_SKILLS_SPEC`).
+**(local)** A missing `metadata` block is `NO_METADATA`; a `metadata` value that is not a mapping is `BAD_METADATA`.
 
 ## Name
 
-- Kebab-case, equal to the directory name, at most 64 characters (`NAME_MISMATCH`, `NAME_NOT_KEBAB_CASE`, `NAME_TOO_LONG`).
+- Kebab-case, equal to the directory name, at most 64 characters (official linter, `AGENT_SKILLS_SPEC`).
 - Verb-first when the user triggers the skill by naming the action (`refactor`, `init`, `write-report`).
-- Plain noun when the skill names the domain or surface (`programming`, `security`, `testing`, `guardrails`).
+- Plain noun when the skill names the domain or surface (`security`); broad engineering owners use `principle-` (`principle-programming`, `principle-testing`).
 - No more than two tokens as authoring guidance.
 - No `-skill`, `-tool`, or `-helper` suffix. The package is already a skill.
 - Do not adopt tool-namespaced names. The directory name is the frontmatter name; a runtime namespace such as `craft-skills:<name>` is an adapter fact, not a field to author.
 
 Two-token guidance is reviewable craft, not a format failure.
-The script checks kebab-case, directory equality, and the 64-character ceiling.
+The official linter checks the name characters, directory equality, and the 64-character ceiling.
 
 ## Description
 
@@ -97,9 +101,8 @@ Name concrete situations, including ones that never say the skill's name.
 Runtimes consult a skill only when the description names the situation, and they err toward not consulting.
 The body loads after that decision, so "when to use" prose in the body does not route.
 
-300–700 characters is the target shape.
-The validator warns, without failing, under 200 (`DESCRIPTION_SHORT`) or over 700 (`DESCRIPTION_LONG`).
-It hard-fails only outside 1..1024 (`NO_DESCRIPTION`, `DESCRIPTION_TOO_LONG`).
+300–700 characters is the target shape, judged in review; no local check enforces it.
+The official linter hard-fails only outside 1..1024 (`AGENT_SKILLS_SPEC`).
 Use the languages operators actually use for the intent.
 Do not pad the description to meet a language quota.
 
@@ -150,7 +153,7 @@ Document an external binary only if the skill actually shells out to it.
 Record its official source, a safe version probe, and the support boundary.
 The contents must match the description: no hidden effects, commands, data collection, or exfiltration.
 
-`## Change Log` inside `SKILL.md` is forbidden (`CHANGELOG_IN_SKILL`).
+**(local)** `## Change Log` inside `SKILL.md` is forbidden (`CHANGELOG_IN_SKILL`).
 History lives only in `CHANGELOG.md`.
 
 ### Sentence line breaks
@@ -164,30 +167,23 @@ No script fails a package for line wrapping.
 
 ## Referenced paths
 
-Every package-relative path the body mentions under `scripts/`, `references/`, `templates/`, `assets/`, or `agents/` must exist inside that package after symlink resolution.
-A dangling, missing, or out-of-package path fails as `MISSING_REFERENCED_PATH`.
-A sibling file that exists elsewhere in the repository still fails.
-Fix it by adding the file to this package or by removing the mention.
-Do not leave a placeholder.
+Ship the support files the body mentions inside the package, and do not leave a placeholder.
+The validator checks folder names, not the paths the body mentions; review owns that.
 
-Repo-root `tests/<name>/` is not a package-local support path.
-The validator does not treat a `tests/` mention as a missing package file.
-
-A Markdown link that climbs out of the package with `../` is `TRAVERSAL_LINK`.
+**(local)** A Markdown link that climbs out of the package with `../` is `TRAVERSAL_LINK`.
 The Hermes tap fetcher treats that shape as a traversal attempt and aborts the install.
 Cross-package pointers are prose that names the skill and the file.
-In-package symlinks to contained files are valid.
-Escaping or dangling links are missing.
 Other destinations may use their own cross-package convention, without treating an external file as a contained support resource or bypassing access checks.
 
 ## Local version and changelog
 
+Everything in this section is **(local)**.
 `metadata.version` is `MAJOR.MINOR.PATCH` (`NO_VERSION`, `BAD_VERSION`).
 Release tooling in this repository consumes it.
 A native skill loader does not require it.
 Do not present the field as spec-mandated portability.
 
-```
+```text
 MAJOR  A trigger phrase is removed or renamed, or the output format breaks a downstream consumer.
 MINOR  A backward-compatible capability is added.
 PATCH  A bug fix, prose correction, or dependency bump with no interface change.
@@ -201,14 +197,16 @@ An absorption or comparison that changes nothing records a verified no-op and ne
 
 Every library package has `CHANGELOG.md` with at least one dated bullet and at most 100 lines (`NO_CHANGELOG`, `CHANGELOG_NO_DATED_BULLET`, `CHANGELOG_TOO_LONG`).
 
-```
-- YYYY-MM-DD — [vX.Y.Z: ]<why it changed> → <what it became>.
+```text
+- YYYY-MM-DD: <why it changed>
 ```
 
-Lead with the trigger.
+An entry holds only the date and the reason the package changed this way.
+Do not use an em dash, a required version, or a what-arrow.
+The validator checks only the leading date.
 The bullet is the summary; Git holds the detail.
 Append a new bullet.
-Do not rewrite a retained past bullet.
+Do not rewrite a retained past bullet, including ones in the older format.
 When a new bullet would exceed 100 lines, drop the oldest whole entries until it fits.
 Do not cut an entry in the middle, and do not grow a sidecar archive.
 Dropped history remains in Git.
@@ -240,30 +238,36 @@ Verification does not restate the writing recipe.
 
 ## What the format script checks
 
-`scripts/governance/tools/validate_skill_format.py` enforces this contract's format surface:
+`scripts/governance/tools/validate_skill_format.py` enforces this contract's format surface.
 
-- Frontmatter presence and the allowed key set, including the guarded optional spec keys.
-- `name` equality, kebab-case, and the 64-character ceiling.
-- Description hard bounds 1..1024, with non-failing shape warnings outside 200..700.
-- `metadata.version` semver.
-- No nested `SKILL.md` (`NESTED_SKILL_MD`).
-- No `## Change Log` in `SKILL.md`.
-- `CHANGELOG.md` present, at least one `- YYYY-MM-DD` bullet, at most 100 lines.
+Official linter (`skills_ref.validate`, reported as `AGENT_SKILLS_SPEC`):
+
+- Frontmatter presence, YAML validity, and the allowed key set.
+- `name` characters, directory equality, and the 64-character ceiling.
+- Description hard bounds 1..1024 and the `compatibility` ceiling.
+
+Local checks:
+
+- `metadata` presence and mapping shape (`NO_METADATA`, `BAD_METADATA`) and `metadata.version` semver (`NO_VERSION`, `BAD_VERSION`), read through `skills_ref.read_properties`.
+- The top-level folder and file allowlist (`DISALLOWED_PACKAGE_ENTRY`).
+- No directory named `tests` anywhere in the package (`TESTS_IN_PACKAGE`).
+- No `## Change Log` in `SKILL.md` (`CHANGELOG_IN_SKILL`).
+- `CHANGELOG.md` present, at least one `- YYYY-MM-DD` bullet, at most 100 lines (`NO_CHANGELOG`, `CHANGELOG_NO_DATED_BULLET`, `CHANGELOG_TOO_LONG`).
 - No tracked real `.env` in the package. `.env` and `.env.*` are real; only the exact name `.env.example` is exempt (`TRACKED_ENV`).
-- Support paths mentioned in the body resolve inside the package (`MISSING_REFERENCED_PATH`).
 - No `../` climb-out link (`TRAVERSAL_LINK`).
 - Retirement tombstones: a removed owner with remaining files is `INCOMPLETE_RETIREMENT`; a live reference to a removed owner is `DANGLING_PACKAGE_REFERENCE`. Historical changelog mentions are not that check.
 
-It does not fail a package for sentence wrapping, an eval corpus, a `MUST USE` phrase, an output-contract heading, body length, two-token names, or description quality.
+No local check duplicates the official linter.
+It does not fail a package for sentence wrapping, an eval corpus, a `MUST USE` phrase, an output-contract heading, body length, two-token names, description length or quality, paths the body mentions, or other `SKILL.md` files inside a package.
 Those are authoring and review obligations.
 
 Default mode scans packages and exits 1 on a hard finding.
+Without `skills-ref` installed the script exits 2 with an install hint; the linter needs Python 3.11 or newer.
 `--diff-base REF` selects the union of committed, staged, unstaged, and untracked package and support changes against one commit, not a revision range.
 `--package PATH` adds an existing `skills/<owner>` directory.
 `--advisory` reports format findings without failing; input and Git errors still exit 2.
 Every mode needs a Git worktree.
 `--root` identifies that worktree root; it is not a standalone non-Git package directory.
-Description-length warnings never affect the exit code.
 
 Shared repository surfaces — docs, CI, and `scripts/governance/` — are repository-tool scope.
 A change there selects no skill package and does not require any particular live package owner.
@@ -276,7 +280,8 @@ See [verification.md](verification.md).
 ## Provenance
 
 Portable baseline and optional spec keys: [Agent Skills specification](https://agentskills.io/specification), compared with [agentskills/agentskills@69ef37e](https://github.com/agentskills/agentskills/tree/69ef37e9424c0a7ea9dd2293b559e43ec8176379), [anthropics/skills@3b3fad9](https://github.com/anthropics/skills/tree/3b3fad96af16a10759d930941b4520ba0c40edae), and [openai/skills@49f948f](https://github.com/openai/skills/tree/49f948faa9258a0c61caceaf225e179651397431).
-The local changelog, version rubric, flat-package rule, and traversal-link ban are this library's policy, not that specification.
+Specification rules are checked by the official reference linter [`skills-ref` 0.1.1](https://pypi.org/project/skills-ref/0.1.1/) from [agentskills/agentskills](https://github.com/agentskills/agentskills/tree/main/skills-ref), adopted 2026-10-07 in place of a hand-rolled frontmatter reader; it describes itself as a reference library, so the version stays pinned.
+The local changelog, version rubric, flat-package rule, folder allowlist, and traversal-link ban are this library's policy, not that specification.
 OpenAI's creator forbids in-skill changelogs; this repository keeps them because release tooling consumes them.
 Traversal rejection follows the Hermes tap fetcher's install abort, recorded 2026-09-03.
 The 100-line cap and dated-bullet shape are the local history convention enforced by the format validator since the v4 contract, not a native loader limit.

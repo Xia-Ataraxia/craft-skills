@@ -17,21 +17,27 @@ Change types (use only the ones that apply):
 ## [Unreleased]
 
 ### Added
+
 -
 
 ### Changed
+
 -
 
 ### Fixed
+
 -
 
 ## [{X.Y.Z}] - YYYY-MM-DD
 
 ### Added
+
 - {user-visible change, stated as what changed for the user}
 
 ### Changed
+
 - {behavioral change; note any migration the user must do}
 
 ### Fixed
+
 - {bug fixed, stated by its user-visible symptom}

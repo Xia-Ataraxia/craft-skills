@@ -11,7 +11,7 @@ Keep it a map, not a manual: link to ADRs and rules, never restate their bodies.
 <!-- Annotated directory tree: each top-level folder gets a one-line purpose and a pointer
      to the governing ADR/rule. Trim branches that carry no architectural meaning. -->
 
-```
+```text
 .
 ├── docs/                # research / exec-plan / decisions / rules / architecture.md
 ├── src/                 # {one-line purpose}  (ADR-NNN)

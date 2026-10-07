@@ -1,49 +1,28 @@
 # inline-comments
 
-Apply the inline-comment convention: comment the **why**, not the what. This is a standing convention, not an artifact — there is no template, only the rule and its boundaries.
+Apply the inline-comment convention: a comment survives only when it fits Comment Sicko's keep-list. This is a standing convention, not an artifact — there is no template, only the rule.
 
-The code already shows *what* it does. A comment earns its place only when it carries context the code cannot: why this approach, why this constraint, why this non-obvious choice.
+The keep-list lives in `principle-programming/references/comment-sicko.md` and the review procedure in `principle-programming/references/comments.md`; when this file and those disagree, those win.
 
-## When to add a comment
+## When a comment survives
 
-- **The why behind a non-obvious choice** — why this algorithm over the obvious one, why this order matters, why a slower path is taken on purpose.
-- **A constraint or gotcha** — an external API quirk, a boundary condition, a workaround for an upstream bug, a value that must stay in sync with something elsewhere.
-- **A pointer to the decision** — when the reason is cross-cutting and lives in an ADR, link it: `// See ADR-NNN for rationale`. The comment carries the local "watch out"; the ADR carries the full why.
+- A legal or license header.
+- Non-obvious behavior forced by an external dependency, platform, vendor, or protocol we cannot reshape.
+- `// prettier-ignore`, or a lint suppression whose rule is faulty, pedantic, or style-only.
+- A doc comment that defines a public API contract.
+- An issue or RFC link that explains a constraint code cannot express.
 
-## When NOT to add a comment
+A keep needs proof that it fits one of these today on a live path. When unsure, delete it.
 
-- **Restating the code** — `// increment i` over `i++` is noise that goes stale.
-- **Compensating for an unclear name** — if a comment is needed to explain what a variable or function *is*, rename it instead. A good name removes the comment.
-- **Dead code or commented-out blocks** — delete them; git remembers.
-- **Change narration** — `// changed from X` belongs in the commit message or CHANGELOG, never in the code.
+## Everything else is deleted
 
-## The test
-
-Before writing a comment, ask: *"Does this tell the reader something the code cannot?"*
-- Yes → it is a why-comment; keep it.
-- No → either delete it, or fix the code (rename, extract) so the comment is unnecessary.
-
-## Common rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "More comments make code clearer." | What-comments restate the code and rot when the code changes. Clarity comes from naming and structure; comments are reserved for the why. |
-| "I'll comment what this line does." | The line already says what it does. Comment why it does it this way, or say nothing. |
-| "I'll leave the old version in a comment, just in case." | Git holds history. Commented-out code is dead weight that misleads readers. Delete it. |
-| "A comment is faster than renaming." | A comment explaining what a name means is a renamed-variable waiting to happen. Rename; the comment disappears. |
-
-## Red flags
-
-- A comment that paraphrases the line below it
-- A comment explaining what a poorly named variable holds (rename instead)
-- Commented-out code left in the file
-- A comment narrating a past change ("used to be X")
-- A cross-cutting rationale duplicated inline instead of linked to its ADR
+- A surprise or design choice in our own code: rename, extract, type, or test until it is obvious, and mark the exact symbol when that reshape is out of scope.
+- An ADR pointer such as `// See ADR-NNN`.
+- A comment that restates the code or explains an unclear name; rename instead.
+- Commented-out code and change narration; git and the CHANGELOG hold history.
 
 ## Verification
 
-- [ ] Every comment tells the reader something the code cannot
-- [ ] No comment merely restates the code
-- [ ] Names carry meaning; comments are not compensating for unclear naming
-- [ ] No commented-out code or change-narration comments
-- [ ] Cross-cutting rationale links to its ADR rather than duplicating it
+- [ ] Every surviving comment fits a keep-list category, proven on a live path today.
+- [ ] No ADR-pointer, design-rationale, restating, or change-narration comment remains.
+- [ ] No commented-out code remains.

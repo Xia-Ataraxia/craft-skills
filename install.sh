@@ -12,7 +12,8 @@
 # Idempotent — safe to re-run. Never hardcodes secrets or user paths beyond $HOME.
 # Does not write git commits or push to remotes.
 #
-# NOTE: Runtime install channels and paths are kept in the install matrix in AGENTS.md.
+# Runtime install channels are documented in README.md.
+# Packages are discovered from skills/*/SKILL.md, not a separate selector list.
 
 set -e
 
@@ -71,6 +72,7 @@ install_claude() {
   printf '    /plugin install craft-skills@craft-skills\n'
   printf '\n'
   ok "Paste those two lines into any Claude Code session to install craft-skills."
+  note "Invoke craft-mode for multi-step work or principle-backend for service architecture."
 }
 
 # ── Codex ──────────────────────────────────────────────────────────────────────
@@ -201,7 +203,7 @@ install_gjc() {
   printf '    gjc plugin upgrade              # the whole update path\n'
   printf '\n'
   note "Packages are advertised as craft-skills:<name>; no further configuration is required."
-  note "The installed plugin is the only copy; see the GJC row of the install matrix in AGENTS.md."
+  note "The installed plugin is the only copy; see the GJC installation route in README.md."
 
   if ! command -v gjc >/dev/null 2>&1; then
     note "gjc is not on PATH; nothing to verify."

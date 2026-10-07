@@ -3,7 +3,7 @@
 Making an existing package smaller and clearer by moving as much of the work as possible into linter configuration, and reserving hand judgment for what the linter cannot express.
 Configuration beats a bespoke script: it runs in CI already, and the next person edits one file rather than learning a private tool.
 The rule codes below come from one Python linter and are illustrative — consult the incumbent linter's official documentation for what each rule means and fixes in the installed version before enabling it.
-The configuration itself — how rule sets are staged, how ignores are scoped, and who owns whitespace — belongs to `guardrails`; this reference covers only how a refactor pass drives it.
+Preserve the target repository's incumbent linter and formatter configuration; this reference covers only how a refactor pass drives it.
 
 ## Contents
 
@@ -43,13 +43,23 @@ A worked split ran 165 files at +579/−537 for the mechanical commit and 20 fil
 
 ## Autofix review in a refactor pass
 
-Read every autofix diff against the failure classes catalogued in `guardrails`' [`references/autofix-failure-classes.md`](../../guardrails/references/autofix-failure-classes.md) before committing it.
-They are the reason step 3 commits configuration and autofix alone: each class is invisible in the diff and surfaces only when the suite runs, and a mechanical commit that has to be partly reverted is far cheaper to unpick than a mixed one.
+Read every autofix diff against these failure classes before committing it:
+
+| Class | Risk and check |
+|---|---|
+| Justification stripping | Removing an unused suppression also removes its reason; inspect deleted comment text and retain decision context. |
+| Literal reshaping | Joining or normalizing literals can break source scanners despite identical runtime values; search checks and fixtures for the post-fix literal and preserve deliberate splits. |
+| Order pinning | Sorting exports or declarations can break mirrors, snapshots, checksums, or generators; identify the external ordering contract and scope the rule out of vendored/generated trees. |
+| Presence-only symbols | Removing a locally unused import or binding can erase a re-export, registration, or fixture alias; search repository-wide callers and check side effects. |
+| Half-applied rewrites | Simplifying one half can orphan bindings, conditions, or comments; rerun the full linter and review the whole construct, not just the selected rule. |
+
+Scope an unsafe rule out narrowly with its reason rather than changing a test to accept the break.
+These classes are why step 3 commits configuration and autofix alone: a mechanical commit that has to be partly reverted is far cheaper to unpick than a mixed one.
 
 Two constraints are specific to a refactor pass rather than to the configuration:
 
 - Keep the formatter out of it.
-  A repository with a large unformatted surface produces a format sweep big enough to bury the simplification it was bundled with; adopt the formatter separately, on the ratchet `guardrails` describes.
+  A repository with a large unformatted surface produces a format sweep big enough to bury the simplification it was bundled with; adopt the formatter separately, one coherent scope per change, widening the checked scope as each becomes conformant.
 - Do not stack unrelated packages.
   When a repository-wide rule floods a package that is not the target, scope it with a per-file ignore and record it as follow-up rather than widening the pass.
 

@@ -35,7 +35,7 @@ an ADR from nearby research, plans, rules, or architecture notes.
 
 ## ADR lifecycle
 
-```
+```text
 PROPOSED → ACCEPTED → DEPRECATED
 ```
 

@@ -1,0 +1,16 @@
+# Changelog
+
+- 2026-10-07: Keep frontend discovery within the recommended description budget while preserving routing boundaries.
+- 2026-10-01 — v3.0.1: local authoring and API guidance were still routed through skillify invocation or the upgrade gate → follow docs/skills/authoring.md instead.
+- 2026-07-05 — v1.0.0: no frontend discipline existed → added Phase 0 + design.md gates, references/*.md. Provenance: lazycodex.
+- 2026-07-06 — v2.0.0: realign to vendor-official contract → minimal frontmatter, what+when description, body compressed, stale document link fixed.
+- 2026-07-08 — v2.1.0: API boundary guidance was absent and anti-patterns overlapped → centralized React/Vite/Next API boundary ownership and merged warning sections. Provenance: API boundary rule from [api-boundary-correction](references/api-boundary-correction.md).
+- 2026-07-11 — v2.1.1: API/server routing was ambiguous → route public HTTP contracts to `api` and service structure to `backend`.
+- 2026-07-12 — v2.2.0: config misses and blanket pre-documentation could overwrite incumbents or delay small fixes → added known/unknown/truly-greenfield routing, scoped architecture/design gates, and visual-QA evidence lifecycle. Principles: reuse existing patterns; observable behavior. Provenance: frontend router and visual-QA lifecycle from docs/research/omo-analysis.md.
+- 2026-08-28 — mutable framework and rendering-runtime facts require current evidence → added official-docs-first precedence, conflict disclosure, and no-invention fallback.
+- 2026-08-28 — v2.3.1: frontend dependency maintenance lacked a versioned runtime boundary → recorded Node and framework sources, safe runtime/manifest/lockfile probes, and major/lockfile/capability architecture/build/visual-evaluation trigger.
+- 2026-08-29 — v2.3.2: cross-skill document support paths were parsed as frontend-local files by Hermes → refer to the document skill's design reference and template by ownership rather than false local paths.
+- 2026-08-29 — v2.4.0: low reuse, inconsistent boundaries, and unowned CSS made frontend guidance hard to apply → added framework-shell/slice/public-API rules, reusable component and state contracts, selective CSS architecture, version-aware dependencies, and measurement-led verification. Provenance: architecture and runtime guidance retrieved 2026-08-29 from [React](https://react.dev/), [Next.js](https://nextjs.org/docs), [Vite](https://vite.dev/guide/), and [FSD](https://fsd.how/docs/); CSS guidance from [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/) and [web.dev](https://web.dev/learn/performance/).
+- 2026-08-29 — v3.0.0: frontend's universal design-document gate and document handoff conflicted with dedicated design ownership → route only material visual/UX judgment to `design`, retain frontend implementation autonomy, and relinquish `DESIGN.md`.
+- 2026-10-07: Broad engineering owners need consistent principle-prefixed names so discovery distinguishes policy from procedures.
+- 2026-10-07: Frontend tradeoffs need the upstream experience-first principle beside implementation guidance from Lauren Tan's pstack at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e.

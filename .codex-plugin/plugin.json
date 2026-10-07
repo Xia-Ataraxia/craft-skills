@@ -1,7 +1,7 @@
 {
   "name": "craft-skills",
-  "version": "0.26.0",
-  "description": "Vendor-neutral work-craft Agent Skills for Codex — UI/UX design, research, debugging, documentation, database diagnosis and schema/operations tradeoffs, browser automation, Obsidian craft, git craft, product requirements, engineering, testing, refactoring, and security triage.",
+  "version": "0.29.0",
+  "description": "Vendor-neutral research and engineering skills for Codex: craft-mode, principle owners, situational workflows, and domain tools discovered from skills/*/SKILL.md.",
   "author": {
     "name": "Beomsu Koh"
   },
@@ -18,13 +18,15 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "craft-skills",
-    "shortDescription": "Work-craft skills for Codex, including browser automation",
-    "longDescription": "craft-skills provides reusable Codex skills for UI/UX design, engineering, research, database diagnosis and schema/operations tradeoffs, browser automation, and Obsidian craft: design systems and UX audits, documentation, deep research, debugging, git workflow, structural AST search, project bootstrap, hook authoring, write-prd product requirements, technical reports, API/CI-CD/frontend/backend/ML/agent engineering, testing, refactoring, and security triage.",
+    "shortDescription": "Craft-mode, principle owners, and research and engineering workflows",
+    "longDescription": "craft-skills discovers its packages from skills/*/SKILL.md. Invoke craft-mode for multi-step playbooks, principle-architecture, principle-backend, principle-frontend, principle-programming, or principle-testing for policy, and named workflows for explanation, correction, TDD, evidence, review, parallel work, recall, and prose editing. Domain packages cover APIs, databases, CI/CD, design, documentation, research, debugging, version control, structural search, project bootstrap, ML, GPUs, security, browsers, Obsidian, Orca, and Tailscale.",
     "developerName": "Beomsu Koh",
     "category": "Engineering",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://github.com/Xia-Ataraxia/craft-skills",
     "defaultPrompt": [
+      "Use craft-skills craft-mode for a verified multi-step engineering task",
+      "Use craft-skills principle-backend for service architecture and persistence",
       "Use craft-skills document to structure project docs",
       "Use craft-skills research to investigate before deciding"
     ],

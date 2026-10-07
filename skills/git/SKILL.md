@@ -1,8 +1,8 @@
 ---
 name: git
-description: 'Guides version-control craft: a ground-truth and incumbent-style detection gate before the first git mutation, the atomic-commit `git add -p` split protocol, commit/branch/PR conventions matched to the repo''s own history, and non-interactive-safe history surgery (fixup, reword, split, scripted bisect, undo). Use when committing a change ("commit this", "커밋해줘"), rebasing or squashing history, sizing a PR, recovering from a broken rebase, or running "git wt" to create an isolated worktree with the git-guard rails. Not for hook-enforcement mechanics (runtime/lint/pre-commit guard authoring) — that belongs to guardrails.'
+description: 'Guides version-control craft: a ground-truth and incumbent-style detection gate before the first git mutation, the atomic-commit `git add -p` split protocol, commit/branch/PR conventions matched to the repo''s own history, and non-interactive-safe history surgery (fixup, reword, split, scripted bisect, undo). Use when committing a change ("commit this", "커밋해줘"), rebasing or squashing history, sizing a PR, recovering from a broken rebase, or running "git wt" to create an isolated worktree with the git-guard rails. Not for general runtime-hook or linter configuration; preserve the target repository''s enforcement tooling.'
 metadata:
-  version: 2.2.4
+  version: 2.2.6
 ---
 
 # git
@@ -11,12 +11,12 @@ Version-control craft, in order: **truth over memory, one logical change per com
 A commit is done right when it traces to one logical change, matches the repo's own detected conventions rather than an imported standard, and never rewrites shared history without the safe path.
 Deep recipes live in `references/`: `conventions.md` (commit-type/scope/merge-strategy tables), `history-surgery.md` (non-interactive fixup/reword/split/bisect/undo), `worktree.md` (`git wt` isolated-worktree workflow + guard install).
 Detection-by-code runs throughout — every rule ships a copy-pasteable command with a threshold, because the repo's actual history always outranks a general convention.
+
 ## Request mode
 
 For a commit, rebase, or staging request, run the ground-truth gate before the first Git mutation.
 For an investigation-shaped request — history, blame, why, or status — collect and report evidence without changing the worktree, index, or history.
 Investigation findings do not authorize a follow-on mutation.
-
 
 ## Ground truth (run first, every time)
 
@@ -172,7 +172,7 @@ One PR per slice, each targeting the previous branch; rebase the next slice when
 
 ## Worktrees
 
-`git wt <name>` creates or reuses an isolated worktree off the default branch — never work directly on a protected branch. Full workflow and guard install live in `references/worktree.md`. Guard scripts register into `.githooks/guards.d/`; `core.hooksPath` itself is owned by `guardrails`, not this skill.
+`git wt <name>` creates or reuses an isolated worktree off the default branch — never work directly on a protected branch. Full workflow and guard install live in `references/worktree.md`. Guard scripts register into `.githooks/guards.d/`; the target repository owns its `core.hooksPath` setting and pre-commit dispatcher.
 
 ## Requirements
 

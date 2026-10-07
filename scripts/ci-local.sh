@@ -25,7 +25,8 @@ unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_OBJECT_DIRECTORY GIT_COMMON_DIR G
 DIFF_BASE="${DIFF_BASE:-origin/main}"
 INTEGRATION_BASE="$(git merge-base "$DIFF_BASE" HEAD)"
 SCRATCH="$(mktemp -d)"
-trap 'rm -rf "$SCRATCH"' EXIT
+VENV="$(mktemp -d)"
+trap 'rm -rf "$SCRATCH" "$VENV"' EXIT
 
 FAILED=""
 run_job() {
@@ -99,8 +100,15 @@ PY
 }
 
 job_layer1_format() {
-  python3 scripts/governance/tools/validate_skill_format.py --diff-base "$INTEGRATION_BASE" &&
-  python3 -m unittest scripts.governance.tests.test_validate_skill_format
+  python3 -m venv "$VENV" &&
+  "$VENV/bin/python" -m pip install -q -r scripts/governance/requirements.txt &&
+  "$VENV/bin/python" scripts/governance/tools/validate_skill_format.py &&
+  "$VENV/bin/python" scripts/governance/tools/validate_skill_format.py --diff-base "$INTEGRATION_BASE" &&
+  "$VENV/bin/python" -m unittest scripts.governance.tests.test_validate_skill_format
+}
+
+job_markdown_lint() {
+  npx -y markdownlint-cli2@0.23.3
 }
 
 job_layer1_hygiene() {
@@ -120,7 +128,7 @@ job_distribution_version() {
 }
 
 job_typescript_baseline() {
-  python3 -m unittest tests.programming.test_typescript_baseline
+  python3 -m unittest discover -s tests/principle-programming -p 'test_*.py'
 }
 
 job_marketplaces() {
@@ -155,6 +163,7 @@ PY
 
 run_job "pr-size"              job_pr_size
 run_job "layer1-format"        job_layer1_format
+run_job "markdown-lint"        job_markdown_lint
 run_job "layer1-hygiene"       job_layer1_hygiene
 run_job "distribution-version" job_distribution_version
 run_job "typescript-baseline"  job_typescript_baseline

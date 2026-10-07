@@ -9,11 +9,11 @@
     {
       "trigger": "generate AGENTS.md",
       "expected_package": "craft-skills/init",
-      "forbidden_neighbors": ["craft-skills/document", "craft-skills/programming", "craft-skills/git"]
+      "forbidden_neighbors": ["craft-skills/document", "craft-skills/principle-programming", "craft-skills/git"]
     },
     {
       "trigger": "scaffold a Python project with its package manager",
-      "expected_package": "craft-skills/programming",
+      "expected_package": "craft-skills/principle-programming",
       "forbidden_neighbors": ["craft-skills/init", "craft-skills/document", "craft-skills/git"]
     },
     {
@@ -24,7 +24,7 @@
     {
       "trigger": "deep-init this codebase with AGENTS instructions",
       "expected_package": "craft-skills/init",
-      "forbidden_neighbors": ["craft-skills/document", "craft-skills/programming", "craft-skills/git"]
+      "forbidden_neighbors": ["craft-skills/document", "craft-skills/principle-programming", "craft-skills/git"]
     },
     {
       "trigger": "map repository conventions into AGENTS.md",
@@ -49,7 +49,7 @@
     {
       "trigger": "verify AGENTS coverage across this repository",
       "expected_package": "craft-skills/init",
-      "forbidden_neighbors": ["craft-skills/testing", "craft-skills/document", "craft-skills/git"]
+      "forbidden_neighbors": ["craft-skills/principle-testing", "craft-skills/document", "craft-skills/git"]
     },
     {
       "trigger": "scaffold documentation for this repository",
@@ -69,22 +69,17 @@
     {
       "trigger": "install git hooks for this repository",
       "expected_package": "craft-skills/git",
-      "forbidden_neighbors": ["craft-skills/init", "craft-skills/guardrails", "craft-skills/cicd"]
+      "forbidden_neighbors": ["craft-skills/init", "craft-skills/cicd"]
     },
     {
       "trigger": "git worktree",
       "expected_package": "craft-skills/git",
-      "forbidden_neighbors": ["craft-skills/init", "craft-skills/programming", "bstack/task"]
+      "forbidden_neighbors": ["craft-skills/init", "craft-skills/principle-programming", "bstack/task"]
     },
     {
       "trigger": "pre-commit hook guard",
       "expected_package": "craft-skills/git",
-      "forbidden_neighbors": ["craft-skills/programming", "craft-skills/init", "craft-skills/guardrails"]
-    },
-    {
-      "trigger": "configure the linter rule set and formatter for this repo",
-      "expected_package": "craft-skills/guardrails",
-      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/cicd", "craft-skills/programming"]
+      "forbidden_neighbors": ["craft-skills/principle-programming", "craft-skills/init"]
     },
     {
       "trigger": "technical report scaffold",
@@ -104,12 +99,12 @@
     {
       "trigger": "이거 왜 안 되는지 찾아줘",
       "expected_package": "craft-skills/debug",
-      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/testing", "craft-skills/programming"]
+      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/principle-testing", "craft-skills/principle-programming"]
     },
     {
       "trigger": "bisect this bug to the commit that caused it",
       "expected_package": "craft-skills/debug",
-      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/testing", "craft-skills/security"]
+      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/principle-testing", "craft-skills/security"]
     },
     {
       "trigger": "이 레포 규칙 파쿠리해줘",
@@ -123,53 +118,48 @@
     },
     {
       "trigger": "choose test placement and fixtures for an integration boundary",
-      "expected_package": "craft-skills/testing",
-      "forbidden_neighbors": ["craft-skills/programming", "craft-skills/debug", "craft-skills/refactor"]
+      "expected_package": "craft-skills/principle-testing",
+      "forbidden_neighbors": ["craft-skills/principle-programming", "craft-skills/debug", "craft-skills/refactor"]
     },
     {
       "trigger": "write a typed python function to parse this config file",
-      "expected_package": "craft-skills/programming",
-      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/testing", "craft-skills/debug"]
+      "expected_package": "craft-skills/principle-programming",
+      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/principle-testing", "craft-skills/debug"]
     },
     {
       "trigger": "review this diff for code smells",
       "expected_package": "craft-skills/refactor",
-      "forbidden_neighbors": ["craft-skills/programming", "craft-skills/testing", "craft-skills/debug"]
+      "forbidden_neighbors": ["craft-skills/principle-programming", "craft-skills/principle-testing", "craft-skills/debug"]
     },
     {
       "trigger": "build a responsive React component for this page",
-      "expected_package": "craft-skills/frontend",
-      "forbidden_neighbors": ["craft-skills/programming", "craft-skills/backend", "craft-skills/document"]
+      "expected_package": "craft-skills/principle-frontend",
+      "forbidden_neighbors": ["craft-skills/principle-programming", "craft-skills/principle-backend", "craft-skills/document"]
     },
     {
       "trigger": "design the service layer for this new endpoint",
-      "expected_package": "craft-skills/backend",
-      "forbidden_neighbors": ["craft-skills/api", "craft-skills/frontend", "craft-skills/programming"]
-    },
-    {
-      "trigger": "tighten this agent's tool schema",
-      "expected_package": "craft-skills/agents",
-      "forbidden_neighbors": ["craft-skills/security", "craft-skills/ml", "craft-skills/programming"]
+      "expected_package": "craft-skills/principle-backend",
+      "forbidden_neighbors": ["craft-skills/api", "craft-skills/principle-frontend", "craft-skills/principle-programming"]
     },
     {
       "trigger": "train and evaluate a baseline model on this dataset",
       "expected_package": "craft-skills/ml",
-      "forbidden_neighbors": ["craft-skills/agents", "craft-skills/backend", "craft-skills/programming"]
+      "forbidden_neighbors": ["craft-skills/principle-backend", "craft-skills/principle-programming"]
     },
     {
       "trigger": "audit this repo for security vulnerabilities",
       "expected_package": "craft-skills/security",
-      "forbidden_neighbors": ["craft-skills/debug", "craft-skills/testing", "craft-skills/programming"]
+      "forbidden_neighbors": ["craft-skills/debug", "craft-skills/principle-testing", "craft-skills/principle-programming"]
     },
     {
       "trigger": "design the public REST contract for this resource",
       "expected_package": "craft-skills/api",
-      "forbidden_neighbors": ["craft-skills/backend", "craft-skills/frontend", "craft-skills/document"]
+      "forbidden_neighbors": ["craft-skills/principle-backend", "craft-skills/principle-frontend", "craft-skills/document"]
     },
     {
       "trigger": "set up the PR pipeline and deployment for this repo",
       "expected_package": "craft-skills/cicd",
-      "forbidden_neighbors": ["craft-skills/git", "craft-skills/guardrails", "craft-skills/backend"]
+      "forbidden_neighbors": ["craft-skills/git", "craft-skills/principle-backend"]
     },
     {
       "trigger": "write a PRD for this feature",
@@ -179,12 +169,7 @@
     {
       "trigger": "find every call site of this function with ast-grep",
       "expected_package": "craft-skills/ast-grep",
-      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/programming", "craft-skills/debug"]
-    },
-    {
-      "trigger": "extract clean markdown from this URL",
-      "expected_package": "craft-skills/defuddle",
-      "forbidden_neighbors": ["craft-skills/research", "craft-skills/document", "craft-skills/write-report"]
+      "forbidden_neighbors": ["craft-skills/refactor", "craft-skills/principle-programming", "craft-skills/debug"]
     },
     {
       "trigger": "ssh over tailscale is hanging and the peer is missing from tailscale status",
@@ -194,52 +179,47 @@
     {
       "trigger": "set up pytorch and flash attention on the new RTX workstation",
       "expected_package": "craft-skills/gpu",
-      "forbidden_neighbors": ["craft-skills/ml", "craft-skills/backend", "craft-skills/debug"]
+      "forbidden_neighbors": ["craft-skills/ml", "craft-skills/principle-backend", "craft-skills/debug"]
     },
     {
       "trigger": "run this fine-tuning job on the shared lab GPU server",
       "expected_package": "craft-skills/gpu",
-      "forbidden_neighbors": ["craft-skills/ml", "craft-skills/cicd", "craft-skills/backend"]
+      "forbidden_neighbors": ["craft-skills/ml", "craft-skills/cicd", "craft-skills/principle-backend"]
     },
     {
       "trigger": "obsidian-cli로 노트를 고치고 Mermaid가 깨지지 않는지 확인해줘",
       "expected_package": "craft-skills/obsidian",
-      "forbidden_neighbors": ["craft-skills/document", "craft-skills/defuddle", "craft-skills/browser"]
-    },
-    {
-      "trigger": "VMware Fusion guest를 VNC로 조작해줘",
-      "expected_package": "craft-skills/vmware",
-      "forbidden_neighbors": ["craft-skills/browser", "craft-skills/tailscale", "craft-skills/debug"]
+      "forbidden_neighbors": ["craft-skills/document", "craft-skills/browser"]
     },
     {
       "trigger": "Use Aside to inspect my logged-in dashboard",
       "expected_package": "craft-skills/browser",
-      "forbidden_neighbors": ["craft-skills/defuddle", "craft-skills/obsidian", "craft-skills/vmware"]
+      "forbidden_neighbors": ["craft-skills/obsidian"]
     },
     {
       "trigger": "Use Aside to open my logged-in dashboard and click this button",
       "expected_package": "craft-skills/browser",
-      "forbidden_neighbors": ["craft-skills/defuddle", "craft-skills/obsidian", "craft-skills/vmware"]
+      "forbidden_neighbors": ["craft-skills/obsidian"]
     },
     {
       "trigger": "Create the root DESIGN.md for this product",
       "expected_package": "craft-skills/design",
-      "forbidden_neighbors": ["craft-skills/document", "craft-skills/frontend", "craft-skills/init"]
+      "forbidden_neighbors": ["craft-skills/document", "craft-skills/principle-frontend", "craft-skills/init"]
     },
     {
       "trigger": "Audit this onboarding flow for bad UX and propose evidence-backed improvements",
       "expected_package": "craft-skills/design",
-      "forbidden_neighbors": ["craft-skills/frontend", "craft-skills/document", "craft-skills/testing"]
+      "forbidden_neighbors": ["craft-skills/principle-frontend", "craft-skills/document", "craft-skills/principle-testing"]
     },
     {
       "trigger": "Implement this screen with the established component primitives",
-      "expected_package": "craft-skills/frontend",
-      "forbidden_neighbors": ["craft-skills/design", "craft-skills/document", "craft-skills/testing"]
+      "expected_package": "craft-skills/principle-frontend",
+      "forbidden_neighbors": ["craft-skills/design", "craft-skills/document", "craft-skills/principle-testing"]
     },
     {
       "trigger": "Redesign the information hierarchy and visual hierarchy for this workflow",
       "expected_package": "craft-skills/design",
-      "forbidden_neighbors": ["craft-skills/frontend", "craft-skills/document", "craft-skills/testing"]
+      "forbidden_neighbors": ["craft-skills/principle-frontend", "craft-skills/document", "craft-skills/principle-testing"]
     },
     {
       "trigger": "Write a README and an ADR for this decision",
@@ -249,52 +229,52 @@
     {
       "trigger": "Capture browser screenshots for the visual regression test",
       "expected_package": "craft-skills/browser",
-      "forbidden_neighbors": ["craft-skills/design", "craft-skills/frontend", "craft-skills/document"]
+      "forbidden_neighbors": ["craft-skills/design", "craft-skills/principle-frontend", "craft-skills/document"]
     },
     {
       "trigger": "Our mobile checkout is confusing; improve the interaction and recovery flow",
       "expected_package": "craft-skills/design",
-      "forbidden_neighbors": ["craft-skills/frontend", "craft-skills/document", "craft-skills/browser"]
+      "forbidden_neighbors": ["craft-skills/principle-frontend", "craft-skills/document", "craft-skills/browser"]
     },
     {
       "trigger": "Choose a coherent type, color, spacing, and motion direction",
       "expected_package": "craft-skills/design",
-      "forbidden_neighbors": ["craft-skills/frontend", "craft-skills/document", "craft-skills/browser"]
+      "forbidden_neighbors": ["craft-skills/principle-frontend", "craft-skills/document", "craft-skills/browser"]
     },
     {
       "trigger": "Review loading, empty, error, disabled, and focus states for this component family",
       "expected_package": "craft-skills/design",
-      "forbidden_neighbors": ["craft-skills/frontend", "craft-skills/testing", "craft-skills/document"]
+      "forbidden_neighbors": ["craft-skills/principle-frontend", "craft-skills/principle-testing", "craft-skills/document"]
     },
     {
       "trigger": "Compare these rendered states and identify the UX problems that matter",
       "expected_package": "craft-skills/design",
-      "forbidden_neighbors": ["craft-skills/browser", "craft-skills/frontend", "craft-skills/testing"]
+      "forbidden_neighbors": ["craft-skills/browser", "craft-skills/principle-frontend", "craft-skills/principle-testing"]
     },
     {
       "trigger": "Turn these accessibility and usability findings into a design improvement plan",
       "expected_package": "craft-skills/design",
-      "forbidden_neighbors": ["craft-skills/testing", "craft-skills/frontend", "craft-skills/write-report"]
+      "forbidden_neighbors": ["craft-skills/principle-testing", "craft-skills/principle-frontend", "craft-skills/write-report"]
     },
     {
       "trigger": "Choose SSR/RSC versus SPA for this app",
-      "expected_package": "craft-skills/frontend",
-      "forbidden_neighbors": ["craft-skills/design", "craft-skills/backend", "craft-skills/document"]
+      "expected_package": "craft-skills/principle-frontend",
+      "forbidden_neighbors": ["craft-skills/design", "craft-skills/principle-backend", "craft-skills/document"]
     },
     {
       "trigger": "Move this React state out of the component",
-      "expected_package": "craft-skills/frontend",
-      "forbidden_neighbors": ["craft-skills/design", "craft-skills/refactor", "craft-skills/testing"]
+      "expected_package": "craft-skills/principle-frontend",
+      "forbidden_neighbors": ["craft-skills/design", "craft-skills/refactor", "craft-skills/principle-testing"]
     },
     {
       "trigger": "Fix the one-pixel CSS regression using the existing token",
-      "expected_package": "craft-skills/frontend",
-      "forbidden_neighbors": ["craft-skills/design", "craft-skills/browser", "craft-skills/testing"]
+      "expected_package": "craft-skills/principle-frontend",
+      "forbidden_neighbors": ["craft-skills/design", "craft-skills/browser", "craft-skills/principle-testing"]
     },
     {
       "trigger": "Design the public HTTP API for this resource",
       "expected_package": "craft-skills/api",
-      "forbidden_neighbors": ["craft-skills/design", "craft-skills/frontend", "craft-skills/backend"]
+      "forbidden_neighbors": ["craft-skills/design", "craft-skills/principle-frontend", "craft-skills/principle-backend"]
     },
     {
       "trigger": "Write a technical report about the usability study",
@@ -303,28 +283,28 @@
     },
     {
       "trigger": "Audit these AI-generated tests for tautologies and cases that cannot fail",
-      "expected_package": "craft-skills/testing",
-      "forbidden_neighbors": ["craft-skills/programming", "craft-skills/debug", "craft-skills/refactor"]
+      "expected_package": "craft-skills/principle-testing",
+      "forbidden_neighbors": ["craft-skills/principle-programming", "craft-skills/debug", "craft-skills/refactor"]
     },
     {
       "trigger": "Review this PostgreSQL EXPLAIN ANALYZE and recommend post-selection index and query-shape changes",
       "expected_package": "craft-skills/db",
-      "forbidden_neighbors": ["craft-skills/backend", "craft-skills/debug", "craft-skills/testing"]
+      "forbidden_neighbors": ["craft-skills/principle-backend", "craft-skills/debug", "craft-skills/principle-testing"]
     },
     {
       "trigger": "Choose the database engine, provider, ORM, production major version, roles, and destructive target for this new service",
-      "expected_package": "craft-skills/backend",
-      "forbidden_neighbors": ["craft-skills/db", "craft-skills/api", "craft-skills/programming"]
+      "expected_package": "craft-skills/principle-backend",
+      "forbidden_neighbors": ["craft-skills/db", "craft-skills/api", "craft-skills/principle-programming"]
     },
     {
       "trigger": "With Aurora already selected, decide read-after-write routing, replica lag handling, and storage reclamation after bulk DELETE",
       "expected_package": "craft-skills/db",
-      "forbidden_neighbors": ["craft-skills/backend", "craft-skills/debug", "craft-skills/cicd"]
+      "forbidden_neighbors": ["craft-skills/principle-backend", "craft-skills/debug", "craft-skills/cicd"]
     },
     {
       "trigger": "Retire the migration ledger and replace it with a create-verify-refuse bootstrap",
-      "expected_package": "craft-skills/backend",
-      "forbidden_neighbors": ["craft-skills/db", "craft-skills/api", "craft-skills/testing"]
+      "expected_package": "craft-skills/principle-backend",
+      "forbidden_neighbors": ["craft-skills/db", "craft-skills/api", "craft-skills/principle-testing"]
     }
   ]
 }

@@ -1,8 +1,8 @@
 ---
 name: refactor
-description: "Restructures code without changing what it does — extracting functions, renaming, removing duplication, flattening nested conditionals, and other mechanical moves backed by a detection command and threshold. Use when the user says \"refactor this\", \"clean up this code\", \"리팩토링 해줘\", or \"this function is a mess\", or a named smell (long function, deep nesting, feature envy) surfaces while reading code with no intended behavior change. Gates untested legacy code behind a characterization-test protocol first. Not for diagnosing why something is broken — use debug — or for behavior-changing feature work and bug fixes, which belong to programming's red-green-refactor loop."
+description: "Restructures code without changing what it does — extracting functions, renaming, removing duplication, flattening nested conditionals, and other mechanical moves backed by a detection command and threshold. Use when the user says \"refactor this\", \"clean up this code\", \"리팩토링 해줘\", or \"this function is a mess\", or a named smell (long function, deep nesting, feature envy) surfaces while reading code with no intended behavior change. Gates untested legacy code behind a characterization-test protocol first. Not for diagnosing why something is broken — use debug — or for behavior-changing feature work and bug fixes, which belong to principle-programming's red-green-refactor loop."
 metadata:
-  version: 2.5.1
+  version: 2.6.1
 ---
 
 # refactor
@@ -26,26 +26,29 @@ Before touching structure: a test suite exists for the path and is green right n
 2. Write characterization tests against representative inputs, including the odd already-in-production ones, asserting the actual observed output — not the output assumed correct. `assert compute(weird_input) == 47` is right if `47` is genuinely what today's code returns, even if it looks wrong.
 3. Get them green against current behavior. They pin what the code does now, bugs included — not yet a fix.
 4. Only then refactor, keeping every characterization test green after each step below.
-5. A real bug surfacing mid-characterization gets flagged (a comment, a note, a follow-up issue), never fixed in this pass — unless the task at hand is that fix, which runs as its own red-green-refactor cycle via `programming`, before or after the restructuring, never blended into it.
+5. A real bug surfacing mid-characterization gets flagged (a note, a follow-up issue), never fixed in this pass — unless the task at hand is that fix, which runs as its own red-green-refactor cycle via `principle-programming`, before or after the restructuring, never blended into it.
 
 ## Safety protocol
 
 1. Tests green before starting (from Phase 0, or from the characterization protocol).
 2. One move at a time from `references/catalog.md` — never combine two into one step.
 3. Verify proportionally to blast radius: run a focused test after a local move, a broader suite after a cohesive checkpoint, and the final relevant suite when the refactor is complete. A red result reverts the move or cohesive group that caused it rather than debugging forward on a refactor that just broke something.
-4. Refactor commits stay separate from behavior commits. Detect a commit mixing the two before it lands:
+4. Refactor commits stay separate from behavior commits. A planned change with declared breakage defers to the `principle-architecture` skill's outcome-oriented-execution reference instead. Detect a commit mixing the two before it lands:
+
    ```bash
    git diff --staged --diff-filter=M -- '*test*' '*spec*' '*_test.*' '*.test.*' | grep -E '^[+-][^+-].*\b(assert|expect)\b'
    ```
+
    `--diff-filter=M` exempts brand-new test files (characterization tests, added coverage) by construction — no output means clean. An existing assertion's expected value flipping (a `-`/`+` pair changing `assert x == 47` to `== 48`, or a deletion) is the behavior-change signal — split the commit. A `+`-only line adding a new assertion beside untouched ones is just added coverage, not proof of a mix.
 
 ## Scope guard
 
 - Split when the change no longer forms one cohesive, independently reviewable and revertible structural unit. File count is a reviewability signal, not a fixed ceiling.
-- Boy-scout boundary, restated: spotting an unrelated smell mid-task is never license to fix it inline — flag it (a comment, a `craft:`-style note, or a message proposing a follow-up) and keep the current diff scoped to the stated task.
+- Boy-scout boundary, restated: spotting an unrelated smell mid-task is never license to fix it inline — flag it (a follow-up note or a message proposing a follow-up) and keep the current diff scoped to the stated task.
 
 ## Routing
 
+- Sequencing an addition, refactor, or rewrite → [Subtract Before You Add](references/subtract-before-you-add.md): remove dead code, redundant validators, and stub references first, then build on the simpler base.
 - Which smell, which detect command, which threshold → `references/code-smells.md`.
 - Which mechanical move fixes which smell, with worked Python/TypeScript examples → `references/catalog.md`.
 - Shrinking a whole package rather than one function — measure candidate linter rule sets, enable what pays, autofix, then hand-simplify what lint cannot express → `references/lint-first.md`. Prefer linter configuration to a bespoke script, and keep the mechanical and judgment commits separate.
@@ -53,8 +56,8 @@ Before touching structure: a test suite exists for the path and is green right n
 - When symbol safety matters, prefer available language-server definitions, references, rename, and diagnostics; confirm support in the source project, not from another workspace's server status.
 - Use an available AST tool when syntax-aware matching or transformation helps; consult an existing code graph only for a concrete dependency or impact question, checking its coverage and freshness.
 - Without semantic support, use bounded text search and source inspection, disclose coverage limits, and validate with project checks; text matches are not semantic proof or complete reference coverage. Stop when that fallback cannot establish the move's safety rather than assuming a server, hook, or skill wrapper must be installed.
-- File-size ceiling (250 pure LOC) and its escape hatches → `programming`; this skill owns function-level size, not file-level.
-- Turning any rule here into an enforced lint/hook/pre-commit check → `guardrails`.
+- File-size ceiling (250 pure LOC) and its escape hatches → `principle-programming`; this skill owns function-level size, not file-level.
+- Turning any rule here into an enforced lint/hook/pre-commit check → use the target repository's existing enforcement tooling.
 
 ## Mutable tool and LSP facts
 
@@ -79,14 +82,14 @@ For mutable language-server, test, runtime, and tool behavior, consult official 
 | "No time for characterization tests, I already know what it does." | That certainty is exactly the guess this protocol replaces with a pinned assertion. |
 | "Two duplicates is basically three, I'll extract now." | Rule of three means three — the second occurrence is too early to know the right shape. |
 | "Tests still pass, so the commit is one change." | Passing tests don't prove that; check whether any assertion's expected value moved before assuming so. |
-| "The linter's autofix is mechanical, so it needs no review." | Autofixes have flipped tests by stripping suppression reasons, joining literals a scan searched for, and reordering a byte-pinned export list — the failure classes `guardrails` catalogues. Read the diff and run the suite. |
+| "The linter's autofix is mechanical, so it needs no review." | Autofixes have flipped tests by stripping suppression reasons, joining literals a scan searched for, and reordering a byte-pinned export list — see the failure classes in `references/lint-first.md`. Read the diff and run the suite. |
 | "A quick script that greps for this is faster than configuring the linter." | The script is a private tool CI must be taught to call and the next person must learn; configuration is already wired in. |
 
 ## Verification
 
 - [ ] Phase 0 passed: trigger identified, tests confirmed green (or the characterization protocol completed first).
 - [ ] Verification matched blast radius: focused test after each local move, broader suite at cohesive checkpoints, and final relevant suite at completion.
-- [ ] No commit mixes a structural change with a changed test assertion (checked with the detection command above).
+- [ ] No commit mixes a structural change with a changed test assertion (checked with the detection command above); a planned change with declared breakage follows the `principle-architecture` skill's outcome-oriented-execution reference instead.
 - [ ] Any applicable smell fixed cites its `references/code-smells.md` entry and the detect command's result.
 - [ ] Scope stayed within the stated task; anything spotted-but-out-of-scope was flagged, not fixed inline.
 - [ ] For a lint-first pass: candidate rule sets were counted before being enabled, autofixes landed in their own commit ahead of the hand edits, and every reverted autofix is recorded as a scoped ignore with its reason.

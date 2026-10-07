@@ -64,7 +64,7 @@ Exactly one top-level directory touched → use it as the scope: `fix(auth): ...
 
 SMELL / CLEAN, same diff:
 
-```
+```text
 SMELL: fix(stuff): correct token refresh bug
 CLEAN: fix(auth): correct token refresh bug
 ```
@@ -73,7 +73,7 @@ CLEAN: fix(auth): correct token refresh bug
 
 ## Breaking-change footer
 
-```
+```text
 BREAKING CHANGE: <what breaks and the migration path>
 ```
 
@@ -87,7 +87,7 @@ Empty output on a repo that otherwise uses conventional commits doesn't mean bre
 
 ## Worked example — a full breaking-change commit message
 
-```
+```text
 feat(auth)!: require refresh-token rotation on every login
 
 Rotating the refresh token on each login closes a replay window where

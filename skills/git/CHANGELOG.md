@@ -17,3 +17,6 @@
 - 2026-08-28 — v2.2.2: the owner of `core.hooksPath` was renamed → every hand-off in the description, `references/worktree.md`, the installer scripts, and the guards.d headers now names `guardrails`.
 - 2026-08-29 — v2.2.2: an installer comment's executable-list wording looked like a set-id permission command to Hermes Guard → describe the synchronized executable-file list without the false dangerous pattern.
 - 2026-08-30 — v2.2.3: concurrent v2.2.2 releases both apply → preserves `guardrails` ownership of `core.hooksPath` and the safe installer wording.
+
+- 2026-10-06 — v2.2.5: retired hook ownership left the registered checks without an activation contract → preserve the repository-owned dispatcher recipe and remove obsolete installer hand-offs without changing hook installation. Provenance: dispatcher behavior from skills/guardrails/scripts/pre-commit.sh at ea1a8123933e2fad19541118d363f2b015b6956e.
+- 2026-10-07: the package folder allowlist admits only scripts, references, assets, templates and agents, so the shipped hook files moved from githooks/ to assets/githooks/ and the installer and worktree reference now point there.

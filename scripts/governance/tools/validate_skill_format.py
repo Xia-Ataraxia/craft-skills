@@ -5,32 +5,31 @@
 Each skill package is a single directory `skills/<skill-name>/` containing at
 least `SKILL.md` + `CHANGELOG.md`. This validator enforces, per package:
 
-  1. SKILL.md frontmatter has required `name`, `description`, `metadata` and
-     may additionally contain Agent Skills' optional `license`,
-     `compatibility`, and `allowed-tools` keys. `allowed-tools` is an
-     experimental, implementation-dependent declaration, not a portable
-     enforcement mechanism. See package-contract.md § Frontmatter.
-  2. `name` equals the package directory name, is kebab-case, and is <= 64
-     characters. See package-contract.md § Naming.
-  3. `description` is 1..1024 characters (hard bounds); a shape warning
-     (non-blocking) fires under 200 or over 700 characters. Lexical routing
-     phrases are not a format gate. See package-contract.md § Description.
-  4. `metadata.version` is present and is semver `MAJOR.MINOR.PATCH`.
-     Changelog length and dated bullets are local release policy, not a
-     native loader requirement. See package-contract.md § Changelog and version.
-  5. SKILL.md body compactness is authoring guidance, not a format failure.
-     Sentence-boundary line breaks are a nonblocking typography preference
-     (`docs/skills/verification.md` § Typography) and are not a format error.
-  6. No SKILL.md is nested anywhere inside the package below the top-level one
-     (every skill is one flat directory). See package-contract.md § Package parts.
-  7. SKILL.md body contains no `## Change Log` (history lives in CHANGELOG.md).
-  8. CHANGELOG.md exists beside SKILL.md with >= 1 dated bullet `- YYYY-MM-DD ...`
-     and is at or under 100 lines (package-contract.md § Changelog and version).
-  9. No tracked real `.env` file in the package (only `.env.example` may be committed).
- 10. Every package-relative support path the body mentions (`scripts/`, `references/`,
-     `templates/`, `assets/`, `agents/`) exists in the package, and no markdown link
-     climbs out of the package with `../` (package-contract.md § Referenced paths).
-     Repository-root `tests/<name>/` paths are not package-local support paths.
+  1. Every Agent Skills specification rule (frontmatter syntax and keys,
+     `name`, `description` including its length limit, `compatibility`)
+     through the official linter `skills_ref.validate` (pinned in
+     scripts/governance/requirements.txt); each message is `AGENT_SKILLS_SPEC`.
+     No local rule duplicates the linter.
+  2. Local: `metadata` is a present mapping (`NO_METADATA`, `BAD_METADATA`) and
+     `metadata.version` is semver `MAJOR.MINOR.PATCH` (`NO_VERSION`, `BAD_VERSION`).
+     See package-contract.md § Changelog and version.
+  3. Local: SKILL.md contains no `## Change Log` (`CHANGELOG_IN_SKILL`).
+  4. Local: CHANGELOG.md exists beside SKILL.md with >= 1 dated bullet
+     `- YYYY-MM-DD ...` and is at or under 100 lines (`NO_CHANGELOG`,
+     `CHANGELOG_NO_DATED_BULLET`, `CHANGELOG_TOO_LONG`).
+  5. Local: no tracked real `.env` file in the package (`TRACKED_ENV`).
+  6. Local: no markdown link climbs out of the package with `../`
+     (`TRAVERSAL_LINK`; the Hermes tap fetcher aborts on such a path).
+  7. Local: Git-visible top-level entries are only the directories `scripts/`,
+     `references/`, `assets/`, `templates/`, `agents/` and the files `SKILL.md`,
+     `CHANGELOG.md`, `.env.example`, `env.example` (`DISALLOWED_PACKAGE_ENTRY`).
+  8. Local: no directory named `tests` anywhere in the package
+     (`TESTS_IN_PACKAGE`); tests live in repo-root `tests/<name>/`.
+  9. Local, --diff-base only: a removed package leaves no files
+     (`INCOMPLETE_RETIREMENT`) and no live references (`DANGLING_PACKAGE_REFERENCE`).
+
+Only top-level `skills/<name>/SKILL.md` files define packages. Paths the body
+mentions are not resolved, and body length or typography is not a format check.
 
 Modes (`docs/skills/verification.md` § Format checks):
   (default)       full scan; reports every violation; exit 1 if any hard error found.
@@ -40,7 +39,6 @@ Modes (`docs/skills/verification.md` § Format checks):
                   additive to --diff-base, never a glob or an escaping path.
   --advisory      report format findings without failing; input/Git errors exit 2.
 
-Warnings (description-length shape) never affect the exit code, in any mode.
 This validator owns FORMAT only. Secret/real-path leakage is owned by
 validate_runtime_hygiene.py — keep the two concerns separate.
 """
@@ -48,7 +46,6 @@ from __future__ import annotations
 
 import argparse
 import ast
-import json
 import os
 import re
 import subprocess
@@ -61,28 +58,13 @@ SKILLS_DIR = REPO_ROOT / "skills"
 TESTS_DIR = REPO_ROOT / "tests"
 
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
-KEBAB_CASE_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 CHANGELOG_BULLET_RE = re.compile(r"^- \d{4}-\d{2}-\d{2}\b")
 CHANGE_LOG_HEADING_RE = re.compile(r"^## +Change Log\b", re.MULTILINE)
 REAL_ENV_NAME_RE = re.compile(r"^\.env(?:\..+)?$")
 
-ALLOWED_TOP_KEYS = {
-    "name",
-    "description",
-    "metadata",
-    "license",
-    "compatibility",
-    "allowed-tools",
-}
 CHANGELOG_LINE_LIMIT = 100
-DESCRIPTION_MIN_WARN = 200
-DESCRIPTION_MAX_WARN = 700
-DESCRIPTION_HARD_MAX = 1024
-NAME_MAX_LENGTH = 64
-PACKAGE_PATH_DIRS = ("scripts", "references", "templates", "assets", "tests", "agents")
-PACKAGE_PATH_RE = re.compile(
-    r"(?:\$SKILL_DIR/|\$\{SKILL_DIR\}/|(?<![A-Za-z0-9_./-]))(?:" + "|".join(PACKAGE_PATH_DIRS) + r")/[A-Za-z0-9_./-]*[A-Za-z0-9_]"
-)
+ALLOWED_PACKAGE_DIRS = frozenset({"scripts", "references", "assets", "templates", "agents"})
+ALLOWED_PACKAGE_FILES = frozenset({"SKILL.md", "CHANGELOG.md", ".env.example", "env.example"})
 
 # Repository tools, docs, and CI need no skill owner.
 # Exact files and directory prefixes; a path is in scope when it equals a
@@ -118,124 +100,22 @@ HISTORICAL_REFERENCE_EXEMPT = frozenset({
 })
 
 
+def require_skills_ref():
+    """Import the official linter only when format checks run."""
+    try:
+        import skills_ref
+    except ImportError:
+        print("skill-format: missing the official linter; run "
+              "`python3 -m pip install -r scripts/governance/requirements.txt`", file=sys.stderr)
+        raise SystemExit(2)
+    return skills_ref
+
+
 @dataclass
 class Finding:
     skill: str
     code: str
     detail: str
-    severity: str = "error"  # "error" | "warning"
-
-
-def parse_scalar(value: str) -> object:
-    """Parse the YAML scalar forms needed to distinguish strings from types."""
-    value = value.strip()
-    if len(value) >= 2 and value[0] == value[-1] == '"':
-        try:
-            return json.loads(value)
-        except json.JSONDecodeError:
-            return None
-    if len(value) >= 2 and value[0] == value[-1] == "'":
-        return value[1:-1].replace("''", "'")
-    if value.startswith("[") and value.endswith("]"):
-        inner = value[1:-1]
-        return [parse_scalar(item) for item in inner.split(",") if item.strip()]
-    if value.startswith("{") and value.endswith("}"):
-        return {}
-    if re.fullmatch(r"[>|][+-]?", value):
-        return None
-    comment = re.search(r"[ \t]+#", value)
-    if comment is not None:
-        value = value[:comment.start()].rstrip()
-    if value in {"null", "Null", "NULL", "~"}:
-        return None
-    if value.lower() == "true":
-        return True
-    if value.lower() == "false":
-        return False
-    if re.fullmatch(r"[-+]?\d+", value):
-        return int(value)
-    if re.fullmatch(r"[-+]?(?:\d+\.\d*|\d*\.\d+)(?:[eE][-+]?\d+)?", value):
-        return float(value)
-    return value
-
-
-
-def parse_frontmatter(text: str) -> "dict[str, object] | None":
-    """Minimal YAML-frontmatter reader (no external deps).
-
-    Supports scalar values, inline lists (``key: [a, b]``), block lists
-    (``key:`` then ``  - item``), and one level of nested mapping
-    (``metadata:`` then ``  version: 1.0.0``).
-    """
-    if not text.startswith("---"):
-        return None
-    end = text.find("\n---", 3)
-    if end == -1:
-        return None
-    block = text[3:end].strip("\n")
-    fields: "dict[str, object]" = {}
-    lines = block.splitlines()
-    i = 0
-    while i < len(lines):
-        line = lines[i]
-        if not line or line[0] in " \t#":
-            i += 1
-            continue
-        if ":" not in line:
-            i += 1
-            continue
-        key, _, val = line.partition(":")
-        key = key.strip()
-        val = val.strip()
-        if val != "":
-            fields[key] = parse_scalar(val)
-            i += 1
-            continue
-        # Empty scalar: look ahead for an indented block (list or mapping).
-        block_lines: list[str] = []
-        j = i + 1
-        while j < len(lines):
-            nxt = lines[j]
-            if nxt and nxt[0] not in " \t":
-                break
-            block_lines.append(nxt)
-            j += 1
-        list_items = [parse_scalar(ln.lstrip()[2:]) for ln in block_lines if ln.lstrip().startswith("- ")]
-        if list_items and len(list_items) == len([b for b in block_lines if b.strip()]):
-            fields[key] = list_items
-        elif block_lines:
-            nested: dict[str, object] = {}
-            base_indent = min(len(ln) - len(ln.lstrip()) for ln in block_lines if ln.strip())
-            for index, ln in enumerate(block_lines):
-                if not ln.strip() or len(ln) - len(ln.lstrip()) != base_indent:
-                    continue
-                stripped = ln.strip()
-                if ":" not in stripped:
-                    continue
-                nkey, _, nval = stripped.partition(":")
-                nval = nval.strip()
-                if nval:
-                    nested[nkey.strip()] = parse_scalar(nval)
-                    continue
-                children = [
-                    child for child in block_lines[index + 1:]
-                    if child.strip() and len(child) - len(child.lstrip()) > base_indent
-                ]
-                if children and children[0].lstrip().startswith("- "):
-                    nested[nkey.strip()] = [
-                        parse_scalar(child.lstrip()[2:])
-                        for child in children
-                        if child.lstrip().startswith("- ")
-                    ]
-                elif children:
-                    nested[nkey.strip()] = {}
-                else:
-                    nested[nkey.strip()] = ""
-            fields[key] = nested
-        else:
-            fields[key] = val
-        i = j
-    return fields
 
 
 def tracked_env_files(skill_dir: Path) -> list[str]:
@@ -305,7 +185,7 @@ def current_owners() -> set[str]:
     for entry in SKILLS_DIR.iterdir():
         if entry.is_symlink() and not entry.resolve().is_relative_to(skills_root):
             raise ValueError(f"skill path escapes skills/: {entry.relative_to(REPO_ROOT)}")
-    for skill in SKILLS_DIR.rglob("SKILL.md"):
+    for skill in SKILLS_DIR.glob("*/SKILL.md"):
         if not skill.resolve().is_relative_to(SKILLS_DIR.resolve()):
             raise ValueError(f"SKILL.md escapes skills/: {skill.relative_to(REPO_ROOT)}")
         owners.add(skill.parent.relative_to(REPO_ROOT).as_posix())
@@ -486,151 +366,92 @@ def select_packages(diff_base: str | None, packages: list[str]) -> tuple[list[Pa
     return [REPO_ROOT / owner for owner in sorted(selected)], findings
 
 
-
-
 TRAVERSAL_LINK_RE = re.compile(
     r"\]\(\.\./|(?:references|templates|scripts|assets|examples)/(?:[^\s)`\"'<>]*/)?\.\.(?:/|$)"
 )  # mirrors the Hermes tap fetcher's traversal abort
 
 
-def _support_path_inside_package(skill_dir: Path, rel: str) -> bool:
-    """True when rel exists inside this package after resolving symlinks.
-
-    Sibling-package and repo-root containment are not enough. Dangling or
-    escaping links count as missing. Do not read target contents.
-    """
-    candidate = skill_dir / rel
-    try:
-        if not candidate.exists() and not candidate.is_symlink():
-            return False
-        resolved = candidate.resolve()
-        package_root = skill_dir.resolve()
-        return resolved.is_relative_to(package_root) and resolved.exists()
-    except OSError:
-        return False
+def check_traversal_link(name: str, body: str) -> list[Finding]:
+    if not TRAVERSAL_LINK_RE.search(body):
+        return []
+    return [Finding(name, "TRAVERSAL_LINK",
+                    "SKILL.md links climb out of the package with `../`; "
+                    "the Hermes tap fetcher aborts the install on such a path "
+                    "(docs/skills/package-contract.md § Referenced paths)")]
 
 
-def check_referenced_paths(name: str, skill_dir: Path, body: str) -> list[Finding]:
-    findings: list[Finding] = []
-    if TRAVERSAL_LINK_RE.search(body):
-        findings.append(Finding(name, "TRAVERSAL_LINK",
-                                "SKILL.md links climb out of the package with `../`; "
-                                "the Hermes tap fetcher aborts the install on such a path "
-                                "(docs/skills/package-contract.md § Referenced paths)"))
-    seen: set[str] = set()
-    for match in PACKAGE_PATH_RE.finditer(body):
-        rel = re.sub(r"^\$\{?SKILL_DIR\}?/", "", match.group(0)).rstrip(".")
-        if rel in seen or "<" in rel or "*" in rel or rel.endswith("/"):
+def check_package_entries(name: str, skill_dir: Path) -> list[Finding]:
+    """Git-visible top-level entries must be on the package allowlist,
+    and no directory anywhere in the package may be named `tests`."""
+    rel = skill_dir.relative_to(REPO_ROOT).as_posix()
+    entries: dict[str, bool] = {}
+    test_dirs: set[str] = set()
+    # Names only: entries are never resolved or read.
+    listing = git_output("ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", rel)
+    for path in (os.fsdecode(value) for value in listing.split(b"\0") if value):
+        if not os.path.lexists(REPO_ROOT / path):
+            continue  # an uncommitted deletion is no longer a package entry
+        inner = path[len(rel) + 1:]
+        top, sep, _ = inner.partition("/")
+        entries[top] = entries.get(top, False) or bool(sep)
+        dirs = inner.split("/")[:-1]
+        if "tests" in dirs:
+            test_dirs.add("/".join(dirs[:dirs.index("tests") + 1]))
+    findings: list[Finding] = [
+        Finding(name, "TESTS_IN_PACKAGE",
+                f"directory {test_dir + '/'!r} ships tests inside the install bundle; "
+                f"move them to repo-root tests/{name}/ (docs/skills/package-contract.md § Package)")
+        for test_dir in sorted(test_dirs)
+    ]
+    for entry, is_dir in sorted(entries.items()):
+        if entry in (ALLOWED_PACKAGE_DIRS if is_dir else ALLOWED_PACKAGE_FILES):
             continue
-        if rel == "tests" or rel.startswith("tests/"):
-            continue  # repo-root tests/<name>/ is never a package path
-        seen.add(rel)
-        if rel.split("/", 1)[0] not in PACKAGE_PATH_DIRS:
-            continue
-        if not _support_path_inside_package(skill_dir, rel):
-            findings.append(Finding(name, "MISSING_REFERENCED_PATH",
-                                    f"SKILL.md mentions `{rel}` but the package does not ship it "
-                                    "(docs/skills/package-contract.md § Referenced paths)"))
+        if is_dir and entry == "tests":
+            continue  # TESTS_IN_PACKAGE owns a top-level tests/ directory
+        if not is_dir and REAL_ENV_NAME_RE.match(entry):
+            continue  # TRACKED_ENV owns real env files
+        kind = "directory" if is_dir else "file"
+        findings.append(Finding(name, "DISALLOWED_PACKAGE_ENTRY",
+                                f"{kind} {entry!r} is not on the package allowlist "
+                                "(docs/skills/package-contract.md § Package)"))
     return findings
 
 
-
 def check_skill(skill_dir: Path) -> list[Finding]:
+    skills_ref = require_skills_ref()
     name = skill_dir.name
     findings: list[Finding] = []
-    if skill_dir.parent != SKILLS_DIR:
-        findings.append(Finding(name, "NESTED_SKILL_MD", "craft packages must be flat under skills/"))
     skill_md = skill_dir / "SKILL.md"
     text = skill_md.read_text(encoding="utf-8")
 
-    fm = parse_frontmatter(text)
-    if fm is None:
-        return [Finding(name, "NO_FRONTMATTER", "SKILL.md has no YAML frontmatter")]
+    for message in skills_ref.validate(skill_dir):
+        findings.append(Finding(name, "AGENT_SKILLS_SPEC", message))
+    try:
+        props = skills_ref.read_properties(skill_dir)
+    except skills_ref.SkillError:
+        props = None  # validate() above already reported why the frontmatter is unreadable
 
-    extra_keys = set(fm.keys()) - ALLOWED_TOP_KEYS
-    for key in sorted(extra_keys):
-        findings.append(Finding(name, "FORBIDDEN_KEY",
-                                f"frontmatter key {key!r} is not allowed; only "
-                                "name/description/metadata and optional "
-                                "license/compatibility/allowed-tools are"))
-
-    fm_name = fm.get("name")
-    if fm_name != name:
-        findings.append(Finding(name, "NAME_MISMATCH",
-                                f"frontmatter name {fm_name!r} != dir {name!r}"))
-    elif not KEBAB_CASE_RE.match(str(fm_name)):
-        findings.append(Finding(name, "NAME_NOT_KEBAB_CASE",
-                                f"{fm_name!r} is not kebab-case"))
-    elif len(fm_name) > NAME_MAX_LENGTH:
-        findings.append(Finding(name, "NAME_TOO_LONG",
-                                f"{len(fm_name)} > {NAME_MAX_LENGTH} chars"))
-
-    desc = fm.get("description", "")
-    if not desc:
-        findings.append(Finding(name, "NO_DESCRIPTION", "missing description"))
-    elif len(str(desc)) > DESCRIPTION_HARD_MAX:
-        findings.append(Finding(name, "DESCRIPTION_TOO_LONG",
-                                f"{len(str(desc))} > {DESCRIPTION_HARD_MAX} chars"))
-    elif len(str(desc)) < DESCRIPTION_MIN_WARN:
-        findings.append(Finding(name, "DESCRIPTION_SHORT",
-                                f"{len(str(desc))} < {DESCRIPTION_MIN_WARN} chars (shape warning)",
-                                severity="warning"))
-    elif len(str(desc)) > DESCRIPTION_MAX_WARN:
-        findings.append(Finding(name, "DESCRIPTION_LONG",
-                                f"{len(str(desc))} > {DESCRIPTION_MAX_WARN} chars (shape warning)",
-                                severity="warning"))
-
-
-    metadata = fm.get("metadata")
-    if not isinstance(metadata, dict):
-        findings.append(Finding(name, "NO_METADATA", "missing metadata.version block"))
-    else:
-        for key, value in metadata.items():
-            if not isinstance(key, str) or not isinstance(value, str):
-                findings.append(Finding(
-                    name,
-                    "BAD_METADATA",
-                    "metadata must be a string-to-string map",
-                ))
-                break
-        version = metadata.get("version", "")
-        if not version:
-            findings.append(Finding(name, "NO_VERSION", "missing metadata.version"))
-        elif not isinstance(version, str) or not SEMVER_RE.match(version):
-            findings.append(Finding(name, "BAD_VERSION", f"{version!r} is not MAJOR.MINOR.PATCH"))
-
-    if "license" in fm and (not isinstance(fm["license"], str) or not fm["license"].strip()):
-        findings.append(Finding(name, "BAD_LICENSE",
-                                "license must be a non-empty string"))
-
-    if "compatibility" in fm:
-        compatibility = fm["compatibility"]
-        if (not isinstance(compatibility, str)
-                or not 1 <= len(compatibility) <= 500):
-            findings.append(Finding(name, "BAD_COMPATIBILITY",
-                                    "compatibility must be a string of 1..500 characters"))
-
-    if ("allowed-tools" in fm
-            and (not isinstance(fm["allowed-tools"], str) or not fm["allowed-tools"].strip())):
-        findings.append(Finding(
-            name,
-            "BAD_ALLOWED_TOOLS",
-            "allowed-tools must be a non-empty string; its semantics are experimental "
-            "and implementation-dependent",
-        ))
+    if props is not None:
+        metadata = props.metadata
+        if metadata is None:
+            findings.append(Finding(name, "NO_METADATA", "missing metadata.version block"))
+        elif not isinstance(metadata, dict):
+            findings.append(Finding(name, "BAD_METADATA", "metadata must be a mapping"))
+        else:
+            version = metadata.get("version", "")
+            if not version:
+                findings.append(Finding(name, "NO_VERSION", "missing metadata.version"))
+            elif not SEMVER_RE.match(version):
+                findings.append(Finding(name, "BAD_VERSION", f"{version!r} is not MAJOR.MINOR.PATCH"))
 
     if CHANGE_LOG_HEADING_RE.search(text):
         findings.append(Finding(name, "CHANGELOG_IN_SKILL",
                                 "## Change Log belongs in CHANGELOG.md, not SKILL.md"))
 
-    body = text[text.find("\n---", 3) + 4:]
+    body = text[text.find("\n---", 3) + 4:] if text.startswith("---") else text
 
-    findings.extend(check_referenced_paths(name, skill_dir, body))
-
-    for nested in sorted(skill_dir.rglob("SKILL.md")):
-        if nested != skill_md:
-            findings.append(Finding(name, "NESTED_SKILL_MD",
-                                    f"nested SKILL.md not allowed: {nested.relative_to(skill_dir)}"))
+    findings.extend(check_traversal_link(name, body))
+    findings.extend(check_package_entries(name, skill_dir))
 
     for env in tracked_env_files(skill_dir):
         findings.append(Finding(name, "TRACKED_ENV", f"committed real env file: {env}"))
@@ -672,6 +493,7 @@ def main() -> int:
     ap.add_argument("--advisory", action="store_true", help="report format findings; input/Git errors still fail")
     ap.add_argument("--root", help="repo root override (default: derived from script path)")
     args = ap.parse_args()
+    require_skills_ref()
 
     global REPO_ROOT, SKILLS_DIR, TESTS_DIR
     if args.root:
@@ -691,21 +513,15 @@ def main() -> int:
         print(f"skill-format: input error: {exc}", file=sys.stderr)
         return 2
 
-    errors = [f for f in findings if f.severity == "error"]
-    warnings = [f for f in findings if f.severity == "warning"]
-
-    for f in warnings:
-        print(f"  [{f.code}] {f.skill}: {f.detail}")
-    for f in errors:
+    for f in findings:
         print(f"  [{f.code}] {f.skill}: {f.detail}")
 
     if not findings:
         print(f"skill-format: OK — {len(targets)} package(s) validated.")
         return 0
 
-    print(f"skill-format: {len(errors)} error(s), {len(warnings)} warning(s) "
-          f"across {len(targets)} package(s).")
-    return 0 if (args.advisory or not errors) else 1
+    print(f"skill-format: {len(findings)} error(s) across {len(targets)} package(s).")
+    return 0 if args.advisory else 1
 
 
 if __name__ == "__main__":

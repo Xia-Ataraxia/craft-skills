@@ -1,7 +1,7 @@
 {
   "name": "craft-skills",
-  "description": "Vendor-neutral work-craft Agent Skills for Claude Code UI/UX design, research, engineering, database diagnosis and schema/operations tradeoffs, browser automation, Obsidian, and product requirements.",
-  "version": "0.26.0",
+  "description": "Vendor-neutral research and engineering skills for Claude Code: craft-mode, principle owners, situational workflows, and domain tools discovered from skills/*/SKILL.md.",
+  "version": "0.29.0",
   "author": {
     "name": "Beomsu Koh"
   },

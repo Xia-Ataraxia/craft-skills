@@ -73,6 +73,7 @@ These signs usually mean the template was assembled from assumptions instead of 
 ## Verification
 
 After completing the template:
+
 - [ ] JSON is valid and parseable
 - [ ] All selectors verified against fetched page content
 - [ ] Properties match Frontmatter Guideline conventions

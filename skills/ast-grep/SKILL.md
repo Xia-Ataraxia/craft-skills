@@ -1,8 +1,8 @@
 ---
 name: ast-grep
-description: Routes syntax-aware structural search and replacement through ast-grep. Use when asked to find every call site of a function, match a function declaration, search JavaScript or TypeScript syntax, replace a code shape safely, or locate a particular AST node. Not for behavior-preserving restructuring (use refactor) or writing new code (use programming).
+description: Routes syntax-aware structural search and replacement through ast-grep. Use when asked to find every call site of a function, match a function declaration, search JavaScript or TypeScript syntax, replace a code shape safely, or locate a particular AST node. Not for behavior-preserving restructuring (use refactor) or writing new code (use principle-programming).
 metadata:
-  version: 1.1.0
+  version: 1.1.1
 ---
 
 # ast-grep
@@ -30,20 +30,27 @@ Ask: **is this a syntax-tree question or a bytes question?** Use ast-grep when t
 ## Golden path: mutate by ladder
 
 1. **Validate the pattern.** State the target language and run a query-inspection command before targeting the repository:
+
    ```sh
    ast-grep run --lang ts --pattern 'client.fetch($URL)' --debug-query
    ```
+
    Replace `ast-grep` with `sg` when that is the installed binary. If parsing fails, fix the pattern before searching files.
 2. **Search without mutation.** Limit paths to the intended scope and read representative matches:
+
    ```sh
    ast-grep run --lang ts --pattern 'client.fetch($URL)' src/
    ```
+
 3. **Dry-run the replacement.** `--rewrite` without `--update-all` previews the change; it does not write files:
+
    ```sh
    ast-grep run --lang ts --pattern 'client.fetch($URL)' --rewrite 'http.fetch($URL)' src/
    ```
+
 4. **Inspect the blast radius.** Check total matches, changed files, surrounding code, and exceptional forms such as optional chaining, overloads, or comments that text search would have confused.
 5. **Apply only the reviewed change.** Re-run the exact dry-run command with `--update-all`, then inspect the diff and run focused tests:
+
    ```sh
    ast-grep run --lang ts --pattern 'client.fetch($URL)' --rewrite 'http.fetch($URL)' --update-all src/
    ```
@@ -81,4 +88,4 @@ Use a small known-positive snippet or a single representative file to distinguis
 ## Hand-offs
 
 - A reviewed structural change needs behavior-preserving reorganization across the codebase → `refactor`.
-- The request is to design or write new behavior rather than locate or transform existing syntax → `programming`.
+- The request is to design or write new behavior rather than locate or transform existing syntax → `principle-programming`.

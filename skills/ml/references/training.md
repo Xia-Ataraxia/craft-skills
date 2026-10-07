@@ -89,6 +89,6 @@ A clean checkout can use an immutable revision when it fully identifies the exec
 
 - Dataset splitting, fitted-statistic leakage, and manifests → `references/datasets.md`.
 - Vision-specific input pipelines, augmentation, and error analysis → `references/vision.md`.
-- Serving a trained checkpoint behind an API → the `backend` skill.
-- Per-file Python discipline → the `programming` skill.
+- Serving a trained checkpoint behind an API → the `principle-backend` skill.
+- Per-file Python discipline → the `principle-programming` skill.
 - Framework/CUDA compatibility and shared-host launch safety → the `gpu` skill.

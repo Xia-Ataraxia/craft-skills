@@ -20,6 +20,7 @@ If the native skill, executable, app bridge, or requested command is unavailable
 - The user asks to "add a plugin to the registry" or "document this plugin's API patterns".
 
 **NOT for:**
+
 - Vault-wide link rot, orphan notes, or frontmatter schema drift — those are not plugin-scoped.
 - Core Obsidian bugs unrelated to any plugin.
 - Template format problems that have nothing to do with plugin API (e.g., pure Markdown structure issues) — discover the official `obsidian-markdown` skill; template selection remains with target-vault policy (its AGENTS.md and guidelines) or personal policy.
@@ -62,6 +63,7 @@ obsidian dev:errors
 ```
 
 Classification categories:
+
 - **undefined-variable** — `ReferenceError: X is not defined` inside a template expression.
 - **api-mismatch** — plugin method signature changed between versions.
 - **known-regression** — matches a `known_regressions` entry for that plugin inside `doctor-plugins.yaml`.
@@ -83,6 +85,7 @@ yq '.["<plugin-id>"].known_regressions[] | select(.version == "<version>")' doct
 ```
 
 If the plugin is **not in the registry**, or the registry entry has no `key_patterns` that cover the symptom:
+
 1. Fetch the plugin docs (via a web fetch, browser, or `defuddle`) using the `docs` URL from the registry (or the repo README if `docs` is null).
 2. Extract relevant patterns with Defuddle.
 3. Append the learned entry to `doctor-plugins.yaml` (see `## Registry Schema`).
@@ -179,6 +182,7 @@ It is keyed by `plugin-id` (the string in `manifest.json`).
 ```
 
 Rules:
+
 - `version_seen` is updated on every run where the installed version is newer than recorded.
 - `key_patterns` grows; entries are never removed unless the API is gone.
 - `antipatterns` and `known_regressions` are append-only — never blank the list.
@@ -198,12 +202,14 @@ Templater evaluates `<% expr %>` as a bare JS expression in its scope.
 Result: `ReferenceError`, template aborts.
 
 **Step 3 — Consult Registry:** the `doctor-plugins.yaml` entry for `templater-obsidian` confirms:
+
 - `antipatterns` includes `"<% bareVar %> # undefined in Templater's JS scope → ReferenceError"`.
 - `key_patterns.entry_block` = `"<%* ... %>"` — the correct form for imperative logic.
 - `key_patterns.prompt` = `"await tp.system.prompt('label', 'default')"` — to capture user input.
 
 **Step 4 — Patch:** Rewrite the template.
 Replace every `<% newName %>` occurrence with a `<%* ... %>` entry block that:
+
 1. Prompts the user for the value.
 2. Sanitizes input.
 3. Renames the file.
@@ -211,7 +217,7 @@ Replace every `<% newName %>` occurrence with a `<%* ... %>` entry block that:
 
 Correct entry block pattern:
 
-```
+```javascript
 <%*
 const rawInput = await tp.system.prompt("Project name");
 if (!rawInput) return;

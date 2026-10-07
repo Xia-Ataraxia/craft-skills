@@ -19,7 +19,7 @@ A lockfile pins resolved versions, while an importable package keeps reusable pi
 
 ### Greenfield example tree
 
-```
+```text
 project/
   pyproject.toml
   uv.lock
@@ -55,11 +55,11 @@ project/
 | One-off exploration | `notebooks/NN-topic.ipynb`, numbered | logic imported back into `src/` |
 | Thin CLI entrypoints | `scripts/<name>.py`, calling into `src/<pkg>/` | business logic living in the script body itself |
 | Run outputs (checkpoints, logs, metrics, plots) | `experiments/<run-id>/`, gitignored | committed into the repository |
-| Tests | `tests/` mirroring `src/<pkg>/` — see the `testing` skill for suite-level structure | scattered per-module `tests/` directories |
+| Tests | `tests/` mirroring `src/<pkg>/` — see the `principle-testing` skill for suite-level structure | scattered per-module `tests/` directories |
 
 ### Scripts stay thin
 
-A file under `scripts/` calls into `src/<pkg>/` — it does not re-implement the pipeline inline. The same 250-pure-LOC ceiling the `programming` skill applies to every source file applies here too; a script that grows past it has quietly become the real implementation.
+A file under `scripts/` calls into `src/<pkg>/` — it does not re-implement the pipeline inline. The same 250-pure-LOC ceiling the `principle-programming` skill applies to every source file applies here too; a script that grows past it has quietly become the real implementation.
 
 ```bash
 awk '!/^[[:space:]]*$/ && !/^[[:space:]]*#/' scripts/train.py | wc -l
@@ -144,11 +144,12 @@ Pass: one file per meaningfully distinct run, growing over the project's life. F
 - `experiments/` output is gitignored by default, but a small number of final, reported-on run directories may be committed deliberately (e.g. under `experiments/reported/`) when the team wants those specific results version-controlled — the default stays gitignored; this is an explicit, scoped exception, not a silent one.
 
 ## Incumbent-respect clause
+
 Detect the project's existing layout before changing anything: inspect its dependency declaration, lockfile, environment manager, package shape, and `configs/` or `data/` convention. Follow that incumbent shape for edits inside an established project. Apply the `pyproject.toml` + locked dependencies + importable-package recipe to new projects and explicitly scoped package migrations only; never restructure an existing project's layout inside an unrelated feature or experiment change.
 
 ## Hand-offs
 
 - Dataset construction, splitting, and leakage prevention → `references/datasets.md`.
 - Training-run discipline and experiment tracking → `references/training.md`.
-- Suite-level test placement and structure beyond the `tests/` mirror rule above → the `testing` skill.
-- Per-file Python discipline (typing, the 250-LOC ceiling, TDD loop) → the `programming` skill.
+- Suite-level test placement and structure beyond the `tests/` mirror rule above → the `principle-testing` skill.
+- Per-file Python discipline (typing, the 250-LOC ceiling, TDD loop) → the `principle-programming` skill.

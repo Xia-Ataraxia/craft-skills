@@ -1,9 +1,11 @@
 ---
 name: design
-description: Owns canonical DESIGN.md artifacts and evidence-first UX/UI judgment for coherent product design roots. Use when requests ask to define interface direction; choose type, color, spacing, or motion; audit a user journey; establish design tokens or state specifications; redesign information hierarchy; review mental models; evaluate rendered states; prioritize bad UX; improve an interaction; turn accessibility and usability findings into an improvement plan; or 디자인 점검해줘. Not for frontend rendering or architecture, product copy, or generic documentation — use frontend, the product or copywriting owner, or document; live-page operation and automated evidence collection remain mechanics-owned.
+description: Owns canonical DESIGN.md artifacts and evidence-first UX/UI judgment for coherent product design roots. Use when requests ask to define interface direction; choose type, color, spacing, or motion; audit a user journey; establish design tokens or state specifications; redesign information hierarchy; review mental models; evaluate rendered states; prioritize bad UX; improve an interaction; turn accessibility and usability findings into an improvement plan; or 디자인 점검해줘. Not for frontend rendering or architecture, product copy, or generic documentation — use principle-frontend, the product or copywriting owner, or document; live-page operation and automated evidence collection remain mechanics-owned.
 metadata:
-  version: 1.1.1
+  version: 1.1.2
 ---
+
+# Design
 
 Review a PR or rendered user journey against seven named UX principles so an identified operator can complete one primary action without an evidenced interaction failure.
 Succeed when the review names each failed principle from a rendered screen or interaction, records reproducible evidence, and recommends the smallest correction.
@@ -22,7 +24,7 @@ When only part of the journey is reachable → return the checked screens and pa
 | Request | Owner and response |
 |---|---|
 | Material choice changes perception, understanding, decision-making, task completion, accessibility experience, or reusable visual or interaction language | Use this skill for bounded design judgment. |
-| Rendering, framework or component architecture, state placement, folders, API boundaries, or faithful implementation of established decisions | Keep `frontend` autonomous. |
+| Rendering, framework or component architecture, state placement, folders, API boundaries, or faithful implementation of established decisions | Keep `principle-frontend` autonomous. |
 | Navigation, interaction automation, screenshots, accessibility snapshots, computed styles, or visual diffs | Use the `browser` skill to capture evidence, then return to this skill for judgment. |
 | General documentation or information architecture without design judgment | Use `document`. |
 
@@ -69,7 +71,7 @@ Keep screenshots and manual rendered judgment separate from a checker pass.
 
 ## Handoffs
 
-Give `frontend` the design decision, target user, task, context, token or primitive or state specification, non-color cue, responsive or accessibility expectation, accepted debt, and verification evidence.
+Give `principle-frontend` the design decision, target user, task, context, token or primitive or state specification, non-color cue, responsive or accessibility expectation, accepted debt, and verification evidence.
 Give `browser` the target route, role, interaction, and capture request without prescribing its mechanics.
 Escalate normative accessibility conformance to accessibility engineering and legal, privacy, or security obligations to their applicable owner.
 
@@ -79,7 +81,7 @@ Escalate normative accessibility conformance to accessibility engineering and le
 - Name a principle without a screen → attach a screenshot path or interaction transcript reference and reproducible steps.
 - Recommend a redesign when one check fails → make the smallest fix that makes the failed check pass.
 - Remove explanatory copy to make an interface cleaner → strengthen hierarchy, action labels, signifiers, recognition, and progressive disclosure first.
-- Treat design as a gate for ordinary frontend implementation → invoke design only for material UX or UI judgment and return implementation ownership to frontend.
+- Treat design as a gate for ordinary frontend implementation → invoke design only for material UX or UI judgment and return implementation ownership to principle-frontend.
 - Call source code or a screenshot proof of user success or conformance → record its domain and limitation and obtain relevant rendered or manual evidence.
 - Ship stock framework values or one-off literals outside the named token system → register the deliberate design decision or replace it with an incumbent token.
 - Assign multiple primary families to one audit finding → choose the dominant user and task consequence and use secondary tags only for context.

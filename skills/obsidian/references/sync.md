@@ -54,7 +54,8 @@ Preserve forensic evidence outside the vault, identify a known-good recovery sou
    git -C "${OBSIDIAN_VAULT_PATH}" tag "safety/ob-sync-$(date -u +%Y%m%d-%H%M%S)"
    ```
 
-Do not stage or commit unrelated changes merely to make the snapshot look clean.
+   Do not stage or commit unrelated changes merely to make the snapshot look clean.
+
 4. Record baseline evidence:
 
    ```bash

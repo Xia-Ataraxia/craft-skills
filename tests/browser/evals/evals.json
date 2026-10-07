@@ -24,10 +24,10 @@
     {
       "id": "static-page-boundary",
       "prompt": "Extract this public article for a summary.",
-      "expected_behavior": "Routes static public extraction to defuddle rather than browser automation.",
+      "expected_behavior": "Routes static public extraction to a standalone extractor rather than browser automation.",
       "grading": "verifiable",
       "assertions": [
-        "Names defuddle as the owner.",
+        "Uses a standalone extractor outside the managed browser route.",
         "Does not start browser automation."
       ]
     }
