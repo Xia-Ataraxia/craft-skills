@@ -1,8 +1,8 @@
 ---
 name: debug
-description: 'Diagnoses a failing program under a hypothesis-driven loop: reproduce the failure before theorizing, log observed facts separately from inferences, hold competing hypotheses until the cheapest probe discriminates between them, and confirm the mechanism with instrumentation before any fix lands. Use when a test or command fails for an unclear reason, a bug needs bisecting to the commit or input that caused it, a failure only reproduces intermittently, or asked to find out why something is broken ("이거 왜 안 되는지 찾아줘"). Not for restructuring working code (use refactor), suite-level test architecture (use testing), or triaging a vulnerability class (use security).'
+description: 'Diagnoses a failing program under a hypothesis-driven loop: reproduce the failure before theorizing, log observed facts separately from inferences, hold competing hypotheses until the cheapest probe discriminates between them, and confirm the mechanism with instrumentation before any fix lands. Use when a test or command fails for an unclear reason, a bug needs bisecting to the commit or input that caused it, a failure only reproduces intermittently, or asked to find out why something is broken ("이거 왜 안 되는지 찾아줘"). Not for restructuring working code (use refactor), suite-level test architecture (use principle-testing), or triaging a vulnerability class (use security).'
 metadata:
-  version: 1.2.0
+  version: 1.2.1
 ---
 
 # debug
@@ -19,7 +19,7 @@ Diagnose why code is broken under one loop: establish observed evidence, log fac
    - **Input** — a large or complex failing input: halve it, keep whichever half still reproduces, repeat until the input is minimal.
    - **Layer** — a multi-hop pipeline (client → gateway → service → DB): probe the midpoint first to learn which half owns the fault, then recurse into that half only.
 5. **Instrument only when evidence cannot discriminate.** When the existing evidence cannot prove or disprove the leading hypothesis, add the smallest probe that can — a log line, an assertion, or a debugger breakpoint — and run it. Touch source once the mechanism is confirmed by observed evidence, not merely suspected from reading the code.
-6. **Fix, prove, clean up.** Write the fix once the mechanism is confirmed. Per `testing`'s prove-it law, add a regression test that fails against the pre-fix code and passes against the post-fix code (red, then green) in the same change as the fix. After that test passes, exercise the real user-facing scenario too. Inventory every temporary artifact before creating it — files, processes, ports, environment changes, and debugger sessions — then remove each one before the diff lands; instrumentation is disposable, the regression test is not.
+6. **Fix, prove, clean up.** Write the fix once the mechanism is confirmed. Per `principle-testing`'s prove-it law, add a regression test that fails against the pre-fix code and passes against the post-fix code (red, then green) in the same change as the fix. After that test passes, exercise the real user-facing scenario too. Inventory every temporary artifact before creating it — files, processes, ports, environment changes, and debugger sessions — then remove each one before the diff lands; instrumentation is disposable, the regression test is not.
 
 Escape hatch: reproduction is genuinely too expensive or too flaky to pin down (a rare race, a third-party outage) — timebox the search, act on the best-evidenced hypothesis, and say explicitly in the report which assumption stands unconfirmed.
 
@@ -34,12 +34,12 @@ When existing signals cannot discriminate, the gap is usually attribution rather
 A decision the system cannot explain is a decision nobody can triage: one detector fired 572 events per hour across 13 inputs and accumulated 8,060 artefacts that no one could act on, because each record stored a null trace id, a null policy id, a null module id, a null evidence link, and no score.
 So when adding instrumentation, persist for every automated decision the score, the threshold applied, the policy or model identity, and a link to the evidence artefact it produced.
 Make success countable rather than only emitting failures, and delete any counter nothing reads — one incremented on every dropped unit and read nowhere made a silent drop look identical to a healthy stream.
-`programming` owns log level, placement, and structured-field style; this skill owns what has to be recoverable afterwards.
+`principle-programming` owns log level, placement, and structured-field style; this skill owns what has to be recoverable afterwards.
 
 ## Hand-offs
 
 - The fix needs restructuring beyond the minimal patch (extract, rename, deduplicate) → `refactor`.
-- The regression test's placement in the suite (unit vs. integration, fixture scope) → `testing`.
+- The regression test's placement in the suite (unit vs. integration, fixture scope) → `principle-testing`.
 - The root cause is a vulnerability class (injection, auth bypass, secret exposure), not a defect → `security`.
 
 ## Anti-patterns

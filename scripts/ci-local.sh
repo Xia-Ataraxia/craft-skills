@@ -120,7 +120,7 @@ job_distribution_version() {
 }
 
 job_typescript_baseline() {
-  python3 -m unittest tests.programming.test_typescript_baseline
+  python3 -m unittest discover -s tests/principle-programming -p 'test_*.py'
 }
 
 job_marketplaces() {

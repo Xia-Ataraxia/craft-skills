@@ -186,4 +186,4 @@ jobs:
       - name: Install current official TypeScript compiler
         run: npm install --global typescript@latest
       - name: Verify unused-local and parameter boundaries
-        run: python3 -m unittest tests.programming.test_typescript_baseline
+        run: python3 -m unittest discover -s tests/principle-programming -p 'test_*.py'

@@ -1,8 +1,8 @@
 ---
 name: ast-grep
-description: Routes syntax-aware structural search and replacement through ast-grep. Use when asked to find every call site of a function, match a function declaration, search JavaScript or TypeScript syntax, replace a code shape safely, or locate a particular AST node. Not for behavior-preserving restructuring (use refactor) or writing new code (use programming).
+description: Routes syntax-aware structural search and replacement through ast-grep. Use when asked to find every call site of a function, match a function declaration, search JavaScript or TypeScript syntax, replace a code shape safely, or locate a particular AST node. Not for behavior-preserving restructuring (use refactor) or writing new code (use principle-programming).
 metadata:
-  version: 1.1.0
+  version: 1.1.1
 ---
 
 # ast-grep
@@ -81,4 +81,4 @@ Use a small known-positive snippet or a single representative file to distinguis
 ## Hand-offs
 
 - A reviewed structural change needs behavior-preserving reorganization across the codebase → `refactor`.
-- The request is to design or write new behavior rather than locate or transform existing syntax → `programming`.
+- The request is to design or write new behavior rather than locate or transform existing syntax → `principle-programming`.

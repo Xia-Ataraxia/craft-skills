@@ -122,7 +122,7 @@ Any hit inside a repository file means the repository is managing its own transa
 
 ## Incumbent-respect clause
 
-Detect the layer boundaries already in use in this service (see the `backend` `SKILL.md` PHASE 0 gate) and follow them for every edit. The strict responsibility law above is the default for new services and new files; it is never a reason to rewrite an existing controller/service/repository split mid-feature. Propose a boundary correction as its own change, scoped and reviewed on its own.
+Detect the layer boundaries already in use in this service (see the `principle-backend` `SKILL.md` PHASE 0 gate) and follow them for every edit. The strict responsibility law above is the default for new services and new files; it is never a reason to rewrite an existing controller/service/repository split mid-feature. Propose a boundary correction as its own change, scoped and reviewed on its own.
 
 ## Folder shape (see `folders.md` for full framework-specific trees)
 

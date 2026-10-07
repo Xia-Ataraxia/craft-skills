@@ -1,6 +1,6 @@
 # Rendered verification handoff
 
-Rendered verification belongs to browser/testing mechanics. Design supplies expected states and observations; capture producers emit the checker v1 manifest without claiming usability or WCAG conformance.
+Rendered verification belongs to browser/principle-testing mechanics. Design supplies expected states and observations; capture producers emit the checker v1 manifest without claiming usability or WCAG conformance.
 
 ## Capture matrix
 

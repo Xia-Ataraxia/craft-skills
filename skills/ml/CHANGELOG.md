@@ -10,3 +10,4 @@
 - 2026-09-10 — v2.3.3: correct overconfident training-evidence rules for constrained tiny batches, multi-factor attribution, seed counts, test reuse, and dirty-but-frozen source; preserve real leakage and recovery checks. Absorb only requested, portable field lessons about generative-evaluation identity and reward/parser adversarial checks, with private source mapping retained in the task receipt; no training or deployment is implied.
 
 - 2026-10-06 — v2.3.4: retired agent routing would name a missing package → keep agent behavior outside model-training scope and follow the target project's evaluation contract.
+- 2026-10-07: Sibling handoffs must resolve the renamed broad principle owners rather than retired skill names.

@@ -49,7 +49,7 @@ Grey zone: 4 parameters that vary fully independently of one another are just a 
 
 A single file or class that has grown past the point a reviewer can hold in working memory.
 
-**Detect:** the file-size ceiling is owned by `programming` — reuse its command directly rather than duplicating a threshold here:
+**Detect:** the file-size ceiling is owned by `principle-programming` — reuse its command directly rather than duplicating a threshold here:
 
 ```bash
 awk '!/^[[:space:]]*$/ && !/^[[:space:]]*(\/\/|#)/' <file> | wc -l   # >250 pure LOC = defect
@@ -215,7 +215,7 @@ grep -rnE '(email|user_id|currency|amount)[[:space:]]*:[[:space:]]*(str|string)\
   --include='*.py' --include='*.ts' <dir> | wc -l
 ```
 
-**Fix:** [Introduce Parameter Object](catalog.md#8-introduce-parameter-object) for a group, or hand off to `programming`'s `NewType`/branded-type rule for a single recurring value.
+**Fix:** [Introduce Parameter Object](catalog.md#8-introduce-parameter-object) for a group, or hand off to `principle-programming`'s `NewType`/branded-type rule for a single recurring value.
 
 Grey zone: a primitive used once, locally, with no repeated validation logic is not obsession yet — the smell is the *same* concept's validation duplicated at every site that touches it.
 
@@ -256,7 +256,7 @@ npx ts-prune -p tsconfig.json    # TypeScript — unused exports
 
 A 0%-coverage function from a full test-suite run is also a dead-code candidate — confirm it is truly unreachable before deleting; a coverage gap can mean untested-but-live code instead.
 
-**Fix:** no catalog move applies — delete it outright. See `programming`'s rule to remove obsolete code rather than leaving a dead alias behind.
+**Fix:** no catalog move applies — delete it outright. See `principle-programming`'s rule to remove obsolete code rather than leaving a dead alias behind.
 
 Grey zone: code behind a feature flag that is currently off is not dead — judge reachability across every live configuration, not just today's default.
 

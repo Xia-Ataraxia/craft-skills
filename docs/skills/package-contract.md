@@ -79,7 +79,7 @@ A missing or non-map `metadata` block is `NO_METADATA` or `BAD_METADATA`.
 
 - Kebab-case, equal to the directory name, at most 64 characters (`NAME_MISMATCH`, `NAME_NOT_KEBAB_CASE`, `NAME_TOO_LONG`).
 - Verb-first when the user triggers the skill by naming the action (`refactor`, `init`, `write-report`).
-- Plain noun when the skill names the domain or surface (`programming`, `security`, `testing`).
+- Plain noun when the skill names the domain or surface (`security`); broad engineering owners use `principle-` (`principle-programming`, `principle-testing`).
 - No more than two tokens as authoring guidance.
 - No `-skill`, `-tool`, or `-helper` suffix. The package is already a skill.
 - Do not adopt tool-namespaced names. The directory name is the frontmatter name; a runtime namespace such as `craft-skills:<name>` is an adapter fact, not a field to author.

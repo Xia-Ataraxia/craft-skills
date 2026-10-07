@@ -1,5 +1,5 @@
 {
-  "skill": "programming",
+  "skill": "principle-programming",
   "cases": [
     {
       "id": "fix-typed-python-parser",

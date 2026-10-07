@@ -1,8 +1,8 @@
 ---
 name: refactor
-description: "Restructures code without changing what it does — extracting functions, renaming, removing duplication, flattening nested conditionals, and other mechanical moves backed by a detection command and threshold. Use when the user says \"refactor this\", \"clean up this code\", \"리팩토링 해줘\", or \"this function is a mess\", or a named smell (long function, deep nesting, feature envy) surfaces while reading code with no intended behavior change. Gates untested legacy code behind a characterization-test protocol first. Not for diagnosing why something is broken — use debug — or for behavior-changing feature work and bug fixes, which belong to programming's red-green-refactor loop."
+description: "Restructures code without changing what it does — extracting functions, renaming, removing duplication, flattening nested conditionals, and other mechanical moves backed by a detection command and threshold. Use when the user says \"refactor this\", \"clean up this code\", \"리팩토링 해줘\", or \"this function is a mess\", or a named smell (long function, deep nesting, feature envy) surfaces while reading code with no intended behavior change. Gates untested legacy code behind a characterization-test protocol first. Not for diagnosing why something is broken — use debug — or for behavior-changing feature work and bug fixes, which belong to principle-programming's red-green-refactor loop."
 metadata:
-  version: 2.5.2
+  version: 2.5.3
 ---
 
 # refactor
@@ -26,7 +26,7 @@ Before touching structure: a test suite exists for the path and is green right n
 2. Write characterization tests against representative inputs, including the odd already-in-production ones, asserting the actual observed output — not the output assumed correct. `assert compute(weird_input) == 47` is right if `47` is genuinely what today's code returns, even if it looks wrong.
 3. Get them green against current behavior. They pin what the code does now, bugs included — not yet a fix.
 4. Only then refactor, keeping every characterization test green after each step below.
-5. A real bug surfacing mid-characterization gets flagged (a comment, a note, a follow-up issue), never fixed in this pass — unless the task at hand is that fix, which runs as its own red-green-refactor cycle via `programming`, before or after the restructuring, never blended into it.
+5. A real bug surfacing mid-characterization gets flagged (a comment, a note, a follow-up issue), never fixed in this pass — unless the task at hand is that fix, which runs as its own red-green-refactor cycle via `principle-programming`, before or after the restructuring, never blended into it.
 
 ## Safety protocol
 
@@ -53,7 +53,7 @@ Before touching structure: a test suite exists for the path and is green right n
 - When symbol safety matters, prefer available language-server definitions, references, rename, and diagnostics; confirm support in the source project, not from another workspace's server status.
 - Use an available AST tool when syntax-aware matching or transformation helps; consult an existing code graph only for a concrete dependency or impact question, checking its coverage and freshness.
 - Without semantic support, use bounded text search and source inspection, disclose coverage limits, and validate with project checks; text matches are not semantic proof or complete reference coverage. Stop when that fallback cannot establish the move's safety rather than assuming a server, hook, or skill wrapper must be installed.
-- File-size ceiling (250 pure LOC) and its escape hatches → `programming`; this skill owns function-level size, not file-level.
+- File-size ceiling (250 pure LOC) and its escape hatches → `principle-programming`; this skill owns function-level size, not file-level.
 - Turning any rule here into an enforced lint/hook/pre-commit check → use the target repository's existing enforcement tooling.
 
 ## Mutable tool and LSP facts

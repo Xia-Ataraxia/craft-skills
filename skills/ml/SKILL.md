@@ -1,8 +1,8 @@
 ---
 name: ml
-description: Applies ML/DL research engineering discipline — reproducible project layout, leakage-safe dataset construction, and a training-discipline ladder — to classical ML, deep learning, fine-tuning, and vision work. Use when scaffolding a new ML project, asked to "build a dataset" or "데이터셋 구축", running or reviewing a "train a model" experiment, or building a "vision model" pipeline (augmentation, detection, segmentation). Not for per-file Python discipline (typing, TDD loop) — use `programming`. Agent behavior (prompts, tools, agent evals) is outside this package. GPU/CUDA environment setup or shared-host job launch belongs to `gpu`.
+description: Applies ML/DL research engineering discipline — reproducible project layout, leakage-safe dataset construction, and a training-discipline ladder — to classical ML, deep learning, fine-tuning, and vision work. Use when scaffolding a new ML project, asked to "build a dataset" or "데이터셋 구축", running or reviewing a "train a model" experiment, or building a "vision model" pipeline (augmentation, detection, segmentation). Not for per-file Python discipline (typing, TDD loop) — use `principle-programming`. Agent behavior (prompts, tools, agent evals) is outside this package. GPU/CUDA environment setup or shared-host job launch belongs to `gpu`.
 metadata:
-  version: 2.3.4
+  version: 2.3.5
 ---
 
 # ml
@@ -64,7 +64,7 @@ Example: labeling and splitting an image dataset that will then be trained on ma
 
 ## Boundaries
 
-Not for wrapping a trained model behind a serving API — load `backend` — or for suite-level test-architecture decisions — load `testing`. GPU/CUDA environment, compatibility, and shared-host launch preflight are `gpu`'s domain — a GPU training run loads `gpu` first, then this skill. Double-check the agent-behavior boundary from the task gate: "the model calls a tool" or "the pipeline reasons over retrieved text" is agent work even when it also touches a model file.
+Not for wrapping a trained model behind a serving API — load `principle-backend` — or for suite-level test-architecture decisions — load `principle-testing`. GPU/CUDA environment, compatibility, and shared-host launch preflight are `gpu`'s domain — a GPU training run loads `gpu` first, then this skill. Double-check the agent-behavior boundary from the task gate: "the model calls a tool" or "the pipeline reasons over retrieved text" is agent work even when it also touches a model file.
 
 ## Verification
 

@@ -1,11 +1,11 @@
 ---
-name: testing
-description: Designs, improves, and audits test suites around behavior and risk, independent oracles, counterfactual evidence, deterministic diagnosis, and cost. Use for generated-test review, unit/component/integration/e2e or smoke placement, test-suite health, flaky-test policy, fixtures, and test audits. Not for production-code red-green implementation, which belongs to programming; diagnosis or repair of one currently failing or intermittent test, which belongs to debug; structural-change characterization, which belongs to refactor; ML evaluation methodology, which belongs to ml; or project-specific agent evaluation methodology.
+name: principle-testing
+description: Designs, improves, and audits test suites around behavior and risk, independent oracles, counterfactual evidence, deterministic diagnosis, and cost. Use for generated-test review, unit/component/integration/e2e or smoke placement, test-suite health, flaky-test policy, fixtures, and test audits. Not for production-code red-green implementation, which belongs to principle-programming; diagnosis or repair of one currently failing or intermittent test, which belongs to debug; structural-change characterization, which belongs to refactor; ML evaluation methodology, which belongs to ml; or project-specific agent evaluation methodology.
 metadata:
-  version: 2.6.1
+  version: 3.0.0
 ---
 
-# testing
+# principle-testing
 
 Decide for each proposed or changed test which behavior can fail, which independent oracle proves it, and whether to add, rewrite, delete, or omit the test.
 Leave a reviewable strategy that selects the cheapest credible layer and records why a check exists.
@@ -71,7 +71,7 @@ Apply property and contract techniques within an evidence scope.
 ## Ownership and handoffs
 
 Supply risk, oracle, scope, test-quality review, placement, audit decisions, suite policy, quarantine policy, and post-fix suite health.
-Have `programming` own production-code red-green implementation and return pass evidence after this skill supplies the test design and the strongest available evidence for the named risk.
+Have `principle-programming` own production-code red-green implementation and return pass evidence after this skill supplies the test design and the strongest available evidence for the named risk.
 Have `debug` own reproduction, diagnosis, and repair of a specific currently failing or intermittent test and return diagnosis and fix evidence before quarantine or health decisions resume.
 Have `refactor` own characterization before structural change and hand characterization tests to this skill for quality and placement review.
 Do not turn unknown incumbent output into a permanent golden master without an independent contract, invariant, reference, or explicit approval.

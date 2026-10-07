@@ -1,13 +1,13 @@
 ---
-name: programming
-description: Guides correctness-first, type-strict Python and TypeScript implementation. Use when asked to write a `.py` or `.ts` file, scaffold a Python/TypeScript project, add strict types, assess an implementation diff for correctness or type holes, or fix a reproducible defect. Not for smell-only assessment or behavior-preserving restructuring — use refactor; not for suite-level test architecture — use testing.
+name: principle-programming
+description: Guides correctness-first, type-strict Python and TypeScript implementation. Use when asked to write a `.py` or `.ts` file, scaffold a Python/TypeScript project, add strict types, assess an implementation diff for correctness or type holes, or fix a reproducible defect. Not for smell-only assessment or behavior-preserving restructuring — use refactor; not for suite-level test architecture — use principle-testing.
 metadata:
-  version: 2.4.1
+  version: 3.0.0
 ---
 
-# programming
+# principle-programming
 
-Write Python and TypeScript under one discipline: **correctness first, maintainability second, brevity third.** The type system is the proof, the test is the safety net, and the smallest code that satisfies both — never either alone — is the goal. Success looks like a clean type-check + lint pass, evidence for changed observable behavior, and each changed file considered against the LOC review signal below. `testing` owns suite-level architecture, while `refactor` owns smell-only review and behavior-preserving restructuring.
+Write Python and TypeScript under one discipline: **correctness first, maintainability second, brevity third.** The type system is the proof, the test is the safety net, and the smallest code that satisfies both — never either alone — is the goal. Success looks like a clean type-check + lint pass, evidence for changed observable behavior, and each changed file considered against the LOC review signal below. `principle-testing` owns suite-level architecture, while `refactor` owns smell-only review and behavior-preserving restructuring.
 
 ## Load the task-relevant reference first
 

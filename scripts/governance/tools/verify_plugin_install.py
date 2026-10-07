@@ -12,12 +12,12 @@ JsonObject: TypeAlias = dict[str, JsonValue]
 
 _PLUGIN_ID = "craft-skills@craft-skills"
 _FINGERPRINTS = {
-    "skills/backend/references/persistence.md": (
+    "skills/principle-backend/references/persistence.md": (
         "runtime application role",
         "privileged migration/admin role",
         "dedicated disposable non-production target",
     ),
-    "skills/testing/references/integration.md": (
+    "skills/principle-testing/references/integration.md": (
         "application-owned transaction",
         "transaction-local RLS",
         "allowed and denied tenant paths",

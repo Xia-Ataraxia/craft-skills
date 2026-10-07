@@ -1,8 +1,8 @@
 ---
 name: api
-description: "Defines and evolves public HTTP API contracts while preserving published incumbent behavior. Use when asked to design the public REST contract for a resource, document an endpoint contract, choose API pagination or error shapes, standardize a greenfield REST API, or API 계약을 설계할 때. Not for service structure or persistence — use backend; client rendering or state — use frontend; or transport-level test design — use testing."
+description: "Defines and evolves public HTTP API contracts while preserving published incumbent behavior. Use when asked to design the public REST contract for a resource, document an endpoint contract, choose API pagination or error shapes, standardize a greenfield REST API, or API 계약을 설계할 때. Not for service structure or persistence — use principle-backend; client rendering or state — use principle-frontend; or transport-level test design — use principle-testing."
 metadata:
-  version: 1.2.2
+  version: 1.2.3
 ---
 
 # api
@@ -17,7 +17,7 @@ Change a published contract only in an explicitly scoped version or migration. S
 
 For a greenfield API or an explicitly new version, apply the defaults in [conventions.md](references/conventions.md). That reference owns URL, DTO, naming, and pagination rules, plus the drift audit for an incumbent surface, method completeness, and the client-side normalizer. Apply [error-contract.md](references/error-contract.md) for failure behavior; it owns the greenfield problem shape, codes, mapping, sanitization, and the single-discriminator rule.
 
-When two components inside one system agree on a shape by convention — an HTTP path hard-coded on both sides, or a file one writes and another parses — read [interface-ownership.md](references/interface-ownership.md). It owns provider-and-consumer ownership and the round-trip contract test that catches drift; `testing` owns where that test lives and how it is sized.
+When two components inside one system agree on a shape by convention — an HTTP path hard-coded on both sides, or a file one writes and another parses — read [interface-ownership.md](references/interface-ownership.md). It owns provider-and-consumer ownership and the round-trip contract test that catches drift; `principle-testing` owns where that test lives and how it is sized.
 
 ## Verification
 
@@ -33,4 +33,4 @@ When two components inside one system agree on a shape by convention — an HTTP
 
 ## Boundaries
 
-Route service structure, database migration strategy, ORM selection, and persistence implementation to `backend`. Route UI data fetching, rendering, and client state to `frontend`; this skill owns only the wire shape a client parses and the normalizer that rejects an unknown one. Route test taxonomy and fixture strategy to `testing`; this skill owns the contract those tests exercise. Mechanical enforcement — a lint rule, a boundary check, a pre-commit guard — follows the target repository's existing tooling.
+Route service structure, database migration strategy, ORM selection, and persistence implementation to `principle-backend`. Route UI data fetching, rendering, and client state to `principle-frontend`; this skill owns only the wire shape a client parses and the normalizer that rejects an unknown one. Route test taxonomy and fixture strategy to `principle-testing`; this skill owns the contract those tests exercise. Mechanical enforcement — a lint rule, a boundary check, a pre-commit guard — follows the target repository's existing tooling.

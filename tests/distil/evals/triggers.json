@@ -12,7 +12,7 @@
   ],
   "should_not_trigger": [
     "Create a new skill for our repeated incident-triage workflow.",
-    "Update the testing skill to stop proposing tests for trivial getters.",
+    "Update the principle-testing skill to stop proposing tests for trivial getters.",
     "Research whether PostgreSQL or SQLite better fits this embedded product.",
     "Extract clean Markdown from this news article URL.",
     "Open my signed-in dashboard and click the export button.",

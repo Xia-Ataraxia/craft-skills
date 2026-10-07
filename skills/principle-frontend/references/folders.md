@@ -166,4 +166,4 @@ Follow the existing convention when it has coherent ownership and enforceable im
 - Component abstraction and supported props → [`components.md`](components.md).
 - State ownership inside slices → [`state.md`](state.md).
 - CSS locality and token/style ownership → [`css.md`](css.md).
-- Per-file TypeScript and circular-import discipline → `programming`.
+- Per-file TypeScript and circular-import discipline → `principle-programming`.

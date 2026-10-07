@@ -1,8 +1,8 @@
 ---
 name: cicd
-description: "Designs CI/CD changes that preserve the repository's delivery topology and make releases observable and reversible. Use when asked to set up the PR pipeline and deployment for this repo, configure CI/CD, add a deployment pipeline, define required CI checks, design release rollback, or 배포 파이프라인을 설계할 때. Not for service architecture or persistence — use backend; test-suite design — use testing; or commit and PR mechanics — use git."
+description: "Designs CI/CD changes that preserve the repository's delivery topology and make releases observable and reversible. Use when asked to set up the PR pipeline and deployment for this repo, configure CI/CD, add a deployment pipeline, define required CI checks, design release rollback, or 배포 파이프라인을 설계할 때. Not for service architecture or persistence — use principle-backend; test-suite design — use principle-testing; or commit and PR mechanics — use git."
 metadata:
-  version: 1.4.0
+  version: 1.4.1
 ---
 
 # cicd
@@ -58,4 +58,4 @@ Fork-trust, action pinning, workflow permissions, and policy mutation tests belo
 
 ## Boundaries
 
-Route service decomposition, public HTTP API contracts, persistence, and migration semantics to `api` or `backend` as appropriate. Route test selection and fixture strategy to `testing`; this skill sequences existing proof commands. Route commits, branches, and pull-request operations to `git`.
+Route service decomposition, public HTTP API contracts, persistence, and migration semantics to `api` or `principle-backend` as appropriate. Route test selection and fixture strategy to `principle-testing`; this skill sequences existing proof commands. Route commits, branches, and pull-request operations to `git`.

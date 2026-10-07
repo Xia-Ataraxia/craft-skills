@@ -12,3 +12,4 @@
 - 2026-09-21 — v2.5.1: unavailable LSP support implied mandatory restoration → scope semantic capability checks to the source project, keep AST and existing graph use need-driven, and allow only bounded, disclosed text fallback without assumed infrastructure installation. Provenance: operator-supplied Craft issue33 evaluation.
 
 - 2026-10-06 — v2.5.2: retired enforcement routing would lose autofix review lessons → retain the five failure classes and formatter ratchet in lint-first.md and use incumbent enforcement tooling. Provenance: skills/guardrails/references/autofix-failure-classes.md and lint-config.md at ea1a8123933e2fad19541118d363f2b015b6956e.
+- 2026-10-07: Sibling handoffs must resolve the renamed broad principle owners rather than retired skill names.

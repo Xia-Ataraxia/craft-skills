@@ -65,7 +65,7 @@ Task-scoped scratch checks need not become committed test files.
 4. Design a deterministic counterfactual that would fail for the named reason and survive a behavior-preserving refactor.
 5. For a reproducible defect, obtain a strong fail-before and pass-after result in a named disposable consumer when that demonstration is safe.
 6. Otherwise scale evidence to risk and lifecycle: seek stronger observed evidence for material or hard-to-reverse risks, use a precise safely demonstrable counterfactual when that is sufficient, and disclose unavailable evidence and residual risk when a demonstration is unsafe or not credible.
-7. Hand production-code red-green implementation to `programming` with the risk, oracle, and the strongest available failing evidence.
+7. Hand production-code red-green implementation to `principle-programming` with the risk, oracle, and the strongest available failing evidence.
 8. Review returned pass evidence for the named behavior, diagnosis, determinism, and marginal cost.
 
 Do not invent a failing test or mutate source solely to manufacture a red result when the reported behavior cannot be reproduced safely.
@@ -119,7 +119,7 @@ For a new guard whose sensitivity is not otherwise shown, observed evidence may 
 
 ## Test-first and characterization quality
 
-Test-first work starts from a named risk and an independent oracle. Obtain observed fail-before evidence before `programming` changes production behavior when the defect is reproducible and the demonstration is safe; otherwise hand off the strongest lifecycle-appropriate evidence and its limit.
+Test-first work starts from a named risk and an independent oracle. Obtain observed fail-before evidence before `principle-programming` changes production behavior when the defect is reproducible and the demonstration is safe; otherwise hand off the strongest lifecycle-appropriate evidence and its limit.
 
 `refactor` may hand off characterization tests that record incumbent behavior before structural change.
 
@@ -165,7 +165,7 @@ After `debug` returns diagnosis and fix evidence, testing decides readmission, d
 
 Testing accepts handed-off characterization tests for quality, oracle, placement, and provisional-observation review.
 
-`programming` owns production-code red-green implementation after testing supplies the test design and the strongest available evidence for the named risk.
+`principle-programming` owns production-code red-green implementation after testing supplies the test design and the strongest available evidence for the named risk.
 
 `debug` owns a specific failure's reproduction, diagnosis, and repair.
 

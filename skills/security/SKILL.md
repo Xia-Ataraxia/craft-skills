@@ -2,7 +2,7 @@
 name: security
 description: Finds and fixes vulnerabilities in code the user owns across web, API, and LLM surfaces, and owns confidentiality for authorized remote credential handoffs. Use for a security review, "is this safe to ship," "check for vulnerabilities," "보안 점검," secrets hygiene, dependency risk, PR security regressions, or "hand a secret to a remote agent." Not for building LLM-agent systems, Orca session operation (use official `orca-cli`), or general hook and gate configuration; this skill never attacks.
 metadata:
-  version: 2.4.1
+  version: 2.4.2
 ---
 
 # security
@@ -93,7 +93,7 @@ Reachability, not a demonstrated exploit, drives the tree — a finding with cle
 - Building or changing an LLM-agent system itself — a new agent, prompt authoring, eval sets — follows the target project's engineering contract; this skill finds and fixes vulnerabilities in what's already built, including prompt injection, tool-permission scope, and consumption guards in agent/LLM code (`references/llm.md`).
 - Orca session operation belongs to the unchanged official `orca-cli` skill and its version-matched guide; remote secret confidentiality stays with [the handoff owner](references/remote-secret-handoff.md).
 - Turning a finding into enforced prevention — a pre-commit hook, a CI lint gate, a runtime guard — uses the target repository's existing enforcement tooling.
-- The parse-don't-validate typed-boundary idiom referenced in PHASE 0 step 2 is owned by `programming`; this skill states the security requirement, `programming` owns the implementation pattern.
+- The parse-don't-validate typed-boundary idiom referenced in PHASE 0 step 2 is owned by `principle-programming`; this skill states the security requirement, `principle-programming` owns the implementation pattern.
 - Offensive tooling, exploit development, penetration-testing infrastructure, and probing systems the user does not own or hold written authorization to test are out of scope entirely — this skill finds and fixes, it never attacks.
 
 ## Requirements

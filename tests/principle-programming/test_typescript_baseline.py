@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Execute tsc against the programming package TypeScript baseline."""
+"""Execute tsc against the principle-programming package TypeScript baseline."""
 from __future__ import annotations
 
 import json
@@ -10,7 +10,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-PACKAGE_ROOT = Path(__file__).resolve().parents[2] / "skills" / "programming"
+PACKAGE_ROOT = Path(__file__).resolve().parents[2] / "skills" / "principle-programming"
 BASELINE = PACKAGE_ROOT / "assets" / "tsconfig.strict.json"
 FIXTURE_COMPILER = {
     "module": "ESNext",

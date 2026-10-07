@@ -1,11 +1,11 @@
 ---
-name: frontend
-description: 'Routes frontend engineering through incumbent-aware rendering, ownership, reuse, state, CSS, and performance decisions. Use when building or reorganizing a React/Vue/Svelte UI ("프론트엔드 구조 잡아줘"); choosing a React + Vite or Next.js shell, folder/public-API, or server/client boundary; improving component reuse or state ownership; selecting CSS Modules/Tailwind/CSS-in-JS and token structure; or setting frontend dependency, bundle, and CSS performance strategy. Not for material visual/UX judgment or DESIGN.md — use design; public API/server contracts — use api/backend; TypeScript-only work — use programming/refactor; test suites — use testing; skill updates — follow docs/skills/authoring.md.'
+name: principle-frontend
+description: 'Routes frontend engineering through incumbent-aware rendering, ownership, reuse, state, CSS, and performance decisions. Use when building or reorganizing a React/Vue/Svelte UI ("프론트엔드 구조 잡아줘"); choosing a React + Vite or Next.js shell, folder/public-API, or server/client boundary; improving component reuse or state ownership; selecting CSS Modules/Tailwind/CSS-in-JS and token structure; or setting frontend dependency, bundle, and CSS performance strategy. Not for material visual/UX judgment or DESIGN.md — use design; public API/server contracts — use api/principle-backend; TypeScript-only work — use principle-programming/refactor; test suites — use principle-testing; skill updates — follow docs/skills/authoring.md.'
 metadata:
-  version: 3.0.1
+  version: 4.0.0
 ---
 
-# frontend
+# principle-frontend
 
 Frontend structure is correct only relative to the incumbent framework, rendering model, product boundaries, and styling system. Establish those facts first, then keep framework mechanics in the shell, product behavior in cohesive slices, and shared code behind narrow supported APIs.
 
@@ -59,8 +59,8 @@ Keep code route- or feature-private first. Promote it only when multiple real co
 ## Design judgment handoff
 
 Call `design` only when work changes what users perceive, understand, decide, or can accomplish, or changes reusable visual/interaction language, tokens, primitives, cross-state/cross-viewport presentation, or accessibility experience.
-`design` owns `DESIGN.md` and the design judgment; `frontend` implements approved design decisions.
-Keep rendering architecture, established-system implementation, faithful use of existing primitives, small fixes, CSS regressions, state placement, components, folders, and API boundaries within `frontend`.
+`design` owns `DESIGN.md` and the design judgment; `principle-frontend` implements approved design decisions.
+Keep rendering architecture, established-system implementation, faithful use of existing primitives, small fixes, CSS regressions, state placement, components, folders, and API boundaries within `principle-frontend`.
 
 ## Requirements
 
@@ -79,7 +79,7 @@ Keep rendering architecture, established-system implementation, faithful use of 
 
 ## API boundary
 
-Centralize the API base, path/version prefix, proxy, and BFF boundary once per app. React/Vite apps use `VITE_*` environment values plus one API client; components call slice APIs, not hardcoded hosts. Next apps preserve the incumbent server-fetch, Route Handler, Server Action, or rewrite boundary. Public HTTP contracts belong to `api`; service architecture belongs to `backend`.
+Centralize the API base, path/version prefix, proxy, and BFF boundary once per app. React/Vite apps use `VITE_*` environment values plus one API client; components call slice APIs, not hardcoded hosts. Next apps preserve the incumbent server-fetch, Route Handler, Server Action, or rewrite boundary. Public HTTP contracts belong to `api`; service architecture belongs to `principle-backend`.
 
 ## Anti-patterns
 
@@ -103,4 +103,4 @@ Centralize the API base, path/version prefix, proxy, and BFF boundary once per a
 - [ ] CSS computed states, responsive/forced-colors/reduced-motion behavior, visual stability, and route delivery were checked where applicable.
 - [ ] Production measurements use the same collection method for baseline and candidate and record source, delta, project threshold, and interpretation. Mark unavailable consumer telemetry N/A; never fabricate it.
 - [ ] Visual work captures relevant states and viewports after the final edit; diff numbers direct review attention but do not decide correctness alone.
-- [ ] `design` was called only for material visual/UX judgment; implementation stayed in `frontend`, and `DESIGN.md` ownership stayed in `design`.
+- [ ] `design` was called only for material visual/UX judgment; implementation stayed in `principle-frontend`, and `DESIGN.md` ownership stayed in `design`.

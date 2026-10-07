@@ -139,7 +139,7 @@ config/
 
 | Concern | Layered | Vertical-slice | Hexagonal |
 |---|---|---|---|
-| Tests | mirrored `tests/` tree, one dir per layer (or colocated — see the `testing` skill for the placement decision) | colocated inside each feature slice | colocated per component; use-case tests run against in-memory fakes of each port, not a real database |
+| Tests | mirrored `tests/` tree, one dir per layer (or colocated — see the `principle-testing` skill for the placement decision) | colocated inside each feature slice | colocated per component; use-case tests run against in-memory fakes of each port, not a real database |
 | Migrations | `db/migrations/` at the repo root, shared across layers | `db/migrations/` at the repo root, shared across slices | `adapters/persistence/migrations/` — the adapter owns them, never the domain |
 | Config | `configs/` (or `config/`) at the repo root, one file per environment | same | same, but the domain never reads config directly; an adapter reads it and passes a typed value through a port |
 

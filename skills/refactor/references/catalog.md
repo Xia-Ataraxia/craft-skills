@@ -150,7 +150,7 @@ class Warehouse {
 5. Migrate one branch at a time, running tests after each — never migrate all branches in one step.
 
 **Safety check:** worth the indirection only when new variants get added over time; a two-branch
-conditional that never grows may not need it (a judgment call — see `programming`'s exhaustive-match
+conditional that never grows may not need it (a judgment call — see `principle-programming`'s exhaustive-match
 rule for the type-system-enforced version of this same idea).
 
 ```python
@@ -300,7 +300,7 @@ function handleOrder(raw: string) { return computeTotal(parseOrder(raw)); }
 5. Run tests after each field/method move, not in one large step.
 
 **Safety check:** each resulting half should be nameable in one noun phrase without "and" (see
-`programming`'s single-responsibility check) — if either half still needs "and," split again.
+`principle-programming`'s single-responsibility check) — if either half still needs "and," split again.
 
 ```python
 # SMELL — one class owns both account data and notification delivery

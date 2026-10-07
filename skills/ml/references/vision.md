@@ -124,4 +124,4 @@ A common effective schedule is progressive unfreezing: train only a new head wit
 
 - The base training ladder (smoke test, baseline, seeds, eval discipline) this reference layers on top of → `references/training.md`.
 - Split-before-fitting and leakage prevention for the underlying dataset → `references/datasets.md`.
-- Per-file Python discipline for the pipeline code itself → the `programming` skill.
+- Per-file Python discipline for the pipeline code itself → the `principle-programming` skill.

@@ -55,11 +55,11 @@ project/
 | One-off exploration | `notebooks/NN-topic.ipynb`, numbered | logic imported back into `src/` |
 | Thin CLI entrypoints | `scripts/<name>.py`, calling into `src/<pkg>/` | business logic living in the script body itself |
 | Run outputs (checkpoints, logs, metrics, plots) | `experiments/<run-id>/`, gitignored | committed into the repository |
-| Tests | `tests/` mirroring `src/<pkg>/` — see the `testing` skill for suite-level structure | scattered per-module `tests/` directories |
+| Tests | `tests/` mirroring `src/<pkg>/` — see the `principle-testing` skill for suite-level structure | scattered per-module `tests/` directories |
 
 ### Scripts stay thin
 
-A file under `scripts/` calls into `src/<pkg>/` — it does not re-implement the pipeline inline. The same 250-pure-LOC ceiling the `programming` skill applies to every source file applies here too; a script that grows past it has quietly become the real implementation.
+A file under `scripts/` calls into `src/<pkg>/` — it does not re-implement the pipeline inline. The same 250-pure-LOC ceiling the `principle-programming` skill applies to every source file applies here too; a script that grows past it has quietly become the real implementation.
 
 ```bash
 awk '!/^[[:space:]]*$/ && !/^[[:space:]]*#/' scripts/train.py | wc -l
@@ -150,5 +150,5 @@ Detect the project's existing layout before changing anything: inspect its depen
 
 - Dataset construction, splitting, and leakage prevention → `references/datasets.md`.
 - Training-run discipline and experiment tracking → `references/training.md`.
-- Suite-level test placement and structure beyond the `tests/` mirror rule above → the `testing` skill.
-- Per-file Python discipline (typing, the 250-LOC ceiling, TDD loop) → the `programming` skill.
+- Suite-level test placement and structure beyond the `tests/` mirror rule above → the `principle-testing` skill.
+- Per-file Python discipline (typing, the 250-LOC ceiling, TDD loop) → the `principle-programming` skill.

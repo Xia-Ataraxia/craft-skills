@@ -14,3 +14,4 @@
 - 2026-10-01 — v2.6.0: mandatory tables and universal red-proof ceremony displaced risk judgment → proportional rationale, lifecycle-scaled evidence, deterministic contract checks, documented taste, and optional authored inputs distinct from unversioned run outputs. Provenance: scoped verification from [OpenAI](https://developers.openai.com/api/docs/guides/latest-model) and [Anthropic](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1#keep-changes-and-tests-to-what-the-task-asks-for); judgment plus tools inspired by [Garry Tan/gstack](https://github.com/garrytan/gstack), not wholesale policy adoption.
 
 - 2026-10-06 — v2.6.1: retired agent-evaluation ownership would name a missing package → keep model-training methodology with ml and agent methodology with the target project.
+- 2026-10-07: Broad engineering owners need consistent principle-prefixed names so discovery distinguishes policy from procedures.

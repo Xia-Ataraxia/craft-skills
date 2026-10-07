@@ -13,3 +13,4 @@
 - 2026-09-21 — v2.4.0: remote agent handoffs need confidentiality without exposing credentials through orchestration → add [remote secret handoff](references/remote-secret-handoff.md) with bound authority, provider-owned transport and storage, no-clobber intake, scoped verification and retention, and nonsecret session receipts; compose official Orca and transport owners unchanged, with live transfer and synthetic fixture verification left to the authorized operator.
 
 - 2026-10-06 — v2.4.1: retired engineering and enforcement hand-offs would name missing packages → preserve vulnerability and confidential-handoff scope while following target-project engineering and enforcement contracts.
+- 2026-10-07: Sibling handoffs must resolve the renamed broad principle owners rather than retired skill names.

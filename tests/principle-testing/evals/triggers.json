@@ -1,5 +1,5 @@
 {
-  "skill": "testing",
+  "skill": "principle-testing",
   "should_trigger": [
     "Review these generated tests for duplicate coverage and weak oracles.",
     "Which test layer should prove this API schema boundary?",

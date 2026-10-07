@@ -1,8 +1,8 @@
 ---
 name: gpu
-description: Applies GPU environment and resource discipline — probe the hardware before choosing any install, budget the host before launching any job — to CUDA/PyTorch setup, attention-backend builds, and GPU job launches. Use when setting up CUDA or PyTorch on a new GPU machine, asked to "install flash attention", debugging "torch.cuda.is_available() returns False", "CUDA out of memory", or "no kernel image is available", sizing VRAM, running a training/inference job on a shared GPU host or HPC, or working on Apple Silicon (MPS, M-series). Not for training methodology, datasets, or evaluation discipline — use `ml` — and not for serving a model behind an API — use `backend`.
+description: Applies GPU environment and resource discipline — probe the hardware before choosing any install, budget the host before launching any job — to CUDA/PyTorch setup, attention-backend builds, and GPU job launches. Use when setting up CUDA or PyTorch on a new GPU machine, asked to "install flash attention", debugging "torch.cuda.is_available() returns False", "CUDA out of memory", or "no kernel image is available", sizing VRAM, running a training/inference job on a shared GPU host or HPC, or working on Apple Silicon (MPS, M-series). Not for training methodology, datasets, or evaluation discipline — use `ml` — and not for serving a model behind an API — use `principle-backend`.
 metadata:
-  version: 1.2.0
+  version: 1.2.1
 ---
 
 # gpu
@@ -67,7 +67,7 @@ For driver, CUDA, wheel, backend, or toolchain support, consult official vendor 
 
 ## Boundaries
 
-This skill proves the environment; it does not judge the experiment. Training discipline, dataset handling, and evaluation honesty belong to `ml` — a fine-tuning run loads both, `gpu` first. Per-file Python discipline is `programming`; serving a trained model is `backend`.
+This skill proves the environment; it does not judge the experiment. Training discipline, dataset handling, and evaluation honesty belong to `ml` — a fine-tuning run loads both, `gpu` first. Per-file Python discipline is `principle-programming`; serving a trained model is `principle-backend`.
 
 ## Verification
 

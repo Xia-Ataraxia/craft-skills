@@ -6,3 +6,4 @@
 - 2026-08-28 — v1.2.1: the enforcement skill this routes mechanical-convention work to was renamed → the routing line now names `guardrails`.
 
 - 2026-10-06 — v1.2.2: retired enforcement routing would name a missing package → use the target repository's existing tooling.
+- 2026-10-07: Sibling handoffs must resolve the renamed broad principle owners rather than retired skill names.

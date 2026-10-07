@@ -1,5 +1,5 @@
 {
-  "skill": "programming",
+  "skill": "principle-programming",
   "should_trigger": [
     "Write a strictly typed Python function that parses this webhook payload.",
     "Fix this TypeScript bug where an optional field causes a runtime crash.",

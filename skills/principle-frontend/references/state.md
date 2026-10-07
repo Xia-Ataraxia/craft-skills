@@ -157,4 +157,4 @@ Use the incumbent router, form, query/cache, and store mechanisms for the matchi
 - Slice and public API ownership → [`folders.md`](folders.md).
 - Controlled/uncontrolled component APIs → [`components.md`](components.md).
 - Persisted theme/token styling → [`css.md`](css.md).
-- Store/reducer type discipline → `programming`.
+- Store/reducer type discipline → `principle-programming`.

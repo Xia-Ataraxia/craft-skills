@@ -19,26 +19,26 @@ This is a task-oriented library for software and research work — kept separate
 | `api` | Define contract-first public HTTP APIs with stable resource URLs, DTO-only success payloads, pagination, and diagnosable sanitized failures. |
 | `browser` | Route browser work to Aside first, except when an explicit tool or an existing authenticated browser session is required; enforce safety preflight, recovery, and cleanup. |
 | `ast-grep` | Search and replace code by syntax-tree shape with ast-grep, validating parseable patterns and inspecting a dry-run before mutation. |
-| `backend` | Route backend engineering through an architecture-detection gate (layered / vertical-slice / hexagonal), then apply dependency-direction rules, persistence choices, and per-framework folder conventions. |
+| `principle-backend` | Route backend engineering through an architecture-detection gate (layered / vertical-slice / hexagonal), then apply dependency-direction rules, persistence choices, and per-framework folder conventions. |
 | `cicd` | Design inexpensive, reliable PR validation and reversible Jenkins Compose deployment pipelines with deployment-server-owned image builds. |
 | `db` | Diagnose database issues and make schema and operational tradeoffs after the backend has selected the persistence stack and lifecycle. |
 | `debug` | Diagnose a failing program under a hypothesis-driven loop — reproduce before theorizing, log fact separately from inference, and confirm the mechanism with instrumentation before any fix lands. |
 | `design` | Own root `DESIGN.md`, UX/UI judgment, bad-UX audits, and rendered evidence for material design work. |
 | `distil` | Distil transferable rules and conventions from an external source — a repo, an article, an AGENTS.md, or a third-party skill — into the library under the authoring contract, with provenance recorded. |
 | `document` | Scaffold and author repository documentation through the `docs/` ontology while keeping ADR authoring explicit-only unless the user asks to record a decision. |
-| `frontend` | Gate frontend engineering on a rendering-architecture decision (SPA / SSR-RSC / SSG / islands) before UI code is written, then apply component-reuse, state-placement, and folder rules. |
+| `principle-frontend` | Gate frontend engineering on a rendering-architecture decision (SPA / SSR-RSC / SSG / islands) before UI code is written, then apply component-reuse, state-placement, and folder rules. |
 | `git` | Guide version-control craft — ground-truth and incumbent-style detection, the atomic-commit split protocol, commit/branch/PR conventions, and non-interactive-safe history surgery, including the `git wt` worktree workflow. |
 | `gpu` | Apply GPU environment and resource discipline — probe the hardware before choosing any install, budget the host before launching any job — to CUDA/PyTorch setup, attention-backend builds, and GPU job launches. |
 | `init` | Own the hierarchical `AGENTS.md` lifecycle as prose — map, read-only audit, stale reporting — with one script for marker-region edits; bare `init` runs ordinary deep-init. |
 | `ml` | Apply ML/DL research-engineering discipline — reproducible project layout, leakage-safe dataset construction, and a training-discipline ladder — to classical ML, deep learning, fine-tuning, and vision work. |
 | `obsidian` | Compose unchanged official native owners `obsidian-markdown`, `obsidian-bases`, `json-canvas`, and `obsidian-cli` for format and CLI mechanics, keeping only uncovered local app/Sync coordination and live-vault policy (its AGENTS.md and guidelines). |
 | `orca` | Organize low-clutter work targets across hosts while preserving distinct Git identities and live sessions, safely clean old branches, and diagnose connection failures at their actual layer. |
-| `programming` | Apply correctness-first, type-strict engineering discipline when writing or editing Python or TypeScript. |
+| `principle-programming` | Apply correctness-first, type-strict engineering discipline when writing or editing Python or TypeScript. |
 | `refactor` | Restructure code without changing what it does, each move backed by a detection command and threshold, gated behind a characterization-test protocol for untested legacy code. |
 | `research` | Run a decision-depth research workflow ending in a `docs/research/{slug}.md` artifact — sweep primary sources, synthesize with a citation on every claim, and state gaps and confidence, never the decision itself. |
 | `security` | Find and fix vulnerabilities across web, API, and LLM surfaces, mapping every trust boundary first and triaging by production reachability and severity second. |
 | `tailscale` | Verify and repair the Tailscale tailnet that carries cross-host work — SSH, remote process inspection, `scp` — before a dependent workflow runs, triaging failures as network-layer versus service-layer across macOS daemon variants. |
-| `testing` | Architect and audit the test suite — classify each test by taxonomy and resource-based size, place it via a decision tree, and enforce the prove-it law that every bug fix ships with a failing-then-passing test. |
+| `principle-testing` | Architect and audit the test suite — classify each test by taxonomy and resource-based size, place it via a decision tree, and enforce the prove-it law that every bug fix ships with a failing-then-passing test. |
 | `write-prd` | Author decision-ready product requirements documents from a provided or packaged template, keeping scope, metrics, rollout, and open issues coherent. |
 | `write-report` | Scaffold and author a project's one-off canonical technical report against a single YAML frame whose depth is the enforced table of contents. |
 
@@ -67,7 +67,7 @@ Use the Claude Code marketplace channel:
 /plugin install craft-skills@craft-skills
 ```
 
-Then invoke any of the 25 skills above by name, e.g. `api`, `ast-grep`, `design`, `document`, `init`, `programming`, `research`, `write-prd`, `debug`, `orca`.
+Then invoke any of the 25 skills above by name, e.g. `api`, `ast-grep`, `design`, `document`, `init`, `principle-programming`, `research`, `write-prd`, `debug`, `orca`.
 
 ---
 

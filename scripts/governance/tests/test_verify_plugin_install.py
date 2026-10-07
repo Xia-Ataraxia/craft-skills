@@ -36,8 +36,8 @@ class VerifyPluginInstallTest(unittest.TestCase):
 
     def setUp(self) -> None:
         self.previous.mkdir(parents=True)
-        (self.candidate / "skills" / "backend" / "references").mkdir(parents=True)
-        (self.candidate / "skills" / "testing" / "references").mkdir(parents=True)
+        (self.candidate / "skills" / "principle-backend" / "references").mkdir(parents=True)
+        (self.candidate / "skills" / "principle-testing" / "references").mkdir(parents=True)
         (self.candidate / "skills" / "cicd" / "references").mkdir(parents=True)
         self._write_guidance_files()
         self._write_plugin_list([self._valid_entry()])
@@ -58,11 +58,11 @@ class VerifyPluginInstallTest(unittest.TestCase):
         )
 
     def _write_guidance_files(self) -> None:
-        (self.candidate / "skills" / "backend" / "references" / "persistence.md").write_text(
+        (self.candidate / "skills" / "principle-backend" / "references" / "persistence.md").write_text(
             "runtime application role\nprivileged migration/admin role\ndedicated disposable non-production target\n",
             encoding="utf-8",
         )
-        (self.candidate / "skills" / "testing" / "references" / "integration.md").write_text(
+        (self.candidate / "skills" / "principle-testing" / "references" / "integration.md").write_text(
             "application-owned transaction\ntransaction-local RLS\nallowed and denied tenant paths\n",
             encoding="utf-8",
         )
@@ -146,12 +146,12 @@ class VerifyPluginInstallTest(unittest.TestCase):
 
     def test_given_each_missing_fingerprint_when_verifying_then_rejects(self) -> None:
         cases = (
-            ("skills/backend/references/persistence.md", "runtime application role"),
-            ("skills/backend/references/persistence.md", "privileged migration/admin role"),
-            ("skills/backend/references/persistence.md", "dedicated disposable non-production target"),
-            ("skills/testing/references/integration.md", "application-owned transaction"),
-            ("skills/testing/references/integration.md", "transaction-local RLS"),
-            ("skills/testing/references/integration.md", "allowed and denied tenant paths"),
+            ("skills/principle-backend/references/persistence.md", "runtime application role"),
+            ("skills/principle-backend/references/persistence.md", "privileged migration/admin role"),
+            ("skills/principle-backend/references/persistence.md", "dedicated disposable non-production target"),
+            ("skills/principle-testing/references/integration.md", "application-owned transaction"),
+            ("skills/principle-testing/references/integration.md", "transaction-local RLS"),
+            ("skills/principle-testing/references/integration.md", "allowed and denied tenant paths"),
             ("skills/cicd/references/pipeline-safety.md", "immutable release resolver"),
             ("skills/cicd/references/pipeline-safety.md", "no schema change or backward compatibility"),
             ("skills/cicd/references/pipeline-safety.md", "code rollback is not database recovery"),

@@ -1,11 +1,11 @@
 ---
-name: backend
-description: Routes backend service architecture and persistence selection, including engine, provider, ORM, production major, roles, destructive-target proof, persistence implementation, schema-ledger retirement, and folder conventions. Use when building a service layer, choosing a persistence stack, adding a repository or use case, setting up production-fidelity local database development, retiring a migration ledger, or reviewing architecture drift (e.g. "백엔드 구조 잡아줘"). After selection, use db for database workload diagnosis, schema/access-path tradeoffs, and operations/configuration. Not for public HTTP API contracts—use api; UI rendering—use frontend.
+name: principle-backend
+description: Routes backend service architecture and persistence selection, including engine, provider, ORM, production major, roles, destructive-target proof, persistence implementation, schema-ledger retirement, and folder conventions. Use when building a service layer, choosing a persistence stack, adding a repository or use case, setting up production-fidelity local database development, retiring a migration ledger, or reviewing architecture drift (e.g. "백엔드 구조 잡아줘"). After selection, use db for database workload diagnosis, schema/access-path tradeoffs, and operations/configuration. Not for public HTTP API contracts—use api; UI rendering—use principle-frontend.
 metadata:
-  version: 3.3.1
+  version: 4.0.0
 ---
 
-# backend
+# principle-backend
 
 Engineer backend services under one discipline: preserve the incumbent architecture and dependency direction, and make persistence choices explicit. Done means structural changes follow manifest and import-direction evidence rather than folder names alone, and database decisions fit the existing service or an explicitly greenfield one.
 
@@ -57,13 +57,13 @@ Use this gate before choosing an architecture or creating service folders. Small
 ## Requirements
 
 - `grep`, `find`: POSIX; used by every detection command in this skill and its references.
-- Greenfield Python services may start with FastAPI + Pydantic v2 + `uv`; greenfield TypeScript services may start with Express or Nest + zod + strict `tsc`. These are defaults, not migration directives; `programming` owns per-file discipline for both.
+- Greenfield Python services may start with FastAPI + Pydantic v2 + `uv`; greenfield TypeScript services may start with Express or Nest + zod + strict `tsc`. These are defaults, not migration directives; `principle-programming` owns per-file discipline for both.
 - Every incumbent service, in any language, keeps its observed framework, validation library, package manager, and stack conventions unless an explicit migration scope says otherwise.
 - For mutable framework, ORM, provider, or runtime facts, consult official primary docs first and disclose conflicts; only more-specific repo-local contracts or matching-version/platform reproducible evidence may override general or stale docs. Otherwise the fact is unknown: do not invent behavior.
 
 ## Boundaries
 
-Not for: post-selection database workload diagnosis, schema/access-path tradeoffs, or database operations/configuration (`db` skill); public HTTP API contracts, response shapes, or REST conventions (`api` skill); per-file type/style discipline or parse-don't-validate input handling at the boundary (`programming` skill); test suite design (`testing` skill); authz/injection/rate-limiting hardening (`security` skill); frontend rendering architecture (`frontend` skill).
+Not for: post-selection database workload diagnosis, schema/access-path tradeoffs, or database operations/configuration (`db` skill); public HTTP API contracts, response shapes, or REST conventions (`api` skill); per-file type/style discipline or parse-don't-validate input handling at the boundary (`principle-programming` skill); test suite design (`principle-testing` skill); authz/injection/rate-limiting hardening (`security` skill); frontend rendering architecture (`principle-frontend` skill).
 
 ## Anti-patterns
 
