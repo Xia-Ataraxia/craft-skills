@@ -55,13 +55,6 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
-try:
-    import skills_ref
-except ImportError:
-    print("skill-format: missing the official linter; run "
-          "`python3 -m pip install -r scripts/governance/requirements.txt`", file=sys.stderr)
-    raise SystemExit(2)
-
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SKILLS_DIR = REPO_ROOT / "skills"
 TESTS_DIR = REPO_ROOT / "tests"
@@ -113,6 +106,17 @@ HISTORICAL_REFERENCE_EXEMPT = frozenset({
     "docs/research/omo-analysis.md",
     "docs/research/skill-authoring-standards.md",
 })
+
+
+def require_skills_ref():
+    """Import the official linter only when format checks run."""
+    try:
+        import skills_ref
+    except ImportError:
+        print("skill-format: missing the official linter; run "
+              "`python3 -m pip install -r scripts/governance/requirements.txt`", file=sys.stderr)
+        raise SystemExit(2)
+    return skills_ref
 
 
 @dataclass
@@ -371,8 +375,6 @@ def select_packages(diff_base: str | None, packages: list[str]) -> tuple[list[Pa
     return [REPO_ROOT / owner for owner in sorted(selected)], findings
 
 
-
-
 TRAVERSAL_LINK_RE = re.compile(
     r"\]\(\.\./|(?:references|templates|scripts|assets|examples)/(?:[^\s)`\"'<>]*/)?\.\.(?:/|$)"
 )  # mirrors the Hermes tap fetcher's traversal abort
@@ -419,7 +421,6 @@ def check_referenced_paths(name: str, skill_dir: Path, body: str) -> list[Findin
     return findings
 
 
-
 def check_package_entries(name: str, skill_dir: Path) -> list[Finding]:
     """Git-visible top-level entries must be on the package allowlist."""
     rel = skill_dir.relative_to(REPO_ROOT).as_posix()
@@ -446,6 +447,7 @@ def check_package_entries(name: str, skill_dir: Path) -> list[Finding]:
 
 
 def check_skill(skill_dir: Path) -> list[Finding]:
+    skills_ref = require_skills_ref()
     name = skill_dir.name
     findings: list[Finding] = []
     if skill_dir.parent != SKILLS_DIR:
@@ -475,7 +477,7 @@ def check_skill(skill_dir: Path) -> list[Finding]:
         if metadata is None:
             findings.append(Finding(name, "NO_METADATA", "missing metadata.version block"))
         elif not isinstance(metadata, dict):
-            findings.append(Finding(name, "BAD_METADATA", "metadata must be a string-to-string map"))
+            findings.append(Finding(name, "BAD_METADATA", "metadata must be a mapping"))
         else:
             version = metadata.get("version", "")
             if not version:
@@ -537,6 +539,7 @@ def main() -> int:
     ap.add_argument("--advisory", action="store_true", help="report format findings; input/Git errors still fail")
     ap.add_argument("--root", help="repo root override (default: derived from script path)")
     args = ap.parse_args()
+    require_skills_ref()
 
     global REPO_ROOT, SKILLS_DIR, TESTS_DIR
     if args.root:

@@ -34,7 +34,7 @@ def _isolated_git_env(extra: dict[str, str] | None = None) -> dict[str, str]:
 class RuntimeHygieneGuardTest(unittest.TestCase):
     def run_guard(self, root: Path, *args: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            ["python3", str(SCRIPT), "--root", str(root), *args],
+            [sys.executable, str(SCRIPT), "--root", str(root), *args],
             cwd=root,
             text=True,
             stdout=subprocess.PIPE,

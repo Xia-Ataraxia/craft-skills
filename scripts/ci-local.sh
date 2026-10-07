@@ -25,7 +25,8 @@ unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_OBJECT_DIRECTORY GIT_COMMON_DIR G
 DIFF_BASE="${DIFF_BASE:-origin/main}"
 INTEGRATION_BASE="$(git merge-base "$DIFF_BASE" HEAD)"
 SCRATCH="$(mktemp -d)"
-trap 'rm -rf "$SCRATCH"' EXIT
+VENV="$(mktemp -d)"
+trap 'rm -rf "$SCRATCH" "$VENV"' EXIT
 
 FAILED=""
 run_job() {
@@ -99,10 +100,11 @@ PY
 }
 
 job_layer1_format() {
-  python3 -m pip install -q -r scripts/governance/requirements.txt &&
-  python3 scripts/governance/tools/validate_skill_format.py &&
-  python3 scripts/governance/tools/validate_skill_format.py --diff-base "$INTEGRATION_BASE" &&
-  python3 -m unittest scripts.governance.tests.test_validate_skill_format
+  python3 -m venv "$VENV" &&
+  "$VENV/bin/python" -m pip install -q -r scripts/governance/requirements.txt &&
+  "$VENV/bin/python" scripts/governance/tools/validate_skill_format.py &&
+  "$VENV/bin/python" scripts/governance/tools/validate_skill_format.py --diff-base "$INTEGRATION_BASE" &&
+  "$VENV/bin/python" -m unittest scripts.governance.tests.test_validate_skill_format
 }
 
 job_markdown_lint() {
