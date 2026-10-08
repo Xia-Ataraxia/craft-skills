@@ -8,11 +8,13 @@
     "Do we need a test for this wrapper method or should we record no-test?",
     "Find the cheapest credible test for concurrent reservation ordering.",
     "Check whether this snapshot has an independent oracle.",
+    "Check whether my new tests would catch a wrong boundary in the code I just changed.",
     "이 변경의 실패 모드와 가장 싼 검증 계층을 정해줘."
   ],
   "should_not_trigger": [
     "Fix this failing test; it started failing in CI today.",
     "Implement this feature with TDD and make the production code pass.",
+    "Add a mutation score threshold to the CI pipeline.",
     "Evaluate the agent's tool-use quality on these benchmark tasks.",
     "Refactor safely by adding characterization tests before moving these modules.",
     "Debug this intermittent timeout and identify its root cause.",

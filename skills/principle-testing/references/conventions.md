@@ -70,6 +70,7 @@ Task-scoped scratch checks need not become committed test files.
 
 Do not invent a failing test or mutate source solely to manufacture a red result when the reported behavior cannot be reproduced safely.
 Do not require source mutation, a strategy table, or another process artifact as universal proof.
+A mutant check on changed logic under [mutation.md](mutation.md) is a review lead for triage, not that proof, and runs only when that guide says so.
 
 Record the limitation and preserve the strongest available evidence until a credible reproduction exists.
 
