@@ -2,7 +2,7 @@
 name: make-bot-ui
 description: "Builds a small web page whose buttons wake an agent over a webhook: a local server keeps the sender key server-side and POSTs JSON to a webhook-triggered routine, and the page is exposed on the existing Tailscale node. Use for \"make a bot UI\", \"a dashboard with buttons that trigger the agent\", \"wake the bot from a page\", handing a webhook sender key to the server without pasting it in chat, or putting that UI on the tailnet. Not for general frontend work - use principle-frontend; not for tailnet health or reachability - use tailscale."
 metadata:
-  version: 1.0.1
+  version: 1.0.2
 ---
 # How to make a bot UI
 
@@ -68,7 +68,8 @@ If `tailscale status` shows an online node, skip install. Read the hostname from
 Use HTTP. Do not add HTTPS unless the user asks.
 
 If Tailscale is not installed, do not install it yourself. Installing it and making this account its operator need root.
-Ask the user to install Tailscale from https://tailscale.com/download, then to run `tailscale set --operator=<this-account>` once as root.
+Ask the user to install Tailscale from https://tailscale.com/download, then to run `tailscale set --operator=<account>` once as root.
+Fill `<account>` with the output of `whoami` from your shell before you send the command.
 
 After that, start the node with a short hostname:
 
