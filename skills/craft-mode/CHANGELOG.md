@@ -11,3 +11,4 @@
 - 2026-10-07: The owner decided to ship make-bot-ui, so the catalog now offers it as a command and the runtimes reference maps webhook-triggered agent runs and secrets held outside the prompt for each runtime.
 - 2026-10-07: Owner decision (l) restores pstack's per-role model split as plain role sentences in the Subagents defaults and code-writing playbooks, records the decision, and maps each runtime's fastest and most capable settings in runtimes.md.
 - 2026-10-07: The source catalog needed to route the pstack Benny automation pack to its single source-neutral issue workflow.
+- 2026-10-09: A session kept following the craft-mode body it loaded at start after a newer version shipped, so step zero now compares the loaded version with upstream main, upgrades the plugin through the runtime's native route, and follows the newer body for the task.
