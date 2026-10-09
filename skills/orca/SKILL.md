@@ -59,14 +59,6 @@ Choose a skill refresh for stale skill guidance, not for a stale binary: the app
 If that refresh is already complete, use it without repeating the effect.
 Source authoring follows [ordinary authoring documentation](https://github.com/Xia-Ataraxia/craft-skills/blob/main/docs/skills/authoring.md); it neither refreshes installed skills nor upgrades applications or remote hosts.
 
-## Unexpected behavior
-
-When an operation reports success but its effect does not persist, stop at the first step that explains it.
-
-1. Search the official docs and the upstream issue tracker for the symptom, and apply a documented workaround.
-2. Update only when a fix is known to have shipped and the update is authorized.
-3. Compare with a setup where the operation works, and change a registration only after the difference is identified.
-
 ## Layer map
 
 Each surface can fail because a connection layer is unproven.
@@ -152,8 +144,7 @@ Do not revive unrelated hosts merely to complete an organization inventory.
 - Reading `selector_not_found` as proof the repo was never registered → confirm the current official result for this root before any registration repair.
 - Reading a process listing as proof that a runtime is up → crash-handler helpers outlive the application, so take the verdict from `orca status --json`.
 - Treating `remote_runtime_unavailable` as a network fault, or restarting an application to chase it → confirm runtime state on the host and leave restart, upgrade, and pairing decisions to the operator.
-- Removing and re-adding a registration to test a guess → follow Unexpected behavior.
-- Reading a remote host's paths as the SSH login user → use the account the runtime runs as.
+- Guessing why an operation silently failed, or re-registering to test the guess → search official docs and upstream issues first, update only for a shipped fix, then compare with a setup that works.
 - Editing an interactive SSH alias so an agent call succeeds → override `RemoteCommand` and `RequestTTY` per invocation and leave the operator's alias intact.
 - Piping the first SSH call to a host that uses a persistent control master → redirect to private files, since the master holds the pipe past any outer timeout.
 - Copying official command sheets or retired RPC and CLI recipes into this package → fetch the current installed guide for the selected executable.
