@@ -29,7 +29,7 @@ Provenance never lives in `SKILL.md` (body or frontmatter): the recipe is presen
 | `init` | — | — | original |
 | `write-report` | — | — | original (promoted from a project-local skill) |
 | `write-prd` | operator-supplied PRD template | — | original (template supplied by operator) |
-| `research` | — | — | original (skill-library redesign) |
+| `research` | problem-statement-first framing before the sweep; trustworthy-record sourcing | operator's own reframing practice; [Polya, How to Solve It](https://press.princeton.edu/books/paperback/9780691164076/how-to-solve-it); [InterPARES 2 terminology](https://www.interpares.org/ip2/ip2_terminology_db/trustworthiness/1413) | original synthesis |
 | `debug` | durable-artefact counting with pinned preconditions; attributable-decision instrumentation | operator-supplied `omc-learned` skills, backed up at `~/seeon-backups/omc-learned-backup-20260828T105212Z/` (measured against SeniorAILab/SeeON-edge) `observability-and-instrumentation` | original (skill-library redesign), then adapted |
 | `browser` | thin Aside-only personal composition — identity, existing-app protection, same-session continuation, observed-result readback; official aside-browser and current native aside guide own product syntax | official aside-browser v3 and current `aside guide` / installed help; former craft `aside` lineage and [bstack](https://github.com/GoBeromsu/bstack) `skills/browser/*` at `d3e291c802e35f940047f93be6b4838a0d1269df` (historical origin, not a current managed fallback) | moved and adapted |
 | `obsidian` | thick package consolidating Markdown, Bases, Canvas, Mermaid, CLI, Clipper, doctor, and headless Sync sub-recipes | [bstack](https://github.com/GoBeromsu/bstack) `obsidian/*` at `3e0672c` | moved and adapted |
