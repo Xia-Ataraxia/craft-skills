@@ -1,71 +1,54 @@
 ---
 name: research
-description: 'Runs a decision research workflow ending in a docs/research/{slug}.md artifact — scope the question and the decision it feeds, sweep official/primary sources before secondary ones, verify claims in proportion to risk, synthesize source-linked findings with options compared side by side, then state gaps and confidence — never the decision itself. Use when asked to "research this before we decide", "do a deep dive on X", "compare these options", "what does the evidence say", or "조사해줘". Fans out source sweeps when subagents are available, otherwise runs sequentially. Not for filing or template questions (use document) and not for making the call — document authors the ADR once research lands.'
+description: 'Researches an open question by first reframing it: rewrites the ask as one problem statement, defines and separates its terms, splits the statement into sub-questions tied to established topics, then sweeps primary sources per sub-question, verifies claims in proportion to risk, and replies with source-linked findings, options side by side, and how to check them. Use for "research this before we decide", "what does the evidence say", "compare these options", "dig into whether this is feasible", "what is this problem really", "조사해줘", or "근거 찾아서 파고들어 봐". Not for making the call; not for how existing code works - use how; not for why it got this shape - use why; not for adversarial review - use interrogate; not for filing a doc - use document.'
 metadata:
-  version: 1.2.0
+  version: 2.0.0
 ---
 
 # research
 
-Turn an open question into a `docs/research/{slug}.md` artifact a future decision can be made from.
-Success: findings and their evidence are traceable, options sit side by side, and the file names its own gaps — it commits to nothing itself.
+**You turn a loosely worded question into a problem the evidence can answer, then answer it with traceable findings and stop short of the decision.**
 
-## Output contract
+Most questions arrive as a feature or a yes/no ("can it recommend edit points?"). The useful research question is hidden underneath, and the field usually already has words and results for its parts. Framing first decides which sources matter. Sweeping first collects sources for the wrong question.
 
-- Synthesis: `docs/research/{slug}.md`, authored from `../document/templates/research.md`.
-- Verbatim capture: `docs/research/references/{slug}.md` per repeatedly-cited source, from `../document/templates/references.md`.
+## 1. Frame
 
-Slug matches the filename exactly; `document` owns the `docs/` layout, slug convention, and lifecycle rules for both paths — load it for those, not this skill.
-When evidence is inaccessible or inconclusive, retain the gap and label the affected finding unresolved rather than supplying an unsupported conclusion.
+1. Rewrite the ask as one problem statement. Name the input, the judgment being made, and the output. If the goal is missing, ask the one question that fills it and stop.
+2. Define the statement's key terms the way the field uses them. Where the field separates near-synonyms, separate them and say which one this question is about. Mark a coined term as a proposal.
+3. When two things sound alike, state the extra judgment the second one takes on. That difference is often the real question.
+4. Split the statement phrase by phrase into mutually exclusive sub-questions. Tie each to the established topic that studies it. A topic with no phrase behind it does not belong. Name the one or two core sub-questions.
+5. Name the decision this research feeds. With none downstream, say so and keep the pass short.
 
-## Phase 1 — Scope
+Ground the frame in what exists before going external. Run `how` when the question is about a system's mechanics, and read prior notes or a demo's output directly.
 
-State the question in one sentence and the decision it will inform (which ADR, which upcoming choice).
-A research pass with no named decision downstream is either premature or belongs in a reference capture instead — confirm the destination decision before sweeping sources.
+## 2. Sweep
 
-## Phase 2 — Sweep
+Sweep per sub-question. Official and primary sources first (specs, papers, source repositories, vendor docs, primary data), then secondary sources only to fill gaps.
+Use a source's native index when it has one and broaden when coverage is thin. Record available stable IDs, URLs, and publication dates at retrieval, keep observation dates apart from publication dates, and leave unknown metadata unknown.
+A search snippet is discovery, not evidence. Read the record before citing it. When access fails, record the limitation and keep the finding unresolved.
+For a source dense enough that paraphrase loses precision, or one cited by more than one sub-question, keep the exact relevant passage with its locator (section, page, line) before synthesis, and quote from that, not from memory.
+When subagents are available and the topic spans several sub-questions, give each sub-question its own sweep, returning findings with source locators and access limits, and merge before verifying. A narrow topic runs in one pass.
 
-Official/primary sources first — vendor docs, specs, source repositories, primary data — then quality secondary sources (well-reviewed write-ups, case studies) only to fill gaps primary sources leave open.
-For a source-specific corpus, start with its native index when available and broaden the search when coverage is insufficient. Record available stable IDs, URLs, and publication dates at retrieval time; distinguish observation dates from publication dates and leave unknown metadata unknown.
-Use search snippets for discovery, not as proof that the underlying source was read. Read the relevant record or body before making a source-backed finding; when access fails, record the limitation and keep the finding unresolved.
-A source dense enough that paraphrasing loses precision, or one likely to be cited more than once, gets captured verbatim as `docs/research/references/{slug}.md` (`../document/templates/references.md`) before synthesis starts — re-quoting it from memory later drifts from the original.
-
-## Phase 3 — Verify risk
+## 3. Verify
 
 Classify each finding before synthesis.
-For a contested code-shaped claim, run the smallest executable probe that exercises the claim and record the command or scenario with its observed result.
-For a consequential non-code claim, counter-search for disconfirming evidence and corroborate it with an independent source; reconcile any conflict.
-When the required probe, counter-search, or corroboration is unavailable or inconclusive, label the finding unresolved rather than promoting it to a conclusion.
+For a contested code-shaped claim, run the smallest executable probe and record the command and its observed result.
+For a consequential non-code claim, counter-search for disconfirming evidence and corroborate it with an independent source. When independent sources disagree, explain the disagreement and keep the finding unresolved.
+When the probe, counter-search, or corroboration is unavailable or inconclusive, label the finding unresolved.
 
-## Phase 4 — Synthesize
+## 4. Reply
 
-Author `docs/research/{slug}.md` from `../document/templates/research.md` — point at the template, never copy its body into this skill.
-Every claim links its source inline; findings and opinion live in separate sections; options that a later decision will choose between are compared in a table, not narrative-ranked.
-This phase produces zero decision — recommending or ranking belongs to the ADR that reads this file later, not to the file itself.
+Reply in the conversation. Lead with the problem statement, then the terms, then findings per sub-question with each claim's source inline. Keep findings and opinion apart. Compare options a later choice will pick between in a table, not a ranking.
+Close with how the answer can be checked: for each finding, the observation that would confirm or overturn it. Separate proof that something runs from proof that it helps the person it is for.
+Then state the gaps and how confident each finding is (source count, authority, recency). An empty gap list is valid when you say why the evidence suffices.
 
-## Phase 5 — Gaps and confidence
+This produces no decision. Recommending belongs to the person, or to an ADR through `document`.
+When the person asks to keep the result as a file, load `document` for its location and template, and archive retained source passages through it.
 
-Close with what the sweep left unresolved and how confident each finding is (source count, source authority, recency).
-An empty "open questions" section is valid when none remain; state why the evidence is sufficient rather than inventing gaps.
+## Recorded mistakes
 
-## Fan-out vs. single agent
+- Listing definitions, topics, and options side by side with no thread between them → derive each sub-question from a phrase in the problem statement.
+- Answering "is it possible" with yes or no → reframe it as the problem statement and report what the evidence says it would take.
+- Treating a model's stated reason as evidence its answer is right → check the answer against the source or a person's judgment.
 
-Default: when the runtime exposes a subagent/Task tool, split Phase 2 across parallel sub-tasks — one per source cluster or comparison dimension — then merge captures before Phase 3.
-Escape hatch: no subagent support, or the topic is narrow enough that one sweep covers it → run all five phases sequentially in one pass.
-Either path produces exactly one `docs/research/{slug}.md`; fan-out changes how Phase 2 runs, never the output shape.
-
-## Boundaries
-
-Not for deciding where an artifact lives, which template applies, or the `docs/` ontology in general — load `document`.
-Not for making the decision this research feeds: once findings are gathered, hand off to `document`'s ADR flow — this skill never writes a recommendation as if it were a conclusion.
-
-## Verification
-
-- [ ] Phase 1's question and the decision it feeds are both stated before any source is opened.
-- [ ] Primary/official sources were swept before secondary ones.
-- [ ] Each contested code-shaped claim has its executable probe or an explicit unresolved label.
-- [ ] Each consequential non-code claim has counter-search, independent corroboration, or an explicit unresolved label.
-- [ ] [Citation rules](#phase-4--synthesize) were applied.
-- [ ] Findings and opinion sit in separate sections; options needing a future choice are tabulated, not ranked.
-- [ ] A repeatedly-cited source has a verbatim `docs/research/references/{slug}.md` capture, not a re-paraphrase from memory.
-- [ ] The file states gaps and confidence and stops short of a decision.
+Write every reply through the **unslop** skill.
