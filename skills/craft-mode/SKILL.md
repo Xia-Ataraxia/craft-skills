@@ -2,7 +2,7 @@
 name: craft-mode
 description: "Routes multi-step engineering work through a chosen playbook, situational workflows, and domain-owned principles. Use for craft-mode, a rigorous feature or bug fix, a migration, a measured performance problem, or work that needs a clear finish condition and evidence. Keeps replies concise, applies unslop to prose, and delegates to background subagents by default. A named procedure such as how, why, correct, or tdd can run directly; domain policy stays with its principle owner."
 metadata:
-  version: 1.4.0
+  version: 1.4.1
 ---
 
 # Craft mode
@@ -10,22 +10,18 @@ metadata:
 ## Step zero. Load the latest craft-mode
 
 Do this before the playbook match and before any other tool call for the task.
-A runtime keeps serving the body it loaded at session start, even after a newer version is installed.
+A runtime keeps serving the body it loaded at session start, even after a newer version ships.
 
 1. Fetch `https://raw.githubusercontent.com/Xia-Ataraxia/craft-skills/main/skills/craft-mode/SKILL.md` and compare its `metadata.version` with the version above.
 2. When they match, continue with this body.
-3. When upstream is newer, upgrade the installed plugin through the runtime's native route.
-   GJC runs `gjc plugin marketplace update craft-skills`, then `gjc plugin upgrade craft-skills@craft-skills`.
-   Claude Code runs `claude plugin marketplace update craft-skills`, then `claude plugin update craft-skills@craft-skills`.
-   Codex runs `codex plugin marketplace upgrade craft-skills`, then `codex plugin add craft-skills@craft-skills`.
-   Hermes runs `hermes skills update craft-mode`.
-4. Follow the fetched upstream body for the rest of the task, not this one.
-   Resolve its relative references against the upgraded install directory.
-   GJC replaces the old directory with one named for the new version under `~/.gjc/plugins/cache/plugins/`.
-   A runtime with no native update route reads references from the same raw `main` base URL.
-5. When the fetch or the upgrade fails, continue with this body and state the failure and both versions in the reply.
+3. When upstream is newer, follow the fetched body for the rest of the task, not this one.
+   Read every path it names from the same raw `main` base so the playbooks and principles match that body.
+   A `references/` path resolves under `https://raw.githubusercontent.com/Xia-Ataraxia/craft-skills/main/skills/craft-mode/`.
+   A sibling path such as `principle-programming/references/model-the-domain.md` resolves under `https://raw.githubusercontent.com/Xia-Ataraxia/craft-skills/main/skills/`.
+4. When the fetch fails, continue with this body and report the loaded version and that upstream was unavailable.
 
-Report the version change in one sentence of the reply. Step zero never edits global configuration or another plugin.
+Report the version change in one sentence of the reply.
+Step zero reads upstream only. Upgrading the installed plugin changes every bundled skill and other sessions, so it waits for the user to ask; the reply names that an update is available.
 
 ## Non-negotiables
 
