@@ -1,6 +1,6 @@
 ---
 name: research
-description: 'Researches an open question by first reframing it: rewrites the ask as one problem statement, defines and separates its terms, splits the statement into sub-questions tied to established topics, then sweeps trustworthy primary sources per sub-question, verifies claims in proportion to risk, and replies with source-linked findings, options side by side, and how to check them. Use for "research this before we decide", "what does the evidence say", "compare these options", "dig into whether this is feasible", "what is this problem really", "조사해줘", or "근거 찾아서 파고들어 봐". Not for making the call; not for how existing code works - use how; not for why it got this shape - use why; not for adversarial review - use interrogate; not for filing a doc - use document.'
+description: 'Researches an open question by reframing it first: rewrites the ask as one problem statement, defines its terms, and splits it into sub-questions tied to established topics, then sweeps trustworthy primary sources, verifies claims by risk, and replies with cited findings, options side by side, and how to check them. Use for "research this before we decide", "what does the evidence say", "compare these options", "dig into whether this is feasible", "조사해줘", or "근거 찾아서 파고들어 봐". Not for making the call; not for how code works - use how; why it has this shape - use why; adversarial review - use interrogate; filing a doc - use document.'
 metadata:
   version: 2.0.0
 ---
