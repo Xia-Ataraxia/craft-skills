@@ -2,7 +2,7 @@
 name: orca
 description: Organizes Orca around low-clutter project identities and preserves running work while diagnosing which local connection layer still needs evidence. Use to "organize Orca", "reduce sidebar clutter", consolidate the "same repo across hosts", clean old branches in Orca, reuse or account for task terminals, resolve selector_not_found or remote_runtime_unavailable, investigate SSH failures to an Orca host, or handle "orca에 연결이 안된다". Not for standalone Git maintenance (use git), vault taxonomy (use obsidian and local policy), network-versus-SSH reachability triage (use tailscale), or executable command mechanics (use the installed orca-cli and orchestration guides).
 metadata:
-  version: 1.3.0
+  version: 1.4.0
 ---
 
 # orca
@@ -48,6 +48,7 @@ Keep connection diagnosis below as the owner of which layer still needs evidence
 For executable usage, retries, handoffs, terminal control, and worktree mechanics, check the version-matched `orca-cli` guide bundled with the `orca` already selected for the task before any other guide — list them with `orca skills list` and read one with `orca skills get <name>`.
 For explicit supervised work only — monitor, wait, track completion, coordinate a DAG, use a decision gate, or manage ask/reply — check the bundled `orchestration` guide from that same executable the same way.
 Only when a task-relevant official Orca skill is proven absent or stale against that bundled set, refresh it — install or update — through the official Orca skill channel (`orca skills install` / `orca skills update`) and only when that effect is separately authorized; otherwise no-op and keep using the bundled guide.
+The same official skills install without the executable through `npx skills add https://github.com/stablyai/orca --skill <name>`, under that same authorization; once one is installed, use it rather than working from memory.
 Verify the installed result before relying on it, and record the version the guides were checked against.
 Do not copy those guides into this package, and do not revive a remembered flag, payload, or private RPC path.
 Use the `git` skill for Git mechanics under the operation's preservation and approval boundaries.
@@ -57,6 +58,14 @@ A skill refresh installs or updates skill guides; it is not an application or re
 Choose a skill refresh for stale skill guidance, not for a stale binary: the application upgrade, remote-host upgrade, restart, and pairing stay separate effects with their own authorization.
 If that refresh is already complete, use it without repeating the effect.
 Source authoring follows [ordinary authoring documentation](https://github.com/Xia-Ataraxia/craft-skills/blob/main/docs/skills/authoring.md); it neither refreshes installed skills nor upgrades applications or remote hosts.
+
+## Unexpected behavior
+
+When an operation appears to succeed but its effect does not persist, work in this order and stop at the first step that explains it.
+
+1. Search the [official docs](https://www.onorca.dev/docs) and the [upstream issue tracker](https://github.com/stablyai/orca/issues) for the symptom before forming a hypothesis; apply a documented workaround within the existing approval and cite the issue.
+2. Update the application or remote runtime only when a release note or closed issue says the fix shipped, and only under its own authorization; an issue that is still open is not repaired by updating.
+3. Otherwise compare the failing setup field by field with one where the same operation works, and change a registration only after the difference is identified.
 
 ## Layer map
 
@@ -127,7 +136,7 @@ Do not revive unrelated hosts merely to complete an organization inventory.
 
 ## Requirements
 
-- `orca` — official source: the installed application's bundled `orca-cli` and `orchestration` guides, fetched with the already selected executable; version probe: `orca --version`; readiness probe: `orca status --json`. This package does not copy their command inventory. Organization support depends on the installed group, project, and host capabilities, not private implementation paths.
+- `orca` — official source: the installed application's bundled `orca-cli` and `orchestration` guides, fetched with the already selected executable, plus the [official docs](https://www.onorca.dev/docs) and [issue tracker](https://github.com/stablyai/orca/issues) for known defects; version probe: `orca --version`; readiness probe: `orca status --json`. This package does not copy their command inventory. Organization support depends on the installed group, project, and host capabilities, not private implementation paths.
 - `git` — official sources: [branch deletion](https://git-scm.com/docs/git-branch), [worktrees](https://git-scm.com/docs/git-worktree), and [reflogs](https://git-scm.com/docs/git-reflog); version probe: `git --version`; cleanup requires linked-worktree enumeration, reflog timestamps, ancestor checks, and non-forced branch deletion.
 - `ssh` — official source: <https://man.openbsd.org/ssh_config>; version probe: `ssh -V`; configuration probe: `ssh -G <host-alias>`; support boundary: an OpenSSH client supporting `ControlPersist`, `RemoteCommand`, `BatchMode`, and `ConnectTimeout`.
 - Dependency trigger — an Orca, Git, or OpenSSH update, changed capability probe, or changed status, identity, grouping, or deletion behavior requires official-documentation review and affected scenarios before reusing the operation.
@@ -143,6 +152,8 @@ Do not revive unrelated hosts merely to complete an organization inventory.
 - Reading `selector_not_found` as proof the repo was never registered → confirm the current official result for this root before any registration repair.
 - Reading a process listing as proof that a runtime is up → crash-handler helpers outlive the application, so take the verdict from `orca status --json`.
 - Treating `remote_runtime_unavailable` as a network fault, or restarting an application to chase it → confirm runtime state on the host and leave restart, upgrade, and pairing decisions to the operator.
+- Removing and re-adding a registration to test a guess about why an operation failed → follow the order in Unexpected behavior and mutate only after the cause is identified.
+- Reading a remote host's paths as the SSH login user → resolve the account the runtime runs as, since its home and permissions decide which folder is the real root.
 - Editing an interactive SSH alias so an agent call succeeds → override `RemoteCommand` and `RequestTTY` per invocation and leave the operator's alias intact.
 - Piping the first SSH call to a host that uses a persistent control master → redirect to private files, since the master holds the pipe past any outer timeout.
 - Copying official command sheets or retired RPC and CLI recipes into this package → fetch the current installed guide for the selected executable.

@@ -41,11 +41,12 @@ In particular, sleep can close panels and workspace deletion can remove files; n
 
 1. Discover the installed Orca CLI and fetch its current bundled guides from that same executable before relying on remembered flags or API payloads.
 2. Inventory the authorized connected hosts, repositories, groups, workspace IDs and paths, statuses, and terminal IDs; record disconnected hosts as unverified.
-3. Inspect the actual Git root and origin on each host, with only narrow metadata reads.
+3. Inspect the actual Git root and origin on each host as the account the runtime runs as, with only narrow metadata reads.
 4. Match the provider, owner, and repository identity, then compare Orca's canonical project and source setup IDs.
 5. Verify fork and upstream relationships with actual Git/provider evidence before correcting stale metadata or combining cards.
 6. Reuse a matching local checkout; create a tracked-source clone only within the approved setup scope.
 7. Assign the shared identity to its local group and verify the remote setup remains attached to that identity.
+   A project whose only setup lives on a remote runtime does not join a local group ([stablyai/orca#13699](https://github.com/stablyai/orca/issues/13699), open at orca@1.4.223): the move reports success and saves only the order. Attach the remote folder to the matching local project as a host setup instead of registering it standalone.
 8. After adding a setup on a paired runtime, read back its host id from that runtime and compare it with the runtime's existing setups; a differing id is a mislabeled setup to report, even when its state reads ready.
 
 A parent-folder registration can contain multiple Git repositories.
