@@ -46,7 +46,7 @@ In particular, sleep can close panels and workspace deletion can remove files; n
 5. Verify fork and upstream relationships with actual Git/provider evidence before correcting stale metadata or combining cards.
 6. Reuse a matching local checkout; create a tracked-source clone only within the approved setup scope.
 7. Assign the shared identity to its local group and verify the remote setup remains attached to that identity.
-   A project whose only setup lives on a remote runtime does not join a local group ([stablyai/orca#13699](https://github.com/stablyai/orca/issues/13699), open at orca@1.4.223): the move reports success and saves only the order. Attach the remote folder to the matching local project as a host setup instead of registering it standalone.
+   A remote-only project does not join a local group; attach the remote folder to the matching local project instead.
 8. After adding a setup on a paired runtime, read back its host id from that runtime and compare it with the runtime's existing setups; a differing id is a mislabeled setup to report, even when its state reads ready.
 
 A parent-folder registration can contain multiple Git repositories.
