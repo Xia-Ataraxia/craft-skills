@@ -66,6 +66,7 @@ Provenance never lives in `SKILL.md` (body or frontmatter): the recipe is presen
 | `recall` | pstack recall workflow | [cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e](https://github.com/cursor/plugins/tree/d0ef80d86795816da932a153458c5dbe192d294e/pstack) (MIT, Lauren Tan) | adapted |
 | `document` | pstack technical-writing guidance | [cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e](https://github.com/cursor/plugins/tree/d0ef80d86795816da932a153458c5dbe192d294e/pstack) (MIT, Lauren Tan) | adapted (technical-writing reference) |
 | `benny` | pstack automations/benny triage, reproduction, existing-fix verification, configuration, and prompt templates | [cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e](https://github.com/cursor/plugins/tree/d0ef80d86795816da932a153458c5dbe192d294e/pstack/automations/benny) (MIT, Lauren Tan) | adapted (runtime and report-source mechanics); preserved judgment |
+| `issue-triage` | R1–R3 triage rules; R5 planning-and-task-breakdown signals and debugging-and-error-recovery section structure | [pstack benny](https://github.com/cursor/plugins/tree/d0ef80d86795816da932a153458c5dbe192d294e/pstack/automations/benny) (MIT, Lauren Tan); [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | adapted |
 
 ## Retirement history
 
