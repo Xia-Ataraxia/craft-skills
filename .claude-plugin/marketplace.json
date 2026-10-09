@@ -2,13 +2,14 @@
   "name": "craft-skills",
   "description": "Vendor-neutral research and engineering skills: craft-mode playbooks, principle-owned policy, situational workflows, and domain tools discovered from skills/*/SKILL.md.",
   "owner": {
-    "name": "GoBeromsu"
+    "name": "beomsukoh",
+    "url": "https://beomsukoh.com"
   },
   "plugins": [
     {
       "name": "craft-skills",
       "source": "./",
-      "description": "Research and engineering skills by Beomsu Koh: craft-mode, principle owners, explanation, correction, TDD, evidence, review, and domain workflows discovered from skills/*/SKILL.md."
+      "description": "Research and engineering skills by beomsukoh: craft-mode, principle owners, explanation, correction, TDD, evidence, review, and domain workflows discovered from skills/*/SKILL.md."
     }
   ]
 }
