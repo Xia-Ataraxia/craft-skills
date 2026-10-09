@@ -1,7 +1,7 @@
 {
   "skill": "orca",
   "should_trigger": [
-    "Organize Orca into actual PARA groups without repeating prefixes",
+    "Group Orca by product so each product's repos sit together without repeating prefixes",
     "Reduce sidebar clutter in Orca while preserving my agent sessions",
     "The same repo appears separately on two Orca hosts; consolidate its project identity",
     "Safely clean old branches cluttering my Orca projects",

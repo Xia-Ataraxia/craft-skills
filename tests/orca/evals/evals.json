@@ -16,11 +16,11 @@
     },
     {
       "id": "shared-project-not-prefixes",
-      "prompt": "Organize Orca with PARA across my connected hosts. A folder registration contains three Git repos, the same repo appears locally and remotely, and agent roles differ. Do not disrupt any terminals.",
-      "expected_behavior": "Creates real groups, verifies nested Git roots and identities, preserves agent roles and live folder workspaces, and checks both the sidebar and runtime before claiming consolidation.",
+      "prompt": "Organize Orca across my connected hosts. One product spans frontend, backend, and edge repos, a folder registration contains three Git repos, the same repo appears locally and remotely, and agent roles differ. Do not disrupt any terminals.",
+      "expected_behavior": "Creates one real group per domain or large project, verifies nested Git roots and identities, preserves agent roles and live folder workspaces, and checks both the sidebar and runtime before claiming consolidation.",
       "grading": "verifiable",
       "assertions": [
-        "Uses actual Projects, Areas, Resources, Archives groups rather than repeated name prefixes or a numbered vault directory mirror",
+        "Groups repositories by the domain or large project they belong to rather than PARA lifecycle buckets, repeated name prefixes, or a vault directory mirror",
         "Does not infer non-Git status from a folder registration or merge repositories by display name",
         "Verifies origin and fork/provider metadata and reuses a matching local checkout before proposing a clone",
         "Preserves terminal IDs, paths, worktrees, and distinct agent roles",

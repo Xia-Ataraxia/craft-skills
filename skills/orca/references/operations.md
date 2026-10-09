@@ -11,18 +11,20 @@
 
 ## Meaning before labels
 
-Use actual `Projects`, `Areas`, `Resources`, and `Archives` groups when the operator requests PARA.
-Treat these as operating semantics, not a mandate to mirror numbered vault folders or impose PARA on another operator.
-A finite outcome belongs in Projects; an ongoing responsibility belongs in Areas; reusable material belongs in Resources; explicitly finished or inactive work belongs in Archives.
+Group by domain: the product, program, or large project whose repositories change together.
+One top-level group holds that whole cluster on every host, such as a product's frontend, backend, edge runtime, dataset, and model repositories under the product's name.
+Do not sort repositories into `Projects`, `Areas`, `Resources`, and `Archives` groups or mirror vault folders; a lifecycle bucket separates repositories that are worked on together.
+Take membership from evidence: the operator's wording or a cross-repository contract.
+A shared owner, organization, or parent folder only nominates a candidate, because one organization or folder can hold unrelated products; confirm the candidate with that evidence or ask before regrouping.
+Ask when a repository fits two domains, and leave one that belongs to no larger target under its own name rather than in a catch-all group.
 Separate a logical work target from its Git repositories: one target can contain an intentional multi-repository cluster.
 Keep each repository's verified Git identity distinct even when the interface groups them under that target.
-An Orca project is not necessarily a finite PARA project: an Area can contain short-lived task workspaces.
-Preserve an explicitly completed status and Archives membership unless the operator changes that decision.
+Preserve group membership the operator already set, including an existing PARA layout, until the operator asks to regroup.
 
 | Surface | Owns | Naming rule |
 |---|---|---|
-| Top-level group | One PARA classification | Use the full group name once |
-| Project | Verified repository or intentional cluster | Use the operator's recognizable target name |
+| Top-level group | One domain or large project | Use the operator's name for it once |
+| Project | One verified repository in that domain | Use the repository's recognizable name without repeating the group |
 | Workspace | Concrete task or execution context | Preserve meaningful task names and parent-child relationships |
 | Host | Execution location | Use host metadata rather than repeating it in every label |
 | Agent role | Responsibility or persona | Keep roles distinct even when they share a repository |
@@ -44,6 +46,7 @@ In particular, sleep can close panels and workspace deletion can remove files; n
 5. Verify fork and upstream relationships with actual Git/provider evidence before correcting stale metadata or combining cards.
 6. Reuse a matching local checkout; create a tracked-source clone only within the approved setup scope.
 7. Assign the shared identity to its local group and verify the remote setup remains attached to that identity.
+8. After adding a setup on a paired runtime, read back its host id from that runtime and compare it with the runtime's existing setups; a differing id is a mislabeled setup to report, even when its state reads ready.
 
 A parent-folder registration can contain multiple Git repositories.
 Register and connect those real roots individually; keep an active umbrella-folder workspace intact rather than pretending it is one repository.
@@ -60,7 +63,7 @@ An advertised schema field can still be filtered or ignored; require read-back o
 Do not edit internal state files, hardcode bundle internals, or turn a failed private API experiment into a reusable command.
 If the installed version has no supported operation, retain the current state and name the missing capability.
 Group placement can depend on which host setup represents a shared project and on native ordering.
-Verify that behavior on the installed version rather than assuming every host registration needs its own PARA group.
+Verify that behavior on the installed version rather than assuming every host registration needs its own group.
 Remove an obsolete group only after repositories, folder workspaces, and child-group references are all absent; disable any cascading removal option.
 Do not remove a setup used by a terminal to simplify representative selection.
 A rename or grouping request does not authorize setup removal.

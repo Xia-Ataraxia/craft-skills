@@ -2,7 +2,7 @@
 name: orca
 description: Organizes Orca around low-clutter project identities and preserves running work while diagnosing which local connection layer still needs evidence. Use to "organize Orca", "reduce sidebar clutter", consolidate the "same repo across hosts", clean old branches in Orca, reuse or account for task terminals, resolve selector_not_found or remote_runtime_unavailable, investigate SSH failures to an Orca host, or handle "orca에 연결이 안된다". Not for standalone Git maintenance (use git), vault taxonomy (use obsidian and local policy), network-versus-SSH reachability triage (use tailscale), or executable command mechanics (use the installed orca-cli and orchestration guides).
 metadata:
-  version: 1.2.1
+  version: 1.3.0
 ---
 
 # orca
@@ -135,6 +135,7 @@ Do not revive unrelated hosts merely to complete an organization inventory.
 ## Anti-patterns
 
 - Replacing real groups with repeated project and tab prefixes → classify once and verify actual sidebar membership.
+- Sorting repositories into PARA lifecycle groups → group them by the domain or large project they belong to.
 - Treating a folder registration as proof of non-Git content, or matching repos by name → inspect real roots and provider identities.
 - Deleting a live setup to remove a duplicate-looking card → preserve the setup and resolve verified identity or grouping metadata.
 - Reporting a successful API response as visible organization → require persisted read-back, and mark UI evidence unavailable when the sidebar cannot be inspected.
