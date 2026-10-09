@@ -147,7 +147,7 @@ gjc plugin marketplace update craft-skills
 gjc plugin upgrade craft-skills@craft-skills
 ```
 
-`craft-mode` runs this check itself as its first step and follows the newer body for the task.
+`craft-mode` compares its loaded version with `main` as its first step and follows the newer body for the task, but leaves the upgrade to you.
 
 The installed plugin is the only copy; a manual copy alongside it outranks the plugin and freezes
 (see the GJC row of the install matrix in `AGENTS.md`).
