@@ -1,6 +1,6 @@
 ---
 name: research
-description: 'Researches an open question by first reframing it: rewrites the ask as one problem statement, defines and separates its terms, splits the statement into sub-questions tied to established topics, then sweeps primary sources per sub-question, verifies claims in proportion to risk, and replies with source-linked findings, options side by side, and how to check them. Use for "research this before we decide", "what does the evidence say", "compare these options", "dig into whether this is feasible", "what is this problem really", "조사해줘", or "근거 찾아서 파고들어 봐". Not for making the call; not for how existing code works - use how; not for why it got this shape - use why; not for adversarial review - use interrogate; not for filing a doc - use document.'
+description: 'Researches an open question by first reframing it: rewrites the ask as one problem statement, defines and separates its terms, splits the statement into sub-questions tied to established topics, then sweeps trustworthy primary sources per sub-question, verifies claims in proportion to risk, and replies with source-linked findings, options side by side, and how to check them. Use for "research this before we decide", "what does the evidence say", "compare these options", "dig into whether this is feasible", "what is this problem really", "조사해줘", or "근거 찾아서 파고들어 봐". Not for making the call; not for how existing code works - use how; not for why it got this shape - use why; not for adversarial review - use interrogate; not for filing a doc - use document.'
 metadata:
   version: 2.0.0
 ---
@@ -23,7 +23,13 @@ Ground the frame in what exists before going external. Run `how` when the questi
 
 ## 2. Sweep
 
-Sweep per sub-question. Official and primary sources first (specs, papers, source repositories, vendor docs, primary data), then secondary sources only to fill gaps.
+Sweep per sub-question. A finding rests only on a trustworthy record: reliable, authentic, and accurate.
+
+- **Reliable.** The issuer has the authority to state the claim, is accountable when it is wrong, and runs a verification process you can inspect: peer review, a published methodology, or an official mandate. A vendor is authoritative about its own product, not about a competitor's.
+- **Authentic.** You read the record the issuer published, traced through the citation chain to the original, not a summary or re-quote of it.
+- **Accurate.** The passage you cite states the claim you make, at the precision you use it. Step 3 checks this.
+
+Cite a paper by its peer-reviewed version of record. A preprint with no version of record may be cited only labelled as a preprint, and a finding that rests on it alone stays unresolved. A source whose issuer cannot be held accountable supports nothing, however original it is. Secondary sources may point you to records; they do not replace them.
 Use a source's native index when it has one and broaden when coverage is thin. Record available stable IDs, URLs, and publication dates at retrieval, keep observation dates apart from publication dates, and leave unknown metadata unknown.
 A search snippet is discovery, not evidence. Read the record before citing it. When access fails, record the limitation and keep the finding unresolved.
 For a source dense enough that paraphrase loses precision, or one cited by more than one sub-question, keep the exact relevant passage with its locator (section, page, line) before synthesis, and quote from that, not from memory.
@@ -50,5 +56,6 @@ When the person asks to keep the result as a file, load `document` for its locat
 - Listing definitions, topics, and options side by side with no thread between them → derive each sub-question from a phrase in the problem statement.
 - Answering "is it possible" with yes or no → reframe it as the problem statement and report what the evidence says it would take.
 - Treating a model's stated reason as evidence its answer is right → check the answer against the source or a person's judgment.
+- Citing an arXiv copy when a peer-reviewed version exists → cite the version of record.
 
 Write every reply through the **unslop** skill.
