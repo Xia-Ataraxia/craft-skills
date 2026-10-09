@@ -7,8 +7,7 @@ metadata:
 
 # orca
 
-A thin router.
-Orca's official skills own the mechanics; this package adds the operator's judgment about grouping, preserving running work, and naming where a connection failed.
+A thin router. Orca's official skills own the mechanics; this package adds the operator's judgment about grouping, preserving running work, and naming where a connection failed.
 
 ## Route
 
@@ -18,11 +17,7 @@ Orca's official skills own the mechanics; this package adds the operator's judgm
 
 ## Boundaries
 
-Informational questions stay read-only.
-A request authorizes only its own effect.
-Pairing, application or remote upgrades, restarts, installed-skill changes, GUI interference, setup removal, and terminal closure each need their own authorization.
-A skill install is not an application upgrade, and an update is not a reachability repair.
-Unknown identity, an unsupported operation, an unreachable host, or missing evidence means preserve the item and report partial coverage.
+Informational questions stay read-only. A request authorizes only its own effect. Pairing, application or remote upgrades, restarts, installed-skill changes, GUI interference, setup removal, and terminal closure each need their own authorization. A skill install is not an application upgrade, and an update is not a reachability repair. Unknown identity, an unsupported operation, an unreachable host, or missing evidence means preserve the item and report partial coverage.
 
 ## Report
 
@@ -48,9 +43,7 @@ Name the layer the evidence identifies and stop there.
 | 4 | A piped SSH call never returns | A persistent control master is holding stdout | Treating the host as down |
 | 4 | Host unreachable at the transport layer | Hand off to tailnet triage | Repairing Orca |
 
-A non-interactive host probe reads the effective alias with `ssh -G <host-alias>`, detaches stdin, keeps batch mode and a 10-second connection timeout, and redirects both streams to files in a unique private temporary directory.
-Bound it with a 20-second caller deadline, record the exit status, read the files, then remove only that probe's files.
-On timeout, mark the host unverified and continue without reconnecting.
+A non-interactive host probe reads the effective alias with `ssh -G <host-alias>`, detaches stdin, keeps batch mode and a 10-second connection timeout, and redirects both streams to files in a unique private temporary directory. Bound it with a 20-second caller deadline, record the exit status, read the files, then remove only that probe's files. On timeout, mark the host unverified and continue without reconnecting.
 
 ## Anti-patterns
 
