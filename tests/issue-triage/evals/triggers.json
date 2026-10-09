@@ -1,0 +1,19 @@
+{
+  "skill": "issue-triage",
+  "should_trigger": [
+    "Triage the backlog in this repo; tell me which issues are duplicates with evidence, no writes.",
+    "Is this a duplicate of the live item editor issue, or just a similar title?",
+    "Close stale issues only when current default-branch code proves they are already fixed.",
+    "Split this issue about import and export into user-visible slices; don't implement it.",
+    "Is this already fixed by the merged PR, or does it still need to stay open?",
+    "이 백로그에서 이미 있는 기능과 중복 이슈를 근거와 규칙으로 판정해줘."
+  ],
+  "should_not_trigger": [
+    "Reproduce and fix this bug report through the real UI with before-and-after proof. Use benny.",
+    "Triage this pasted bug report and decide whether to file a new tracker ticket with benny.",
+    "I have a vague idea for better collaboration; interview me to discover what users need using deep-interview.",
+    "Shape this vague request into a PRD with goals and acceptance criteria using write-prd.",
+    "Debug this intermittent failing unit test and instrument the mechanism before fixing it.",
+    "The bug is already reproduced. Implement the regression fix using craft-mode bug-fix, not backlog refinement."
+  ]
+}
