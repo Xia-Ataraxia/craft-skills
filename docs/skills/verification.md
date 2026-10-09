@@ -199,7 +199,6 @@ Independent review still owns semantic routing, outcome and failure wording, and
 
 The script rejects repeated base flags, revision ranges, noncanonical or escaping paths, nonexistent package selectors, and unresolved support ownership.
 It does not require an output-contract heading, anti-pattern registry wording, a `MUST USE` grammar, a generated eval corpus, sentence-boundary line breaks, or that paths the body mentions exist.
-Sentence line breaks are a nonblocking typography preference.
 The reflow helper is retired.
 
 Markdown style is checked by `npx -y markdownlint-cli2@0.23.3` against the root `.markdownlint-cli2.jsonc`, in CI and `scripts/ci-local.sh`.

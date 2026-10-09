@@ -156,15 +156,6 @@ The contents must match the description: no hidden effects, commands, data colle
 **(local)** `## Change Log` inside `SKILL.md` is forbidden (`CHANGELOG_IN_SKILL`).
 History lives only in `CHANGELOG.md`.
 
-### Sentence line breaks
-
-Prefer one sentence per line in paragraphs and one item per line in lists.
-Do not hard-wrap mid-sentence at a column width.
-Markdown renders both the same; sentence boundaries read and diff more cleanly.
-This is a nonblocking typography preference.
-The reflow helper is retired.
-No script fails a package for line wrapping.
-
 ## Referenced paths
 
 Ship the support files the body mentions inside the package, and do not leave a placeholder.
@@ -258,7 +249,7 @@ Local checks:
 - Retirement tombstones: a removed owner with remaining files is `INCOMPLETE_RETIREMENT`; a live reference to a removed owner is `DANGLING_PACKAGE_REFERENCE`. Historical changelog mentions are not that check.
 
 No local check duplicates the official linter.
-It does not fail a package for sentence wrapping, an eval corpus, a `MUST USE` phrase, an output-contract heading, body length, two-token names, description length or quality, paths the body mentions, or other `SKILL.md` files inside a package.
+It does not fail a package for an eval corpus, a `MUST USE` phrase, an output-contract heading, body length, two-token names, description length or quality, paths the body mentions, or other `SKILL.md` files inside a package.
 Those are authoring and review obligations.
 
 Default mode scans packages and exits 1 on a hard finding.
