@@ -14,7 +14,8 @@
 Group by domain: the product, program, or large project whose repositories change together.
 One top-level group holds that whole cluster on every host, such as a product's frontend, backend, edge runtime, dataset, and model repositories under the product's name.
 Do not sort repositories into `Projects`, `Areas`, `Resources`, and `Archives` groups or mirror vault folders; a lifecycle bucket separates repositories that are worked on together.
-Take membership from evidence: the operator's wording, a shared owner or organization, a shared parent folder, or a cross-repository contract.
+Take membership from evidence: the operator's wording or a cross-repository contract.
+A shared owner, organization, or parent folder only nominates a candidate, because one organization or folder can hold unrelated products; confirm the candidate with that evidence or ask before regrouping.
 Ask when a repository fits two domains, and leave one that belongs to no larger target under its own name rather than in a catch-all group.
 Separate a logical work target from its Git repositories: one target can contain an intentional multi-repository cluster.
 Keep each repository's verified Git identity distinct even when the interface groups them under that target.
