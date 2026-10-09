@@ -140,11 +140,14 @@ gjc plugin install craft-skills@craft-skills
 
 GJC scans the installed plugin directly and advertises every package as `craft-skills:<name>`,
 so `/skill:craft-skills:obsidian` works with no further configuration.
-Updates are one command:
+Refresh the marketplace snapshot before upgrading, or the upgrade stops at the version the snapshot last saw:
 
 ```bash
-gjc plugin upgrade
+gjc plugin marketplace update craft-skills
+gjc plugin upgrade craft-skills@craft-skills
 ```
+
+`craft-mode` runs this check itself as its first step and follows the newer body for the task.
 
 The installed plugin is the only copy; a manual copy alongside it outranks the plugin and freezes
 (see the GJC row of the install matrix in `AGENTS.md`).
