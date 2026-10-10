@@ -75,7 +75,7 @@ This is a task-oriented library for software and research work — kept separate
 |---|---|
 | Claude Code | Marketplace package |
 | Codex | Plugin marketplace package; plain Agent Skills clone is auxiliary development context |
-| Hermes | Custom tap; one package per install unit |
+| Hermes | Portable Agent Plugin; packages load as `<namespace>:<name>` |
 | GJC (Gajae-Code) | Marketplace plugin; packages load from the installed plugin as `craft-skills:<name>` |
 | Cursor | Project or user skills in `.cursor/skills`; plain Agent Skills discovery also supports `.agents/skills` |
 | Grok-native | Skills in `.grok/skills` or a configured plugin path |
@@ -115,18 +115,16 @@ The clone is optional development context; its skills have the nested layout `.a
 
 ---
 
-#### Hermes — custom tap
+#### Hermes — portable plugin
 
-Register the repository as a custom tap, then install each skill as one unit:
+Install the repository as one portable Agent Plugin (root `plugin.json`) and let Hermes keep it current:
 
 ```bash
-hermes skills tap add Xia-Ataraxia/craft-skills
-hermes skills install Xia-Ataraxia/craft-skills/skills/<name>
-hermes skills update            # pull upstream changes for every tap-installed skill
+hermes plugins install Xia-Ataraxia/craft-skills --enable
+hermes config set plugins.auto_apply true   # apply git-plugin updates unattended
 ```
 
-The tap scans every file in the unit; only a `safe` verdict installs without `--force`, so
-every package is kept scanner-clean (see `docs/skills/verification.md`).
+Every scanned file stays scanner-clean (see `docs/skills/verification.md`).
 
 ---
 
