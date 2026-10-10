@@ -214,7 +214,9 @@ def _root_plugin_violations(root: Path, base: str) -> list[str]:
     base_versions: dict[str, str] = {}
     for relative in _ROOT_PLUGIN_MANIFESTS:
         if not (root / relative).exists():
-            continue  # optional runtime manifest absent from this tree
+            if _git_show(root, base, relative):
+                violations.append(f"{relative}: root plugin manifest was removed")
+            continue  # absent from both base and this tree
         current_text = _read_text(root, root / relative)
         current_version = _version_from_plugin(current_text)
         base_version = _version_from_plugin(_git_show(root, base, relative))
