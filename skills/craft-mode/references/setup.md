@@ -10,7 +10,8 @@ It supplies no installer and no per-role configuration.
    For a marketplace or plugin route, the installed plugin is the discovery source.
    For a plain Agent Skills route, the README describes an individual package at `.agents/skills/<name>/SKILL.md`; an auxiliary development clone is not proof of a registered plugin.
    GJC's installed-plugin handle is `craft-skills:craft-mode`; the portable frontmatter name remains `craft-mode`.
-   Use the README's selected route for a tap or any other configured skill location.
+   Hermes's portable-plugin handle is `agent-plugin-craft-skills-<hash>:craft-mode`; read it from `skills_list`.
+   Use the README's selected route for any other configured skill location.
 3. Invoke craft-mode using that runtime's native syntax and inspect the loaded body.
    Check that the inline principle index and local references are reachable, and that cross-package pointers resolve to the discovered owner skills.
 4. Distinguish source presence, discovery, body load, and invocation in the report.
