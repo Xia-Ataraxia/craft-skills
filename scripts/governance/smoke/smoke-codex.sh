@@ -2,7 +2,7 @@
 # Smoke-test the Codex plugin install and installed skill discovery.
 set -euo pipefail
 
-ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/../../.." && pwd)"
+ROOT="$(git -C "$(dirname -- "$0")" rev-parse --show-toplevel)"
 
 if ! command -v codex >/dev/null; then
   printf 'SKIPPED: codex CLI is not installed\n'

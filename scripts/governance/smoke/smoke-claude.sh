@@ -2,7 +2,7 @@
 # Smoke-test Claude Code marketplace installation and installed skill discovery.
 set -euo pipefail
 
-ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/../../.." && pwd)"
+ROOT="$(git -C "$(dirname -- "$0")" rev-parse --show-toplevel)"
 
 if ! command -v claude >/dev/null; then
   printf 'SKIPPED: claude CLI is not installed\n'
