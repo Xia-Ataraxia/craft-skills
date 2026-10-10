@@ -6,3 +6,4 @@
 - 2026-10-07: Issue-report triage needed a direct route to Benny rather than starting with an already-reproduced bug fix.
 - 2026-10-07: Every runtime installs craft-skills through its native plugin or tap, so the repository installer that only reprinted those commands was removed and the setup step no longer points to it.
 - 2026-10-10: Hermes now installs craft-skills as a portable plugin, so the setup step names that route instead of a tap.
+- 2026-10-10: The first-task step no longer assumes bare `/craft-mode`, which a plugin-qualified runtime such as Hermes does not register.

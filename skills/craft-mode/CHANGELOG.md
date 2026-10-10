@@ -13,3 +13,4 @@
 - 2026-10-07: The source catalog needed to route the pstack Benny automation pack to its single source-neutral issue workflow.
 - 2026-10-09: A session kept following the craft-mode body it loaded at start after a newer version shipped, so step zero now compares the loaded version with upstream main, upgrades the plugin through the runtime's native route, and follows the newer body for the task.
 - 2026-10-09: Review found that step zero upgraded the installed plugin without the user asking, embedded vendor plugin commands in the portable body, and asked for an upstream version a failed fetch never returned, so step zero now only reads upstream, resolves references from the same raw main base, and reports an unavailable upstream as such.
+- 2026-10-10: Hermes installs craft-skills as a portable plugin, so the runtime lens names its plugin-qualified slash handle instead of a tap route.

@@ -219,11 +219,14 @@ def _root_plugin_violations(root: Path, base: str) -> list[str]:
             continue  # absent from both base and this tree
         current_text = _read_text(root, root / relative)
         current_version = _version_from_plugin(current_text)
-        base_version = _version_from_plugin(_git_show(root, base, relative))
+        base_text = _git_show(root, base, relative)
+        base_version = _version_from_plugin(base_text)
         if current_version is None or _parse_semver(current_version) is None:
             violations.append(f"{relative}: root plugin version is not valid semver")
         else:
             current_versions[relative] = current_version
+        if base_text is None:
+            continue  # manifest added in this change; nothing to increase from
         if base_version is None or _parse_semver(base_version) is None:
             violations.append(f"{relative}: base root plugin version is not valid semver")
         else:
