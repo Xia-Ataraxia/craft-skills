@@ -7,3 +7,4 @@
 - 2026-09-03 — v1.1.2: three cross-package links climbed out of the package, which the Hermes tap fetcher treats as traversal and refuses to install → name the owning skill and file in prose; add the Output contract and eval corpus the contract requires.
 - 2026-10-01 — v1.1.3: installable skillify handoff is gone → land approved mappings through docs/skills/authoring.md; that path is local policy, not a native requirement.
 - 2026-10-07: Landed rules are prose that readers meet in every package, so unslop now runs as the final pass before landing while code and machine formats stay untouched.
+- 2026-10-12: The central docs/ authoring, contract, and verification pages are gone, so landing and provenance now point at the owning package and its CHANGELOG instead of a repository policy page.

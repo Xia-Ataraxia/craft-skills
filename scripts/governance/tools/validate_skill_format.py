@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Validate craft-skills skill-package format against the authoring contract
-(`docs/skills/package-contract.md`).
+"""Validate craft-skills skill-package format against the repository conventions
+in `AGENTS.md`.
 
 Each skill package is a single directory `skills/<skill-name>/` containing at
 least `SKILL.md` + `CHANGELOG.md`. This validator enforces, per package:
@@ -31,7 +31,7 @@ least `SKILL.md` + `CHANGELOG.md`. This validator enforces, per package:
 Only top-level `skills/<name>/SKILL.md` files define packages. Paths the body
 mentions are not resolved, and body length or typography is not a format check.
 
-Modes (`docs/skills/verification.md` § Format checks):
+Modes:
   (default)       full scan; reports every violation; exit 1 if any hard error found.
   --diff-base REF select the union of committed, staged, unstaged and untracked
                   package/support changes against one commit, not a revision range.
@@ -66,9 +66,9 @@ CHANGELOG_LINE_LIMIT = 100
 ALLOWED_PACKAGE_DIRS = frozenset({"scripts", "references", "assets", "templates", "agents"})
 ALLOWED_PACKAGE_FILES = frozenset({"SKILL.md", "CHANGELOG.md", ".env.example", "env.example"})
 
-# Repository tools, docs, and CI need no skill owner.
+# Repository tools and CI need no skill owner.
 # Exact files and directory prefixes; a path is in scope when it equals a
-# file or starts with a prefix plus "/". docs/ covers docs/skills/.
+# file or starts with a prefix plus "/".
 REPOSITORY_TOOL_FILES = frozenset({
     "AGENTS.md",
     "README.md",
@@ -77,12 +77,8 @@ REPOSITORY_TOOL_FILES = frozenset({
     ".codex/config.yaml",
     ".github/workflows/pr-check.yml",
     ".github/workflows/test-plugin-install.yml",
-    "docs/skills/package-contract.md",
-    "docs/skills/verification.md",
-    "docs/skills/authoring.md",
 })
 REPOSITORY_TOOL_PREFIXES = (
-    "docs/",
     "scripts/governance/",
     "tests/governance/",
     ".github/",
@@ -92,10 +88,6 @@ REPOSITORY_TOOL_PREFIXES = (
 # reference scan only; they still participate in scope and hygiene checks.
 HISTORICAL_REFERENCE_EXEMPT = frozenset({
     "skills/PROVENANCE.md",
-    "docs/governance/audit-matrix.md",
-    "docs/governance/acceptance-report.md",
-    "docs/research/omo-analysis.md",
-    "docs/research/skill-authoring-standards.md",
 })
 
 
@@ -206,7 +198,7 @@ def explicit_owner(value: str, owners: set[str]) -> str:
 
 
 def is_repository_tool_path(rel: str) -> bool:
-    """Docs, CI, and repository tools need no skill owner."""
+    """CI and repository tools need no skill owner."""
     if rel in REPOSITORY_TOOL_FILES:
         return True
     return any(rel == prefix[:-1] or rel.startswith(prefix) for prefix in REPOSITORY_TOOL_PREFIXES)
@@ -376,7 +368,7 @@ def check_traversal_link(name: str, body: str) -> list[Finding]:
     return [Finding(name, "TRAVERSAL_LINK",
                     "SKILL.md links climb out of the package with `../`; "
                     "the Hermes tap fetcher aborts the install on such a path "
-                    "(docs/skills/package-contract.md § Referenced paths)")]
+                    "(AGENTS.md)")]
 
 
 def check_package_entries(name: str, skill_dir: Path) -> list[Finding]:
@@ -399,7 +391,7 @@ def check_package_entries(name: str, skill_dir: Path) -> list[Finding]:
     findings: list[Finding] = [
         Finding(name, "TESTS_IN_PACKAGE",
                 f"directory {test_dir + '/'!r} ships tests inside the install bundle; "
-                f"move them to repo-root tests/{name}/ (docs/skills/package-contract.md § Package)")
+                f"move them to repo-root tests/{name}/ (AGENTS.md)")
         for test_dir in sorted(test_dirs)
     ]
     for entry, is_dir in sorted(entries.items()):
@@ -412,7 +404,7 @@ def check_package_entries(name: str, skill_dir: Path) -> list[Finding]:
         kind = "directory" if is_dir else "file"
         findings.append(Finding(name, "DISALLOWED_PACKAGE_ENTRY",
                                 f"{kind} {entry!r} is not on the package allowlist "
-                                "(docs/skills/package-contract.md § Package)"))
+                                "(AGENTS.md)"))
     return findings
 
 

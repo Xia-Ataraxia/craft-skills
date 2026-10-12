@@ -10,3 +10,4 @@
 - 2026-09-21 — v2.0.0: local browser copied Aside CLI/manuals and kept agent-browser plus existing-session as managed fallbacks, including a forced macOS quit/relaunch → Aside is the sole managed route, official aside-browser/aside guide own product syntax, and this package keeps only personal identity, existing-app protection, same-session continuation, and observed-result readback. Retires agent-browser.md, existing-session.md, and the duplicate aside.md reference. verified_against: aside@1.26.916.1741
 
 - 2026-10-06 — v2.0.2: retired static-extraction routing would name a missing package → keep static pages outside the Aside route, require non-empty readable extraction, and preserve caller-owned persistence.
+- 2026-10-12: The central docs/ authoring page is gone, so related runtimes are re-probed against current official docs and installed help.

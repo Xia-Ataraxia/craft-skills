@@ -2,7 +2,7 @@
 name: browser
 description: Owns personal composition for live authenticated browser work through Aside as the sole managed route. Use when a request says "Use Aside to inspect my logged-in dashboard", "inspect my signed-in dashboard", "open this in my browser", "click this button", "fill out this form", "continue this Aside session", or "브라우저로 열어줘" and the page needs login, JavaScript, or multi-step interaction. Not for static public extraction — use a standalone extractor — or plain JSON API responses — use an HTTP client. Not for rewriting official Aside product usage.
 metadata:
-  version: 2.0.2
+  version: 2.0.3
 ---
 
 # Browser
@@ -34,7 +34,7 @@ Do not claim official Aside skill absence.
 
 ## Requirements
 
-- Official `aside-browser` and current `aside` CLI. When this task uses a related official skill or CLI/agent runtime, re-probe it under Related official skills and mutable facts in docs/skills/authoring.md. Do not treat unused runtimes as required.
+- Official `aside-browser` and current `aside` CLI. When this task uses a related official skill or CLI/agent runtime, re-probe it against current official docs and installed help. Do not treat unused runtimes as required.
 - The `init` skill's tool-preflight reference (`tool-preflight.md` under its references) records Aside install and version probes.
 
 ## Boundaries

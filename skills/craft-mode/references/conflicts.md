@@ -22,7 +22,6 @@ Affected files:
 Affected files:
 
 - Each changed package's `CHANGELOG.md`, including craft-mode's.
-- Repository `docs/skills/package-contract.md`, Local version and changelog.
 - Repository `AGENTS.md`, the managed changelog convention.
 
 ## (c) Validated TypeScript assertions

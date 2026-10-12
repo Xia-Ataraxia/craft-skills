@@ -135,6 +135,6 @@ Do not use universal byte budgets. Derive budgets from product users, route freq
 
 ## Design-document hand-off
 
-This reference owns CSS implementation placement, delivery, and measurement. `document` and the `docs/design.md` gate own token meaning, design-system decisions, and material visual intent. Link to that owner rather than duplicating its document template or lifecycle.
+This reference owns CSS implementation placement, delivery, and measurement. `design` and its root `DESIGN.md` own token meaning, design-system decisions, and material visual intent. Link to that owner rather than duplicating its document template or lifecycle.
 
 Sources for conceptual guidance: [MDN custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties), [MDN cascade layers](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Cascade_layers), [Vite CSS features](https://vite.dev/guide/features.html#css), [Next.js CSS](https://nextjs.org/docs/app/getting-started/css), [Tailwind source detection](https://tailwindcss.com/docs/detecting-classes-in-source-files), and [web.dev performance](https://web.dev/learn/performance/).
