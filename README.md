@@ -213,10 +213,9 @@ git config core.hooksPath .githooks
 ```
 
 `SKIP_LOCAL_CI=1` bypasses a hook once; `SKIP_MARKETPLACES=1` skips the claude/codex CLI job.
-Individual checks can still be run directly (`claude plugin validate .`, `python3 scripts/governance/tools/validate_skill_format.py`, `python3 scripts/governance/tools/validate_runtime_hygiene.py`). Tests for those checks live under `scripts/governance/tests/`.
+Individual checks can still be run directly (`claude plugin validate .`, `python3 scripts/governance/tools/validate_skill_format.py`, `python3 scripts/governance/tools/validate_runtime_hygiene.py`).
 
 Codex reads the tracked plugin tree directly.
-Hermes integration is covered by the isolated plugin install/load contract test under `scripts/governance/tests/`.
 
 ## License
 

@@ -2,7 +2,7 @@
 
 Run this reference before a recipe depends on one of these mutable command-line tools.
 It is not a host inventory, an upstream SSOT, or a CHANGELOG receipt schema.
-Installed versions and host upgrades belong in historical CHANGELOG or the parent ledger, not here.
+Installed versions and host upgrades belong in git history or the parent ledger, not here.
 
 Check current official API guidance when a task depends on that API, and compare it with the installed command surface before relying on version-sensitive behavior. Authoring alone does not authorize installation or upgrades. Deployment and related dependency updates are separate authorized effects. Unrelated tools stay untouched.
 

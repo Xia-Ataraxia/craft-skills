@@ -15,14 +15,14 @@ Affected files:
 - `refactor/SKILL.md`.
 - `principle-programming/references/comments.md`, which owns the no-comments procedure and step 5.
 
-## (b) Changelog rationale
+## (b) Package history
 
-(b) A changelog entry holds only the date and why the package changed this way: `- YYYY-MM-DD: <why it changed>`; no em dash, no required version or what-arrow; retained entries are not rewritten.
+(b) Skills and plugins carry no CHANGELOG. History and per-change credit stay in commit messages and git log; current lineage stays in `skills/PROVENANCE.md`.
 
 Affected files:
 
-- Each changed package's `CHANGELOG.md`, including craft-mode's.
-- Repository `AGENTS.md`, the managed changelog convention.
+- Repository `AGENTS.md`, the package-history convention.
+- `skills/PROVENANCE.md`, the lineage registry.
 
 ## (c) Validated TypeScript assertions
 

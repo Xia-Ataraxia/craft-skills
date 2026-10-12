@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Require changed skill packages to have a semver bump and changelog entry."""
+"""Require changed skill packages and plugin manifests to have a semver bump."""
 
 from __future__ import annotations
 
@@ -11,7 +11,6 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
-_DATE_BULLET = re.compile(r"^- \d{4}-\d{2}-\d{2}\b")
 _SEMVER = re.compile(
     r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
     r"(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?"
@@ -118,7 +117,7 @@ def _changed_relpaths(root: Path, base: str) -> set[str]:
 def _package_from_path(relative: str) -> str | None:
     parts = PurePosixPath(relative).parts
     if len(parts) >= 3 and parts[0] == "skills":
-        if parts[2] == "tests":
+        if parts[2] in {"tests", "CHANGELOG.md"}:
             return None
         return parts[1]
     return None
@@ -242,10 +241,6 @@ def _root_plugin_violations(root: Path, base: str) -> list[str]:
     return violations
 
 
-def _dated_bullets(text: str) -> set[str]:
-    return {line for line in text.splitlines() if _DATE_BULLET.match(line)}
-
-
 def _without_version(text: str) -> str:
     lines = text.splitlines(keepends=True)
     if not lines or lines[0].strip() != "---":
@@ -330,12 +325,6 @@ def check(root: Path, diff_base: str) -> tuple[list[str], list[str]]:
         new_semver = _parse_semver(new_version) if new_version else None
         if new_semver is None:
             violations.append(f"{package}: metadata.version is not valid semver")
-
-        changelog_path = root / "skills" / package / "CHANGELOG.md"
-        current_changelog = _read_text(root, changelog_path) or ""
-        base_changelog = _git_show(root, base, f"skills/{package}/CHANGELOG.md") or ""
-        if not _dated_bullets(current_changelog) - _dated_bullets(base_changelog):
-            violations.append(f"{package}: CHANGELOG.md must gain a dated bullet")
 
         if base_skill is None:
             notes.append(f"{package}: new package (no base SKILL.md)")

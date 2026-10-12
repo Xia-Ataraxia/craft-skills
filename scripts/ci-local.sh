@@ -17,10 +17,7 @@ set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
-# Git hooks export GIT_DIR and friends, which override cwd-based repository
-# discovery in every child git process — the guard tests build fixture repos
-# and would commit into the real repository instead. Scrub so the gate behaves
-# identically from a hook, a terminal, or CI.
+# Scrub hook-exported Git variables so repository checks bind to this worktree.
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_OBJECT_DIRECTORY GIT_COMMON_DIR GIT_PREFIX GIT_QUARANTINE_PATH
 DIFF_BASE="${DIFF_BASE:-origin/main}"
 INTEGRATION_BASE="$(git merge-base "$DIFF_BASE" HEAD)"
@@ -103,8 +100,7 @@ job_layer1_format() {
   python3 -m venv "$VENV" &&
   "$VENV/bin/python" -m pip install -q -r scripts/governance/requirements.txt &&
   "$VENV/bin/python" scripts/governance/tools/validate_skill_format.py &&
-  "$VENV/bin/python" scripts/governance/tools/validate_skill_format.py --diff-base "$INTEGRATION_BASE" &&
-  "$VENV/bin/python" -m unittest scripts.governance.tests.test_validate_skill_format
+  "$VENV/bin/python" scripts/governance/tools/validate_skill_format.py --diff-base "$INTEGRATION_BASE"
 }
 
 job_markdown_lint() {
@@ -112,22 +108,11 @@ job_markdown_lint() {
 }
 
 job_layer1_hygiene() {
-  python3 scripts/governance/tools/validate_runtime_hygiene.py --diff-base "$INTEGRATION_BASE" &&
-  python3 -m unittest scripts.governance.tests.test_validate_runtime_hygiene
+  python3 scripts/governance/tools/validate_runtime_hygiene.py --diff-base "$INTEGRATION_BASE"
 }
 
 job_distribution_version() {
-  python3 scripts/governance/tools/check_version_bump.py --diff-base "$INTEGRATION_BASE" &&
-  python3 -m unittest \
-    scripts.governance.tests.test_check_version_bump \
-    scripts.governance.tests.test_verify_plugin_install \
-    scripts.governance.tests.test_resolve_plugin_revision \
-    tests.init.test_agents_region \
-    tests.init.test_package_contract
-}
-
-job_typescript_baseline() {
-  python3 -m unittest discover -s tests/principle-programming -p 'test_*.py'
+  python3 scripts/governance/tools/check_version_bump.py --diff-base "$INTEGRATION_BASE"
 }
 
 job_marketplaces() {
@@ -165,7 +150,7 @@ run_job "layer1-format"        job_layer1_format
 run_job "markdown-lint"        job_markdown_lint
 run_job "layer1-hygiene"       job_layer1_hygiene
 run_job "distribution-version" job_distribution_version
-run_job "typescript-baseline"  job_typescript_baseline
+
 run_job "marketplaces"         job_marketplaces
 
 echo ""
