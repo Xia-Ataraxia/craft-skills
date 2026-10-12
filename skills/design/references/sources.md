@@ -39,6 +39,6 @@ No row required owner-approved removal.
 - ISO 9241-210, Human-centred design for interactive systems — user/context framing; licensed standard, not reproduced.
 - Nielsen Norman Group usability heuristics, <https://www.nngroup.com/articles/ten-usability-heuristics/> — feedback, control, recovery, consistency prompts.
 
-Update triggers: an explicit approved manual review of a pinned upstream release, material template/schema/checker change, license change, or a source correction. Review the immutable diff, license, paths, adoption/deviation list, probes, tests, checker/reference/template/skill/provenance/version/changelog impacts. Never fetch a moving branch/tag or install/call an upstream runtime during normal checking.
+Update triggers: an explicit approved manual review of a pinned upstream release, material template/schema/checker change, license change, or a source correction. Review the immutable diff, license, paths, adoption/deviation list, probes, tests, checker/reference/template/skill/provenance/version impacts and commit-message credit. Never fetch a moving branch/tag or install/call an upstream runtime during normal checking.
 
 Probe before adopting external mechanics: confirm the source still supports the cited concept, that its license permits the intended reference, and that a conservative local test can distinguish evidence from inference. Runtime installers and browser automation remain out of scope.

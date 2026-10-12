@@ -1,6 +1,0 @@
-{
-  "repos": [
-    {"name": "craft-skills", "path": "."}
-  ],
-  "external_repos": ["bstack", "oh-my-secondbrain", "openai", "anthropics", "NousResearch", "omc-learned"]
-}

@@ -3,7 +3,7 @@
 Cross-skill lineage registry: the source skill(s) each craft-skills skill derives from.
 
 This table is the **current at-a-glance snapshot**.
-The dated, per-change detail — *what* was adapted and *when* — lives in each skill's `CHANGELOG.md` `Provenance:` clause; this registry links back to it the way `architecture.md` links to ADRs without restating them.
+Per-change detail — what was adapted and when — lives in commit messages and `git log`; this registry records current lineage without restating that history.
 
 Provenance never lives in `SKILL.md` (body or frontmatter): the recipe is present-tense imperative only, and naming a source there fails the attribution rule.
 
@@ -84,5 +84,5 @@ Provenance never lives in `SKILL.md` (body or frontmatter): the recipe is presen
 When a skill is created or materially re-sourced:
 
 1. Add or update its row above (the current snapshot).
-2. Add a dated `Provenance:` clause to that skill's `CHANGELOG.md` bullet (the per-change detail): `- YYYY-MM-DD — <why> → <what>. Provenance: <what was taken> from [name](url).` (a local source uses its plain path)
+2. Record per-change credit in the commit message: what was taken, from which source, and why. Link the source; a local source uses its plain path.
 3. Never put the attribution in `SKILL.md` — body or frontmatter.

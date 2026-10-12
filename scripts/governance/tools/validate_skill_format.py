@@ -3,7 +3,7 @@
 in `AGENTS.md`.
 
 Each skill package is a single directory `skills/<skill-name>/` containing at
-least `SKILL.md` + `CHANGELOG.md`. This validator enforces, per package:
+least `SKILL.md`. Package history stays in git. This validator enforces, per package:
 
   1. Every Agent Skills specification rule (frontmatter syntax and keys,
      `name`, `description` including its length limit, `compatibility`)
@@ -12,20 +12,15 @@ least `SKILL.md` + `CHANGELOG.md`. This validator enforces, per package:
      No local rule duplicates the linter.
   2. Local: `metadata` is a present mapping (`NO_METADATA`, `BAD_METADATA`) and
      `metadata.version` is semver `MAJOR.MINOR.PATCH` (`NO_VERSION`, `BAD_VERSION`).
-     See package-contract.md § Changelog and version.
   3. Local: SKILL.md contains no `## Change Log` (`CHANGELOG_IN_SKILL`).
-  4. Local: CHANGELOG.md exists beside SKILL.md with >= 1 dated bullet
-     `- YYYY-MM-DD ...` and is at or under 100 lines (`NO_CHANGELOG`,
-     `CHANGELOG_NO_DATED_BULLET`, `CHANGELOG_TOO_LONG`).
-  5. Local: no tracked real `.env` file in the package (`TRACKED_ENV`).
-  6. Local: no markdown link climbs out of the package with `../`
+  4. Local: no tracked real `.env` file in the package (`TRACKED_ENV`).
+  5. Local: no markdown link climbs out of the package with `../`
      (`TRAVERSAL_LINK`; the Hermes tap fetcher aborts on such a path).
-  7. Local: Git-visible top-level entries are only the directories `scripts/`,
+  6. Local: Git-visible top-level entries are only the directories `scripts/`,
      `references/`, `assets/`, `templates/`, `agents/` and the files `SKILL.md`,
-     `CHANGELOG.md`, `.env.example`, `env.example` (`DISALLOWED_PACKAGE_ENTRY`).
-  8. Local: no directory named `tests` anywhere in the package
-     (`TESTS_IN_PACKAGE`); tests live in repo-root `tests/<name>/`.
-  9. Local, --diff-base only: a removed package leaves no files
+     `.env.example`, `env.example` (`DISALLOWED_PACKAGE_ENTRY`).
+  7. Local: no directory named `tests` anywhere in the package (`TESTS_IN_PACKAGE`).
+  8. Local, --diff-base only: a removed package leaves no files
      (`INCOMPLETE_RETIREMENT`) and no live references (`DANGLING_PACKAGE_REFERENCE`).
 
 Only top-level `skills/<name>/SKILL.md` files define packages. Paths the body
@@ -58,13 +53,11 @@ SKILLS_DIR = REPO_ROOT / "skills"
 TESTS_DIR = REPO_ROOT / "tests"
 
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
-CHANGELOG_BULLET_RE = re.compile(r"^- \d{4}-\d{2}-\d{2}\b")
 CHANGE_LOG_HEADING_RE = re.compile(r"^## +Change Log\b", re.MULTILINE)
 REAL_ENV_NAME_RE = re.compile(r"^\.env(?:\..+)?$")
 
-CHANGELOG_LINE_LIMIT = 100
 ALLOWED_PACKAGE_DIRS = frozenset({"scripts", "references", "assets", "templates", "agents"})
-ALLOWED_PACKAGE_FILES = frozenset({"SKILL.md", "CHANGELOG.md", ".env.example", "env.example"})
+ALLOWED_PACKAGE_FILES = frozenset({"SKILL.md", ".env.example", "env.example"})
 
 # Repository tools and CI need no skill owner.
 # Exact files and directory prefixes; a path is in scope when it equals a
@@ -199,7 +192,7 @@ def explicit_owner(value: str, owners: set[str]) -> str:
 
 def is_repository_tool_path(rel: str) -> bool:
     """CI and repository tools need no skill owner."""
-    if rel in REPOSITORY_TOOL_FILES:
+    if rel in REPOSITORY_TOOL_FILES or PurePosixPath(rel).parent == PurePosixPath("tests"):
         return True
     return any(rel == prefix[:-1] or rel.startswith(prefix) for prefix in REPOSITORY_TOOL_PREFIXES)
 
@@ -391,7 +384,7 @@ def check_package_entries(name: str, skill_dir: Path) -> list[Finding]:
     findings: list[Finding] = [
         Finding(name, "TESTS_IN_PACKAGE",
                 f"directory {test_dir + '/'!r} ships tests inside the install bundle; "
-                f"move them to repo-root tests/{name}/ (AGENTS.md)")
+                "remove test code from the skill repository (AGENTS.md)")
         for test_dir in sorted(test_dirs)
     ]
     for entry, is_dir in sorted(entries.items()):
@@ -437,7 +430,7 @@ def check_skill(skill_dir: Path) -> list[Finding]:
 
     if CHANGE_LOG_HEADING_RE.search(text):
         findings.append(Finding(name, "CHANGELOG_IN_SKILL",
-                                "## Change Log belongs in CHANGELOG.md, not SKILL.md"))
+                                "package history belongs in git log, not SKILL.md"))
 
     body = text[text.find("\n---", 3) + 4:] if text.startswith("---") else text
 
@@ -446,32 +439,6 @@ def check_skill(skill_dir: Path) -> list[Finding]:
 
     for env in tracked_env_files(skill_dir):
         findings.append(Finding(name, "TRACKED_ENV", f"committed real env file: {env}"))
-
-    changelog = skill_dir / "CHANGELOG.md"
-    if not changelog.exists() and not changelog.is_symlink():
-        findings.append(Finding(name, "NO_CHANGELOG", "missing CHANGELOG.md beside SKILL.md"))
-    else:
-        try:
-            if changelog.is_symlink() or changelog.exists():
-                resolved = changelog.resolve()
-                if not resolved.is_relative_to(REPO_ROOT.resolve()):
-                    raise ValueError(f"CHANGELOG.md escapes root: {changelog.relative_to(REPO_ROOT)}")
-                if not resolved.exists():
-                    findings.append(Finding(name, "NO_CHANGELOG", "missing CHANGELOG.md beside SKILL.md"))
-                    return findings
-                cl = resolved.read_text(encoding="utf-8")
-            else:
-                findings.append(Finding(name, "NO_CHANGELOG", "missing CHANGELOG.md beside SKILL.md"))
-                return findings
-        except OSError as exc:
-            raise ValueError(f"unreadable CHANGELOG.md: {exc}") from exc
-        lines = cl.splitlines()
-        if len(lines) > CHANGELOG_LINE_LIMIT:
-            findings.append(Finding(name, "CHANGELOG_TOO_LONG",
-                                    f"CHANGELOG.md is {len(lines)} lines > {CHANGELOG_LINE_LIMIT}"))
-        if not any(CHANGELOG_BULLET_RE.match(line) for line in lines):
-            findings.append(Finding(name, "CHANGELOG_NO_DATED_BULLET",
-                                    "CHANGELOG.md has no '- YYYY-MM-DD ...' bullet"))
 
     return findings
 

@@ -1,6 +1,6 @@
 # Repository Guidelines
 
-<!-- init:managed id=init-root sha256=b03f542458ffd9a06b8b4cc9a899b8e1ae3f33bcd4b3bf5d82b83c7ca590f30a -->
+<!-- init:managed id=init-root sha256=9f22c8b3c1fe8dd75c94662a8f55e73d715b67a12d3968a4b32e825d57c861bb -->
 ## Project Overview
 
 craft-skills is a public library of reusable research and engineering methods, not an application.
@@ -19,9 +19,8 @@ There is no central authoring, contract, or verification document; a package's `
 
 ## Key Directories
 
-- `skills/<name>/`: always-read recipe plus only the support resources it actually consumes; package-local `CHANGELOG.md` holds history.
-- `tests/<name>/`: focused functional, security, and data-integrity fixtures, outside install bundles; optional `evals/` holds reusable scenarios.
-- `scripts/governance/tools/` and `scripts/governance/tests/`: repository checks and their regression tests, not a second skill workflow.
+- `skills/<name>/`: always-read recipe plus only the support resources it actually consumes; history stays in `git log`.
+- `scripts/governance/tools/`: repository validators, not a second skill workflow.
 - `.github/workflows/`: actual CI and distribution jobs; runtime manifests describe native packaging, not universal loader behavior.
 - Gitignored `evals/` scratch: generated transcripts and scores, never committed policy or mandatory quality gates.
 
@@ -38,22 +37,19 @@ python3 scripts/governance/tools/validate_skill_format.py
 python3 scripts/governance/tools/validate_skill_format.py --diff-base "$BASE"
 python3 scripts/governance/tools/validate_runtime_hygiene.py --diff-base "$BASE"
 python3 scripts/governance/tools/check_version_bump.py --diff-base "$BASE"
-python3 -m unittest scripts.governance.tests.test_validate_skill_format
-python3 -m unittest scripts.governance.tests.test_validate_runtime_hygiene
-python3 -m unittest tests.init.test_agents_region tests.init.test_package_contract
 ```
 
-Select the tests relevant to the changed behavior; the commands above are not a mandatory suite for every edit.
+Select verification relevant to the changed behavior; the repository ships validators, not test code.
 The Layer-1 selectors include committed, staged, unstaged, and untracked changes; shared repository-tool paths select no skill owner, while unknown scoped paths fail closed.
 `bash scripts/ci-local.sh` runs the declared local checks, but is not full CI proof: marketplace checks can skip and isolated native-install jobs are CI-only.
 Inspect `.github/workflows/test-plugin-install.yml` before claiming marketplace or install coverage; the local runner can register a marketplace in temporary Codex state.
-There is no application build/run or root npm/Bun pipeline; TypeScript checks use task-specific dependencies declared in CI.
+There is no application build/run or root npm/Bun pipeline.
 
 ## Code Conventions & Common Patterns
 
 Use `name`, `description`, and `metadata.version` frontmatter; the name matches the kebab-case directory, and version is never a top-level key.
-Local semantic versions and changelogs serve repository consumers, not a native loader requirement; optional metadata is whatever the official Agent Skills specification allows.
-Keep judgment in prose and fragile repeatable operations in scripts; reuse existing patterns and prefer standard-library Python with `unittest` for focused fixtures.
+Local semantic versions serve repository consumers, not a native loader requirement; history stays in `git log`, and optional metadata follows the official Agent Skills specification.
+Keep judgment in prose and fragile repeatable operations in scripts; reuse existing patterns and prefer standard-library Python.
 Declare narrow flags or positional inputs; use placeholders in examples, not host-specific paths or secrets.
 A declared non-secret runtime setting may default from one documented environment variable; secrets require declared environment lookup, not ambient environment dumping.
 Resolve support paths within the package, including symlinks; reject missing or escaping paths and ambiguous inputs rather than guessing.
@@ -61,8 +57,8 @@ Do not use `../` cross-package links: name the sibling skill and file in prose i
 Keep `.env` private and gitignored; only `.env.example` with placeholders is committed. Never reproduce secret values in reports or logs.
 Keep one owner per rule and link to it; tables, rigid heading schemas, wording corpora, provider quorums, and checker-of-checker aggregators are not requirements.
 Sentence-per-line is nonblocking taste, not a reflow or formatting gate.
-Changelog bullets use `- YYYY-MM-DD: <why it changed>`: date plus reason only, no em dash; leave retained older entries as written and keep at most 100 lines by dropping oldest whole entries, without a sidecar archive.
-Per-change credit belongs in the package changelog; update `skills/PROVENANCE.md` when primary lineage changes, preserving upstream attribution and applicable NOTICE/LICENSE obligations.
+Skills and plugins carry no CHANGELOG; history stays in `git log`.
+Per-change credit belongs in the commit message; update `skills/PROVENANCE.md` when primary lineage changes, preserving upstream attribution and applicable NOTICE/LICENSE obligations.
 
 ## Important Files
 
