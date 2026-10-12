@@ -10,7 +10,7 @@
 #   PR_SIZE_OVERRIDE=1 bash ...              # accept churn over the threshold
 #
 # The two Layer-1 validators run against one verified merge-base so uncommitted
-# worktree changes are validated too (see docs/skills/verification.md);
+# worktree changes are validated too;
 # the remaining jobs run CI-exact. Label-gated Codex install/replacement jobs are
 # CI-only and intentionally not mirrored.
 set -uo pipefail

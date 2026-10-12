@@ -14,3 +14,4 @@
 - 2026-08-29 — v3.0.0: frontend's universal design-document gate and document handoff conflicted with dedicated design ownership → route only material visual/UX judgment to `design`, retain frontend implementation autonomy, and relinquish `DESIGN.md`.
 - 2026-10-07: Broad engineering owners need consistent principle-prefixed names so discovery distinguishes policy from procedures.
 - 2026-10-07: Frontend tradeoffs need the upstream experience-first principle beside implementation guidance from Lauren Tan's pstack at cursor/plugins@d0ef80d86795816da932a153458c5dbe192d294e.
+- 2026-10-12: The central docs/ authoring page is gone and the docs/design.md gate was already retired, so the description drops the skill-update clause and references name design and root DESIGN.md as the owner.

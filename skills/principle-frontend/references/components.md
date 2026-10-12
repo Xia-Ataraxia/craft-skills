@@ -141,4 +141,4 @@ Use the project's current primitive library, naming, test/story format, and styl
 - State classification → [`state.md`](state.md).
 - CSS variants, tokens, and delivery → [`css.md`](css.md).
 - Type-level API discipline → `principle-programming`; component testing depth → `principle-testing`; untrusted rendering → `security`.
-- New token meaning, primitive, or material design decision → `document` and the `docs/design.md` gate in `SKILL.md`.
+- New token meaning, primitive, or material design decision → `design`, which owns root `DESIGN.md`.

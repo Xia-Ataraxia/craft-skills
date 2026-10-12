@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Validate that craft-skills skill packages do not commit runtime-specific values.
 
-Contract: `docs/skills/verification.md` § Runtime hygiene.
-Package env rules: `docs/skills/package-contract.md` § Package parts.
+Conventions: `AGENTS.md`.
 
 Default mode scans tracked files. CI can use --diff-base with one verified
 commit to scan changed lines of tracked files plus full untracked files, so
@@ -47,11 +46,6 @@ TEXT_EXTENSIONS = {
 }
 
 SKIP_PARTS = {".git", "node_modules", "__pycache__"}
-DOC_EXAMPLE_ALLOWLIST = {
-    "docs/skills/verification.md",
-    "docs/skills/package-contract.md",
-    "docs/skills/authoring.md",
-}
 PLACEHOLDER_MARKERS = ("<", ">", "YOUR_", "REDACTED", "PLACEHOLDER", "EXAMPLE", "DUMMY", "XXXX")
 LOOKUP_VALUE_RE = re.compile(r"[()\[\]{}]")
 
@@ -159,7 +153,7 @@ def is_python_lookup(rel: Path, line: str, match: re.Match[str]) -> bool:
     return False
 
 
-def scan_line(rel: Path, lineno: int, line: str, *, doc_example: bool = False) -> list[Finding]:
+def scan_line(rel: Path, lineno: int, line: str) -> list[Finding]:
     findings: list[Finding] = []
     if not line.strip():
         return findings
@@ -180,9 +174,6 @@ def scan_line(rel: Path, lineno: int, line: str, *, doc_example: bool = False) -
         if is_python_lookup(rel, line, match):
             continue
         findings.append(Finding(rel, lineno, "SECRET_ASSIGNMENT", "secret-like assignment"))
-
-    if doc_example:
-        return findings
 
     for rule in RUNTIME_RULES:
         for match in rule.pattern.finditer(line):
@@ -231,9 +222,8 @@ def scan_file(path: Path, root: Path) -> list[Finding]:
     if not should_scan_contents(path, root):
         return findings
     text = read_text_strict(path)
-    doc_example = rel.as_posix() in DOC_EXAMPLE_ALLOWLIST
     for lineno, line in enumerate(text.splitlines(), start=1):
-        findings.extend(scan_line(rel, lineno, line, doc_example=doc_example))
+        findings.extend(scan_line(rel, lineno, line))
     return findings
 
 
@@ -312,14 +302,13 @@ def scan_diff(root: Path, diff_base: str) -> list[Finding]:
             findings.append(env_hit)
         if not should_scan_contents(live, root):
             continue
-        doc_example = rel in DOC_EXAMPLE_ALLOWLIST
         if rel in untracked:
             text = read_text_strict(live)
             for lineno, line in enumerate(text.splitlines(), start=1):
-                findings.extend(scan_line(rel_path, lineno, line, doc_example=doc_example))
+                findings.extend(scan_line(rel_path, lineno, line))
             continue
         for lineno, line in added_lines_for_path(root, base, rel):
-            findings.extend(scan_line(rel_path, lineno, line, doc_example=doc_example))
+            findings.extend(scan_line(rel_path, lineno, line))
     return findings
 
 

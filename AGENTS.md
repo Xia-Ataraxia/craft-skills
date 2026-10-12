@@ -1,12 +1,12 @@
 # Repository Guidelines
 
-<!-- init:managed id=init-root sha256=2836f15645fb6ef18f665f2539005422086317a2faedbb7ab9f5fc2c67064bf3 -->
+<!-- init:managed id=init-root sha256=b03f542458ffd9a06b8b4cc9a899b8e1ae3f33bcd4b3bf5d82b83c7ca590f30a -->
 ## Project Overview
 
 craft-skills is a public library of reusable research and engineering methods, not an application.
 Keep the plain Markdown core vendor-neutral; personal accounts, knowledge policy, and private operating context belong in `bstack`.
 Discover packages from `skills/*/SKILL.md`, rather than maintaining another inventory here.
-`README.md` introduces usage and distribution; the three owners under `docs/skills/` govern changes.
+`README.md` introduces usage and distribution; each package owns its own recipe, and this file holds the only repository-wide conventions.
 
 ## Architecture & Data Flow
 
@@ -14,16 +14,14 @@ A request routes through a package's description to `SKILL.md`, then to its on-d
 Each package is flat: `skills/<name>/SKILL.md`; no nested skills or grouping directories.
 Runtime-specific adapters and optional `agents/` plumbing stay outside the portable core; authoring does not require GJC.
 Author source → check the affected contract and behavior → hand off evidence; installation, registration, publication, and effective loading are separate effects.
-`docs/skills/authoring.md` owns create, update, move/rename, retire, requested field harvest, and vendor-gap extraction.
-`docs/skills/package-contract.md` owns consumed package contracts; `docs/skills/verification.md` owns evidence and its limits.
-Docs own policy; `validate_skill_format.py` and `validate_runtime_hygiene.py` own their deterministic checks, not semantic judgment.
+There is no central authoring, contract, or verification document; a package's `SKILL.md` and support files are its whole contract.
+`validate_skill_format.py` and `validate_runtime_hygiene.py` own their deterministic checks, not semantic judgment.
 
 ## Key Directories
 
 - `skills/<name>/`: always-read recipe plus only the support resources it actually consumes; package-local `CHANGELOG.md` holds history.
 - `tests/<name>/`: focused functional, security, and data-integrity fixtures, outside install bundles; optional `evals/` holds reusable scenarios.
 - `scripts/governance/tools/` and `scripts/governance/tests/`: repository checks and their regression tests, not a second skill workflow.
-- `docs/skills/`: authoring, package-contract, and verification owners; consult the relevant owner rather than duplicating policy.
 - `.github/workflows/`: actual CI and distribution jobs; runtime manifests describe native packaging, not universal loader behavior.
 - Gitignored `evals/` scratch: generated transcripts and scores, never committed policy or mandatory quality gates.
 
@@ -54,7 +52,7 @@ There is no application build/run or root npm/Bun pipeline; TypeScript checks us
 ## Code Conventions & Common Patterns
 
 Use `name`, `description`, and `metadata.version` frontmatter; the name matches the kebab-case directory, and version is never a top-level key.
-Local semantic versions and changelogs serve repository consumers, not a native loader requirement; consult the package contract for optional metadata.
+Local semantic versions and changelogs serve repository consumers, not a native loader requirement; optional metadata is whatever the official Agent Skills specification allows.
 Keep judgment in prose and fragile repeatable operations in scripts; reuse existing patterns and prefer standard-library Python with `unittest` for focused fixtures.
 Declare narrow flags or positional inputs; use placeholders in examples, not host-specific paths or secrets.
 A declared non-secret runtime setting may default from one documented environment variable; secrets require declared environment lookup, not ambient environment dumping.
@@ -68,9 +66,6 @@ Per-change credit belongs in the package changelog; update `skills/PROVENANCE.md
 
 ## Important Files
 
-- `docs/skills/authoring.md`: lifecycle, admission, private/public boundaries, official-source handling, and separately authorized delivery.
-- `docs/skills/package-contract.md`: metadata, containment, history, supported resource layout, and actual format checks.
-- `docs/skills/verification.md`: observable oracles, scoped checks, evidence identity, security, and deployment limits.
 - `.github/workflows/pr-check.yml`, `.github/workflows/test-plugin-install.yml`, and `scripts/ci-local.sh`: inspect actual jobs rather than assuming README coverage claims.
 - `README.md` and native manifests such as `.codex-plugin/plugin.json`: distribution entry points; check affected manifest compatibility rather than inventing native support.
 - `skills/init/SKILL.md` and `skills/init/scripts/agents_region.py`: hierarchical guidance ownership and hash-checked managed-region editing.
@@ -104,7 +99,7 @@ Reuse exact task- and content-bound evidence across coherent batches; do not res
 ### Repository-aware PR review
 
 When assigned a repository PR, read root and applicable nested `AGENTS.md`, then inspect the actual base, head, and diff, including callers and support resources.
-Apply `docs/skills/authoring.md` to lifecycle and retirement, `docs/skills/package-contract.md` to consumed contracts, and `docs/skills/verification.md` to the oracle and evidence.
+Judge each changed package against its own `SKILL.md` and the conventions here.
 Check affected routes, manifests, privacy, containment, and retirement references; approved retirement removes obsolete paths rather than leaving aliases or loadable stubs.
 Select the actual affected checks; report material findings with path and line, separating observed execution from reviewed evidence and unrun limitations.
 This is assigned-review guidance, not an automatic PR detector, bot, or webhook; review does not authorize fixes, installation, merge, release, or restart.
